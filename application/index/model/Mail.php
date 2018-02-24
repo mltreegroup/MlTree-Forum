@@ -20,7 +20,7 @@ class Mail extends Model{
 	public $errorMsg;
 
 	public function __construct(){
-		$mailOptions = Option::getValues(["mail"]);
+		$mailOptions = Option::getValues(["email"]);
 		$this->fromName = $mailOptions["fromName"];
 		$this->fromAdress = $mailOptions["fromAdress"];
 		$this->smtpHost = $mailOptions["smtpHost"];

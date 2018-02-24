@@ -16,7 +16,7 @@ class User extends Model
     protected $updateTime = 'login_date';
     protected $auto = ['login_ip'];
     protected $insert = ['create_ip'];
-    
+
     protected function setCreateIpAttr()
     {
         return \request()->ip();
@@ -24,6 +24,15 @@ class User extends Model
     protected function setLoginIpAttr()
     {
         return \request()->ip();
+    }
+    protected function setPasswordAttr($val,$data)
+    {
+        if(!empty(session('uid')) && !empty(session('salt')))//用户已经登录
+        {
+            $userData = Db::name('user')->where('uid',session('uid'))->find();
+            return md5($val.$userData['salt'].$userData['email']);
+        }
+        return md5($data['password'].$data['salt'].$data['email']);
     }
     
 
@@ -33,6 +42,21 @@ class User extends Model
 		 	return false;
 		}
 		return true;
+    }
+
+    public function getInfo($userId)
+    {
+        $userInfo = Db::name('user')->where('uid',$userId)->find();
+        if(empty($userInfo))
+        {
+            return [false];
+        }
+        $groupData = Db::name('group')->where('gid',$userInfo['gid'])->find();
+
+        return [
+            'groupData' => $groupData,
+            'userInfo' => $userInfo,
+        ];
     }
     
 }

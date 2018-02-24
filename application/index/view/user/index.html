@@ -3,14 +3,14 @@
 <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
     <div class="mdui-card">
         <div class="mdui-card-media">
-            <img src="__IMG__/card.png" height="200px" />
+            <img src="{$userData.userInfo.avatar}" height="200px" />
         </div>
         <div class="mdui-card-primary">
             <div class="">
-                <img src="__IMG__/user_defaule.png" alt="十载北林" class="mdui-img-circle mdui-float-left" width="60">
+                <img src="{$userData.userInfo.avatar}" alt="{$userData.userInfo.username}" class="mdui-img-circle mdui-float-left" width="60">
             </div>
-            <div class="mdui-card-primary-title">十载北林</div>
-            <div class="mdui-card-primary-subtitle">一房两人，三餐四季。</div>
+            <div class="mdui-card-primary-title">{$userData.userInfo.username}</div>
+            <div class="mdui-card-primary-subtitle">{$userData.userInfo.motto|default="这家伙很懒，什么也没留下"}</div>
         </div>
 
         <div class="mdui-card-content">
@@ -76,13 +76,13 @@
                         <div class="mdui-textfield-error">与新密码不符</div>
                     </div>
                     <div class="mdui-textfield mdui-textfield-floating-label">
-                        <button type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">确认修改</button>
+                        <button layui-submit lay-filter="pass" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">确认修改</button>
                     </div>
                 </form>
             </div>
             <div id="avatar" class="mdui-text-center">
                 <div class="mdui-m-y-1">
-                    <img src="__IMG__/user_defaule.png" alt="十载北林" width="80">
+                    <img id="avatar_new" src="{$userData.userInfo.avatar}" alt="{$userData.userInfo.username}" width="80">
                 </div>
                 <div class="mdui-m-y-1">
                     <button class="mdui-btn mdui-color-pink" id="avatar_btn">上传新头像</button>
@@ -101,19 +101,40 @@
     layui.use(['upload','form'], function () {
         var upload = layui.upload,
             form = layui.form;
-        
-        form.on('submit()',function(data){
-            
+        var $$ = mdui.JQ;
+
+        form.on('submit(pass)',function(data){
+            $$.ajax({
+                method:'post',
+                url: '{:url("user/set")}',
+                data: data.field,
+                dateType: 'json',
+                success: function(res){
+                    if(res.code == 0){
+                        layer.msg(res.message,{icon:1});
+                    }else{
+                        layer.msg(res.message,{icon:5});
+                    }
+                },
+            });
         });
 
         var uploadInst = upload.render({
             elem: '#avatar_btn'
             , accept: 'images'
             , field: 'avatar'
-            , data: ''
-            , url: '/upload/'
+            , data: {uid:'{$userData.userInfo.uid}'}
+            , url: '{:url("index/expand/userUpload")}'
             , done: function (res) {
-
+                if(res.code == 0)
+                {
+                    layer.msg('上传成功！',{
+                        icon:1,
+                        end: function() {
+                            $$('#avatar_new').attr('src',res.url);
+                        }
+                        });
+                }
             }
             , error: function () {
 

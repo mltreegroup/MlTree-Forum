@@ -1,0 +1,124 @@
+{extend name="../template@default/forum_public"}
+{block name="content"}
+<!-- 置顶的内容 -->
+<div class="mdui-col-xs-12 mdui-m-y-1">
+    <div class="mdui-card">
+        <div class="mdui-card-media">
+            <img src="__IMG__/card.png" alt="" height="100">
+            <div class="mdui-card-media-covered mdui-card-media-covered-top">
+                <div class="mdui-card-primary">
+                    <div class="mdui-card-primary-title">置顶</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mdui-card-content">
+
+            <ul class="mdui-list mdui-list-dense">
+                <li class="mdui-list-item mdui-ripple">
+                    <div class="mdui-list-item-avatar">
+                        <img src="https://mdui-aliyun.cdn.w3cbus.com/docs/assets/docs/img/avatar1.jpg" alt="user-1" title="user-14">
+                    </div>
+                    <div class="mdui-list-item-content">
+                        <a class="mdui-list-item-title">帖子标题</a>
+                        <div class="mdui-list-item-text mdui-list-item-one-line">帖子内容测试，这个一定要长一点点呢。。</div>
+                        <div class="mdui-list-item-text">
+                            <a class="mdui-list-item-title">USER NAME</a>
+                            <span title="2018.02.22 16.52">0分钟前</span>
+                        </div>
+                    </div>
+                </li>
+                <li class="mdui-divider-inset mdui-m-y-0"></li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+<!-- 论坛最新内容列表页 -->
+<div class="mdui-col-xs-12 mdui-col-sm-8">
+
+    <!-- 最新内容 -->
+
+    <div class="mdui-tab" mdui-tab>
+        <a href="#topic-all" class="mdui-ripple">综合</a>
+        <a href="#topic-essence" class="mdui-ripple">精华</a>
+    </div>
+
+    <div id="topic-all">
+        <ul class="mdui-list">
+            <li class="mdui-list-item mdui-ripple">
+                <div class="mdui-list-item-avatar">
+                    <img src="https://mdui-aliyun.cdn.w3cbus.com/docs/assets/docs/img/avatar1.jpg" alt="user-1" title="user-14">
+                </div>
+                <div class="mdui-list-item-content">
+                    <a class="mdui-list-item-title">帖子标题一【综合】</a>
+                    <div class="mdui-list-item-text mdui-list-item-one-line">帖子内容测试，这个一定要长一点点呢。。</div>
+                    <div class="mdui-list-item-text">
+                        <a class="mdui-list-item-title">USER NAME</a>
+                        <span title="2018.02.22 16:52">0分钟前</span>
+                    </div>
+                </div>
+            </li>
+
+            <li class="mdui-divider-inset mdui-m-y-0"></li>
+
+            <li class="mdui-list-item mdui-ripple">
+                <div class="mdui-list-item-avatar">
+                    <img src="https://mdui-aliyun.cdn.w3cbus.com/docs/assets/docs/img/avatar1.jpg" alt="user-1" title="user-14">
+                </div>
+                <div class="mdui-list-item-content">
+                    <a class="mdui-list-item-title">帖子标题二【综合】</a>
+                    <div class="mdui-list-item-text mdui-list-item-one-line">帖子内容测试，这个一定要长一点点呢。。</div>
+                    <div class="mdui-list-item-text">
+                        <a class="mdui-list-item-title">USER NAME</a>
+                        <span title="2018.02.22 16:52">0分钟前</span>
+                    </div>
+                </div>
+            </li>
+
+            <li class="mdui-divider-inset mdui-m-y-0"></li>
+
+        </ul>
+    </div>
+
+    <div id="topic-essence">
+        <ul class="mdui-list">
+            <li class="mdui-list-item mdui-ripple">
+                <div class="mdui-list-item-avatar">
+                    <img src="https://mdui-aliyun.cdn.w3cbus.com/docs/assets/docs/img/avatar1.jpg" alt="user-1" title="user-14">
+                </div>
+                <div class="mdui-list-item-content">
+                    <a href="https://blog.kingsr.cc" class="mdui-list-item-title">帖子标题一【精华】</a>
+                    <div class="mdui-list-item-text mdui-list-item-one-line">帖子内容测试，这个一定要长一点点呢。。</div>
+                    <div class="mdui-list-item-text">
+                        <a class="mdui-list-item-title">USER NAME</a>
+                        <span title="2018.02.22 16:52">0分钟前</span>
+                    </div>
+                </div>
+            </li>
+
+            <li class="mdui-divider-inset mdui-m-y-0"></li>
+
+            <li class="mdui-list-item mdui-ripple">
+                <div class="mdui-list-item-avatar">
+                    <img src="https://mdui-aliyun.cdn.w3cbus.com/docs/assets/docs/img/avatar1.jpg" alt="user-1" title="user-14">
+                </div>
+                <div class="mdui-list-item-content">
+                    <a href="https://blog.kingsr.cc" class="mdui-list-item-title">帖子标题二【精华】</a>
+                    <div class="mdui-list-item-text mdui-list-item-one-line">帖子内容测试，这个一定要长一点点呢。。</div>
+                    <div class="mdui-list-item-text">
+                        <a class="mdui-list-item-title">USER NAME</a>
+                        <span title="2018.02.22 16:52">0分钟前</span>
+                    </div>
+                </div>
+            </li>
+
+            <li class="mdui-divider-inset mdui-m-y-0"></li>
+
+        </ul>
+    </div>
+
+</div>
+{include file="/../template@default/right_tool"}
+{/block}

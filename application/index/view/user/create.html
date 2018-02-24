@@ -1,0 +1,62 @@
+{extend name="../template@default/forum_public"} {block name="content"}
+
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
+    <form action="" method="post">
+        <h3>发布主题</h3>
+
+        <div class="mdui-divider"></div>
+
+        <div class="mdui-m-y-1">
+            <select class="mdui-select" mdui-select="{position: 'bottom'}">
+                <option value="1">板块 1</option>
+                <option value="2">板块 2</option>
+                <option value="3">板块 3</option>
+                <option value="4">板块 4</option>
+                <option value="5">板块 5</option>
+                <option value="6">板块 6</option>
+            </select>
+        </div>
+
+
+        <div class="mdui-textfield mdui-m-b-1">
+            <label class="mdui-textfield-label">标题</label>
+            <input class="mdui-textfield-input" type="text" placeholder="title" />
+        </div>
+
+        <div id="editor">
+        </div>
+
+        <div class="mdui-m-y-1">
+            <button class="mdui-btn layui-btn" id="file">
+                <i class="mdui-icon material-icons">file_upload</i>上传附件</button>
+
+                <button class="mdui-btn mdui-color-theme mdui-float-right">发布主题</button>
+        </div>
+    </form>
+</div>
+
+{/block} {block name="js"}
+
+<script src="__JS__/wangEditor.js"></script>
+<script>
+    var E = window.wangEditor
+    var editor = new E('#editor')
+    editor.create()
+</script> 
+<script>
+    layui.use('upload',function() {
+        var upload = layui.upload;
+
+          var uploadInst = upload.render({
+            elem: '#file' //
+            , url: '/upload/' //上传接口
+            , done: function (res) {
+                //上传完毕回调
+            }
+            , error: function () {
+                //请求异常回调
+            }
+        });
+    })
+</script>
+{/block}

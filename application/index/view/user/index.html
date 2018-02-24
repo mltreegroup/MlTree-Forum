@@ -1,0 +1,123 @@
+{extend name="../template@default/forum_public"} {block name="content"}
+
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
+    <div class="mdui-card">
+        <div class="mdui-card-media">
+            <img src="__IMG__/card.png" height="200px" />
+        </div>
+        <div class="mdui-card-primary">
+            <div class="">
+                <img src="__IMG__/user_defaule.png" alt="十载北林" class="mdui-img-circle mdui-float-left" width="60">
+            </div>
+            <div class="mdui-card-primary-title">十载北林</div>
+            <div class="mdui-card-primary-subtitle">一房两人，三餐四季。</div>
+        </div>
+
+        <div class="mdui-card-content">
+            <div class="mdui-tab" mdui-tab>
+                <a href="#theme" class="mdui-ripple">主题</a>
+                <a href="#password" class="mdui-ripple">密码</a>
+                <a href="#avatar" class="mdui-ripple">头像</a>
+            </div>
+            <div id="theme">
+                <ul class="mdui-list">
+                    <li class="mdui-list-item mdui-ripple">
+                        <div class="mdui-list-item-avatar">
+                            <img src="https://mdui-aliyun.cdn.w3cbus.com/docs/assets/docs/img/avatar1.jpg" alt="user-1" title="user-14">
+                        </div>
+                        <div class="mdui-list-item-content">
+                            <a class="mdui-list-item-title">帖子标题一【综合】</a>
+                            <div class="mdui-list-item-text mdui-list-item-one-line">帖子内容测试，这个一定要长一点点呢。。</div>
+                            <div class="mdui-list-item-text">
+                                <a class="mdui-list-item-title">USER NAME</a>
+                                <span title="2018.02.22 16:52">0分钟前</span>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="mdui-divider-inset mdui-m-y-0"></li>
+
+                    <li class="mdui-list-item mdui-ripple">
+                        <div class="mdui-list-item-avatar">
+                            <img src="https://mdui-aliyun.cdn.w3cbus.com/docs/assets/docs/img/avatar1.jpg" alt="user-1" title="user-14">
+                        </div>
+                        <div class="mdui-list-item-content">
+                            <a class="mdui-list-item-title">帖子标题二【综合】</a>
+                            <div class="mdui-list-item-text mdui-list-item-one-line">帖子内容测试，这个一定要长一点点呢。。</div>
+                            <div class="mdui-list-item-text">
+                                <a class="mdui-list-item-title">USER NAME</a>
+                                <span title="2018.02.22 16:52">0分钟前</span>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="mdui-divider-inset mdui-m-y-0"></li>
+
+                </ul>
+            </div>
+            <div id="password">
+                <form action="" method="post">
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <i class="mdui-icon material-icons">https</i>
+                        <label class="mdui-textfield-label">旧密码</label>
+                        <input class="mdui-textfield-input" type="password" required/>
+                        <div class="mdui-textfield-error">旧密码不能为空</div>
+                    </div>
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <i class="mdui-icon material-icons">https</i>
+                        <label class="mdui-textfield-label">新密码</label>
+                        <input class="mdui-textfield-input" type="password" required/>
+                        <div class="mdui-textfield-error">新密码不能为空</div>
+                    </div>
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <i class="mdui-icon material-icons">https</i>
+                        <label class="mdui-textfield-label">确认新密码</label>
+                        <input class="mdui-textfield-input" type="password" required/>
+                        <div class="mdui-textfield-error">与新密码不符</div>
+                    </div>
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <button type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">确认修改</button>
+                    </div>
+                </form>
+            </div>
+            <div id="avatar" class="mdui-text-center">
+                <div class="mdui-m-y-1">
+                    <img src="__IMG__/user_defaule.png" alt="十载北林" width="80">
+                </div>
+                <div class="mdui-m-y-1">
+                    <button class="mdui-btn mdui-color-pink" id="avatar_btn">上传新头像</button>
+                </div>
+                <span>上传完成后，请清除浏览器缓存查看效果</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{/block} {block name="js"}
+
+<script src="__JS__/wangEditor.js"></script>
+
+<script>
+    layui.use(['upload','form'], function () {
+        var upload = layui.upload,
+            form = layui.form;
+        
+        form.on('submit()',function(data){
+            
+        });
+
+        var uploadInst = upload.render({
+            elem: '#avatar_btn'
+            , accept: 'images'
+            , field: 'avatar'
+            , data: ''
+            , url: '/upload/'
+            , done: function (res) {
+
+            }
+            , error: function () {
+
+            }
+        });
+    })
+</script> {/block}

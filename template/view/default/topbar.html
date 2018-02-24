@@ -1,0 +1,55 @@
+<!-- 站点导航部分 -->
+<header class="mdui-appbar mdui-appbar-fixed mdui-color-blue">
+    <div class="mdui-toolbar mdui-color-theme mdui-container">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target:'#mobile-menu'}">
+            <i class="mdui-icon material-icons">menu</i>
+        </a>
+        <a href="{:url('index/index')}" class="mdui-typo-title">MlTree Forum</a>
+        <a href="{:url('index/index')}" class="mdui-hidden-xs" title="Home">首页</a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="{:url('user/create')}" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up">
+            <i class="mdui-icon material-icons">create</i>
+        </a>
+        <a href="{:url('user/login')}" class="mdui-btn mdui-ripple mdui-hidden-xs">
+            <i class="mdui-icon material-icons">person</i>登录</a>
+        <a href="{:url('user/reg')}" class="mdui-btn mdui-ripple mdui-hidden-xs">注册</a>
+    </div>
+
+</header>
+<!-- 论坛左侧手机版菜单 -->
+<div id="mobile-menu" class="mdui-drawer mdui-drawer-close mdui-color-light-blue">
+
+    <div class="mdui-panel" mdui-panel>
+
+        <div class="mdui-panel-item">
+            <div class="mdui-panel-item-header">
+                <a class="mdui-text-color-blue" href="{:url('index/index')}" title="Home">
+                    <i class="mdui-icon material-icons">home</i> 首页</a>
+            </div>
+        </div>
+
+        <div class="mdui-panel-item">
+            <div class="mdui-panel-item-header">
+                <div>站点导航</div>
+                <i class="mdui-panel-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <div class="mdui-panel-item-body">
+                <a class="mdui-text-color-blue" href="https://blog.kingsr.cc" title="北林博客">北林博客</a>
+            </div>
+        </div>
+
+        <div class="mdui-panel-item">
+            <div class="mdui-panel-item-header">
+                <a href="{:url('user/login')}" class="mdui-text-color-blue">登录</a>
+            </div>
+        </div>
+
+        <div class="mdui-panel-item">
+            <div class="mdui-panel-item-header">
+                <a href="{:url('user/reg')}" class="mdui-text-color-blue">注册</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>

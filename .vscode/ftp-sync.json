@@ -1,0 +1,24 @@
+{
+    "remotePath": "./",
+    "host": "42.51.4.233",
+    "username": "forum_kingsr_cc",
+    "password": "wjpNfXAXXJ",
+    "port": 21,
+    "secure": false,
+    "protocol": "ftp",
+    "uploadOnSave": true,
+    "passive": false,
+    "debug": false,
+    "privateKeyPath": null,
+    "passphrase": null,
+    "ignore": [
+        "\\.vscode",
+        "\\.git",
+        "\\.DS_Store"
+    ],
+    "generatedFiles": {
+        "uploadOnSave": false,
+        "extensionsToInclude": [],
+        "path": ""
+    }
+}

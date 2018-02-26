@@ -3,6 +3,7 @@ namespace app\index\controller;
 
 use \think\Controller;
 use \app\index\model\User;
+use \app\index\model\Atta;
 
 class Expand extends Controller
 {
@@ -19,6 +20,12 @@ class Expand extends Controller
         
         if ($info) {
             $path = $info->getSaveName();
+            $fileData = [
+                'uid'=>input('post.uid'),
+                'fileName'=>$file->getinfo()['name'],
+                'url'=>'/uploads/'.$path,
+            ];
+            Atta::create($fileData);
             return json(array('code'=>0,'url'=>'/uploads/'.$path,'msg'=>'上传成功！','file'=>$file->getinfo()['name']));
         } else {
             return json(array('code'=>1,'errmsg'=>'上传失败'));

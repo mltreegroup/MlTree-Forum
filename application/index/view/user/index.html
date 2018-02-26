@@ -3,7 +3,7 @@
 <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
     <div class="mdui-card">
         <div class="mdui-card-media">
-            <img src="{$userData.userInfo.avatar}" height="200px" />
+            <img src="__IMG__/card.png" height="200px" />
         </div>
         <div class="mdui-card-primary">
             <div class="">
@@ -56,27 +56,28 @@
                 </ul>
             </div>
             <div id="password">
-                <form action="" method="post">
+                <form action="{:url('set')}" method="post" class="layui-form">
                     <div class="mdui-textfield mdui-textfield-floating-label">
                         <i class="mdui-icon material-icons">https</i>
                         <label class="mdui-textfield-label">旧密码</label>
-                        <input class="mdui-textfield-input" type="password" required/>
+                        <input name="oldpassword" class="mdui-textfield-input" type="password" required/>
                         <div class="mdui-textfield-error">旧密码不能为空</div>
                     </div>
                     <div class="mdui-textfield mdui-textfield-floating-label">
                         <i class="mdui-icon material-icons">https</i>
                         <label class="mdui-textfield-label">新密码</label>
-                        <input class="mdui-textfield-input" type="password" required/>
+                        <input name="password" class="mdui-textfield-input" type="password" required/>
                         <div class="mdui-textfield-error">新密码不能为空</div>
                     </div>
                     <div class="mdui-textfield mdui-textfield-floating-label">
                         <i class="mdui-icon material-icons">https</i>
                         <label class="mdui-textfield-label">确认新密码</label>
-                        <input class="mdui-textfield-input" type="password" required/>
+                        <input name="repassword" class="mdui-textfield-input" type="password" required/>
                         <div class="mdui-textfield-error">与新密码不符</div>
                     </div>
                     <div class="mdui-textfield mdui-textfield-floating-label">
-                        <button layui-submit lay-filter="pass" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">确认修改</button>
+                        <input type="hidden" name="type" value="pass">
+                        <button lay-submit lay-filter="pass" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">确认修改</button>
                     </div>
                 </form>
             </div>
@@ -98,42 +99,48 @@
 <script src="__JS__/wangEditor.js"></script>
 
 <script>
-    layui.use(['upload','form'], function () {
+    layui.use(['upload', 'form'], function () {
         var upload = layui.upload,
             form = layui.form;
         var $$ = mdui.JQ;
 
-        form.on('submit(pass)',function(data){
+        form.on('submit(pass)', function (data) {
             $$.ajax({
-                method:'post',
-                url: '{:url("user/set")}',
+                method: 'post',
+                url: '{:url("set")}',
                 data: data.field,
-                dateType: 'json',
-                success: function(res){
-                    if(res.code == 0){
-                        layer.msg(res.message,{icon:1});
-                    }else{
-                        layer.msg(res.message,{icon:5});
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code == 1) {
+                        mdui.snackbar({
+                            message: res.message,
+                            position: 'top',
+                            onClosed: function () {
+                                window.location.href = res.url;
+                            },
+                        })
+                    } else {
+                        layer.msg(res.message, { icon: 5 });
                     }
                 },
             });
+            return false;
         });
 
         var uploadInst = upload.render({
             elem: '#avatar_btn'
             , accept: 'images'
             , field: 'avatar'
-            , data: {uid:'{$userData.userInfo.uid}'}
+            , data: { uid: '{$userData.userInfo.uid}' }
             , url: '{:url("index/expand/userUpload")}'
             , done: function (res) {
-                if(res.code == 0)
-                {
-                    layer.msg('上传成功！',{
-                        icon:1,
-                        end: function() {
-                            $$('#avatar_new').attr('src',res.url);
+                if (res.code == 0) {
+                    layer.msg('上传成功！', {
+                        icon: 1,
+                        end: function () {
+                            $$('#avatar_new').attr('src', res.url);
                         }
-                        });
+                    });
                 }
             }
             , error: function () {

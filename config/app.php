@@ -102,14 +102,14 @@ return [
     'request_cache_expire'   => null,
 
     // 默认跳转页面对应的模板文件
-    'dispatch_success_tmpl'  => Env::get('think_path') . 'tpl/dispatch_jump.tpl',
-    'dispatch_error_tmpl'    => Env::get('think_path') . 'tpl/dispatch_jump.tpl',
+    'dispatch_success_tmpl'  => '../template/view/default/success.html',
+    'dispatch_error_tmpl'    => '../template/view/default/error.html',
 
     // 异常页面的模板文件
     'exception_tmpl'         => Env::get('think_path') . 'tpl/think_exception.tpl',
 
     // 错误显示信息,非调试模式有效
-    'error_message'          => '页面错误！请稍后再试～',
+    'error_message'          => '阿偶？出现未知错误了呢~ Power By MlTree Forum',
     // 显示错误信息
     'show_error_msg'         => false,
     // 异常处理handle类 留空使用 \think\exception\Handle

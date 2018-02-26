@@ -7,11 +7,11 @@
         <a href="{:url('index/index')}" class="mdui-typo-title">MlTree Forum</a>
         <a href="{:url('index/index')}" class="mdui-hidden-xs" title="Home">首页</a>
         <div class="mdui-toolbar-spacer"></div>
-        <a href="{:url('user/create')}" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up">
+        <a href="{:url('index/topic/create')}" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up">
             <i class="mdui-icon material-icons">create</i>
         </a>
         <a href="{:url('index/user/index')}" class="mdui-ripple mdui-hidden-xs">
-            <img src="__IMG__/user_defaule.png" class="mdui-img-circle" width="32" alt="{$Think.session.username}">{$Think.session.username}
+            <img src="{$userData.userInfo.avatar}" class="mdui-img-circle" width="32" alt="{$userData.userInfo.username}">{$userData.userInfo.username}
         </a>
         <a href="{:url('index/user/logout')}" class="mdui-btn mdui-ripple mdui-hidden-xs">退出</a>
     </div>

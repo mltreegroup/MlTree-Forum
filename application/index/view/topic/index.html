@@ -1,0 +1,30 @@
+{extend name="../template@default/forum_public"} {block name="content"}
+
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
+    <div class="mf-panel mdui-shadow-10">
+        <header class="mf-panel-hd">
+            <h3>{$topicData.subject}</h3>
+            <span class="mdui-color-red">置顶</span>
+            <span class="mdui-color-blue">精华</span>
+        </header>
+        <div class="mf-panel-bd">
+
+            <div class="mdui-clearfix">
+                <img src="{$userData.userInfo.avatar}" alt="{$userData.userInfo.username}" class="mdui-img-circle mdui-float-left" width="64">
+                <div>
+                    <span>{$userData.userInfo.username}</span>
+                    <span>{$topicData.create_time}</span>
+                </div>
+            </div>
+
+            <div class="mdui-divider"></div>
+
+            <div class="content">
+                {$topicData.content|raw}
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+{/block}

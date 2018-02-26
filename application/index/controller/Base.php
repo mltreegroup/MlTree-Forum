@@ -7,15 +7,18 @@ use think\Db;
 class Base extends Controller
 { 
     protected $beforeActionList = [
-        'userStatus'  =>  ['only'=>'create,set'],
+        
     ];
 
-    public function userStatus()
+    
+
+    public function siteOption($titleSign = null)
     {
-        $uid = session('uid');
-        if(empty($uid))
+        $siteData = \app\index\model\Option::getValues(['base']);
+        if(!empty($titleSign))
         {
-            return redirect('index\user\login');
+            $siteData['siteTitle'] = $titleSign.' - '.$siteData['siteTitle'];
         }
+        return $siteData;
     }
 }

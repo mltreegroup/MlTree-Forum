@@ -1,0 +1,124 @@
+{extend name="../template@default/forum_public"} {block name="content"}
+
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
+    <form>
+        <h3>发布主题</h3>
+
+        <div class="mdui-divider"></div>
+
+        <div class="mdui-m-y-1">
+            <select lay-ignore name="fid" class="mdui-select" mdui-select="{position: 'bottom'}" required>
+                {volist name="forum" id="vo"}
+                <option value="{$vo.fid}">{$vo.name}</option>
+                {/volist}
+            </select>
+        </div>
+
+
+        <div class="mdui-textfield mdui-m-b-1">
+            <label class="mdui-textfield-label">标题</label>
+            <input name="title" class="mdui-textfield-input" type="text" placeholder="title" max="60" required/>
+        </div>
+
+        <div id="editor">
+        </div>
+        <div class="mdui-m-y-1"></div>
+        <input id="content" type="hidden" name="content" value="" required>
+        <input id="files" type="hidden" name="files" value=""> {:token()}
+        <button id="create" class="mdui-btn mdui-color-theme mdui-float-right">发布主题</button>
+    </form>
+    <div>
+        <button class="mdui-btn layui-btn mdui-color-orange" id="file">
+            <i class="mdui-icon material-icons">file_upload</i>上传附件</button>
+        <div id="fileList" class="mdui-hidden-xs">
+            <p>等待上传的附件队列(发布主题时自动上传)：</p>
+        </div>
+    </div>
+</div>
+
+{/block} {block name="js"}
+
+<script src="__JS__/wangEditor.js"></script>
+<script>
+    var E = window.wangEditor;
+    var editor = new E('#editor');
+    var $$ = mdui.JQ;
+    editor.customConfig.onchangeTimeout = 1000;
+    editor.customConfig.onchange = function (html) {
+        $$('#content').val(html);
+    }
+    editor.create();
+
+    layui.use(['upload'], function () {
+        var upload = layui.upload;
+
+        var files;
+        var fileJson;
+        var uploadInst = upload.render({
+            elem: '#file'
+            , method: 'POST'
+            , url: '{:url("index/expand/upload")}'
+            , accept: 'file'
+            , auto: false
+            , bindAction: '#create'
+            , data: {
+                uid: '{$userData.userInfo.uid}',
+            }
+            , choose: function (obj) {
+                files = obj.pushFile();
+                console.log(obj);
+                obj.preview(function (index, file, res) {
+                    var html = '<div class="mdui-chip">';
+                    html += '<span class="mdui-chip-title" >' + file.name + '</span>';
+                    html += '<span class="mdui-chip-delete"><i class="mdui-icon material-icons">cancel</i></span>';
+                    html += '</div>';
+
+                    var chip = $$('#fileList').append(html);
+                    chip.removeClass('mdui-hidden-xs');
+
+                    chip.find('.mdui-chip-delete').on('click', function () {
+                        delete files[index];
+                        chip.remove();
+                        uploadInst.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                    })
+                })
+            }
+            , before: function (obj) {
+                fileJson = JSON.stringify(obj.pushFile());
+                var list = $$('#files').val(fileJson);
+            }
+
+        });
+    });
+
+    $$('#create').on('click', function () {
+        //获取表单内容
+        var data = $$('form').serialize();
+        console.log(data);
+
+        $$.ajax({
+            method: 'post',
+            url: '{:url("index/topic/create")}',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 1) {
+                    mdui.snackbar({
+                        message: res.message,
+                        position: 'top',
+                        onClosed: function () {
+                            window.location.href = res.url;
+                        }
+                    })
+                } else {
+                    mdui.snackbar({
+                        message: '阿偶？出错了，请重试！\n' + res.message,
+                        position: 'top',
+                    })
+                }
+            }
+        });
+        return false;
+    });
+
+</script> {/block}

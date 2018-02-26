@@ -11,7 +11,7 @@ class User extends Base
     public $user;
 
     protected $beforeActionList = [
-        'userInfo'=> ['except' => 'login,reg,logout,sendMail'] ,
+        'userInfo'=> ['except' => 'login,reg,logout'],
     ];
 
     public function userInfo()
@@ -20,8 +20,6 @@ class User extends Base
         {
             $user = new userModel();
             $this->user = $user;
-        }else{
-
         }
     }
 
@@ -36,7 +34,7 @@ class User extends Base
                 $uid = session('uid');
             }
             return view('index',[
-            'title' => '用户信息 - MlTree Forum',
+            'option' => $this->siteOption('用户信息'),
             'userData' => $this->user->getInfo($uid),
             ]);
         }
@@ -57,9 +55,8 @@ class User extends Base
             }
             if(input('post.type') == 'pass')
             {
-                $user = new userModel();
-                $userData = $user::get(session('uid'));
-                $userPass = md5(input('password','','htmlspecialchars').$user->salt.$user->email);
+                $user = userModel::get(session('uid'));
+                $userPass = md5(input('oldpassword','','htmlspecialchars').$user->salt.$user->email);
                 if($userPass !== $user->password)
                 {
                     return ['code'=>'-1','message'=>'新密码不一致或旧密码不正确。'];
@@ -68,16 +65,12 @@ class User extends Base
                 }else {
                     $user->password = input('password');
                     $user->save();
-                    return ['code'=>'0','message'=>'修改成功！请使用新密码登录。'];
+                    session(null);
+                    return $this->success('修改成功！请使用新密码登录。','login');
+                    // return ['code'=>'0','message'=>'修改成功！请使用新密码登录。'];
                 }
             }
         }
-    }
-
-    public function create()
-    {
-        $this->assign('title','发帖 - MlTree Forun');
-        return view();
     }
 
     public function login()
@@ -102,10 +95,14 @@ class User extends Base
                     session('username',$user->username);
                     Db::name('user')->where('uid',$user->uid)->setInc('logins');//增加登录次数值
                     return json(['code'=>'0','message'=>'登录成功！欢迎回来……','url'=>url('index\user\index')]);
+                }else{
+                    return ['code'=>'-1','message'=>'用户名或密码错误！'];
                 }
             }
         }
-        return view();
+        return view('login',[
+            'option' => $this->siteOption('登录'),
+        ]);
     }
 
     public function reg()
@@ -160,7 +157,9 @@ class User extends Base
                 return json(['code'=>0,'message'=>'注册成功！正在跳转至登陆界面……','url'=>url('index\user\login')]);
             }
         }
-        return view();
+        return view('reg',[
+            'option' => $this->siteOption('注册'),
+        ]);
     }
 
     public function logout()
@@ -168,16 +167,9 @@ class User extends Base
         if(!empty(session('uid')))
         {
             session(null);
-            return json(['code'=>'0','message'=>'退出成功！']);
+            return $this->success('退出成功！','index/index/index');
         }else {
-            return json(['code'=>'-1','message'=>'当前无需退出呢~']);
+            return $this->error('当前无需退出呢！');
         }
-    }
-
-    public function sendMail()
-    {
-        $email = model("Mail");
-        $email->send('1143524493@qq.com','十载北林','This Test Mail From MlTreeForum','This Test Mail From MlTreeForum'.time());
-        return '邮件已经发送';
     }
 }

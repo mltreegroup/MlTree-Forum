@@ -7,7 +7,13 @@ class Index extends Base
 {
     public function index()
     {
-        $this->assign('title','MlTree Forum');
+        if(!empty(session('uid')))
+        {
+            $user = model('user');
+            $this->assign('userData',$user->getInfo(session('uid')));
+        }
+        // dump($this->siteOption());
+        $this->assign('option',$this->siteOption());
         return view();
     }
 

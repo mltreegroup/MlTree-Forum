@@ -1,30 +1,37 @@
 {extend name="../template@default/forum_public"} {block name="content"}
 
-<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-m-y-1">
     <div class="mf-panel mdui-shadow-10">
         <header class="mf-panel-hd">
-            <h3>{$topicData.subject}</h3>
-            <span class="mdui-color-red">置顶</span>
-            <span class="mdui-color-blue">精华</span>
+            <h3>{$topicData.subject}
+                {:outBadge($topicData)}
+            </h3>
+            <a class="mdui-color-grey-400" href="{:url('index/user/index',['uid'=>$topicData.uid])}"><strong>{$userData.userInfo.username}</strong></a>
+            <span title="{$topicData.create_time}">    {$topicData.create_time|time_format}    </span>
+            <span><i class="mdui-icon material-icons">remove_red_eye</i>{$topicData.views}</span>
         </header>
         <div class="mf-panel-bd">
-
-            <div class="mdui-clearfix">
-                <img src="{$userData.userInfo.avatar}" alt="{$userData.userInfo.username}" class="mdui-img-circle mdui-float-left" width="64">
-                <div>
-                    <span>{$userData.userInfo.username}</span>
-                    <span>{$topicData.create_time}</span>
-                </div>
-            </div>
-
-            <div class="mdui-divider"></div>
-
             <div class="content">
                 {$topicData.content|raw}
             </div>
         </div>
     </div>
+
+    <div class="mf-panel" id="comment">
+
+    </div>
 </div>
-{/block}
-{block name="js"}
-{/block}
+<div class="mdui-col-sm-4 mdui-m-y-1">
+    <div class="mf-panel mdui-text-center">
+        <header class="mf-panel-hd mdui-color-theme">
+            <img src="{$userData.userInfo.avatar}" alt="{$userData.userInfo.username}" class="mdui-img-circle" width="64">
+            <br/>
+            <a href="{:url('index/user/index',['uid'=>$topicData.uid])}"><h2>{$userData.userInfo.username}</h2></a>
+        </header>
+        <div class="mf-panel-bd">
+            
+        </div>
+    </div>
+
+</div>
+{/block} {block name="js"} {/block}

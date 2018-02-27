@@ -20,11 +20,14 @@ class Topic extends Base
         }
         //获取帖子信息
         $topic = topicModel::get($tid);
+        if(empty($topic))
+        {
+            return $this->error('暂未找到此内容！','index/index/index');
+        }
         $user = model('user');
         return view('index',[
             'option' => $this->siteOption($topic->subject),
             'topicData' => $topic,
-            'userData' => $user->getInfo($topic->uid),
         ]);
     }
     
@@ -69,4 +72,5 @@ class Topic extends Base
             'forum' => $forumData,
         ]);
     }
+
 }

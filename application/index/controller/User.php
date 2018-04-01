@@ -8,23 +8,10 @@ use think\Db;
 
 class User extends Base
 {
-    public $user;
-
-    protected $beforeActionList = [
-        'userInfo'=> ['except' => 'login,reg,logout'],
-    ];
-
-    public function userInfo()
-    {
-        if(!empty(session('uid')))
-        {
-            $user = new userModel();
-            $this->user = $user;
-        }
-    }
 
     public function index($uid = 0)
     {
+        $user = new userModel;
         if($uid == 0 && empty(session('uid')))
         {
             return $this->error('用户不存在！','index\index\index');
@@ -33,9 +20,19 @@ class User extends Base
             {
                 $uid = session('uid');
             }
+
+            //获取用户帖子信息
+            $userTopicList = Db::name('topic')->where('uid',$uid)->select();
+            foreach ($userTopicList as $key => $value) {
+            $value['content'] = strip_tags(htmlspecialchars_decode($value['content']));
+            $value['time_format'] = time_format($value['create_time']);
+            $value['userData'] =Db::name('user')->where('uid',$value['uid'])->field('username,avatar')->find();
+            $userTopicList[$key] = $value;
+        }
             return view('index',[
             'option' => $this->siteOption('用户信息'),
-            'userData' => $this->user->getInfo($uid),
+            'userData' => $user->getInfo($uid),
+            'userTopic' => $userTopicList,
             ]);
         }
         

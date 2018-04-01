@@ -4,34 +4,174 @@
     <div class="mf-panel mdui-shadow-10">
         <header class="mf-panel-hd">
             <h3>{$topicData.subject}
-                {:outBadge($topicData)}
+                <br/> {:outBadge($topicData)}
             </h3>
-            <a class="mdui-color-grey-400" href="{:url('index/user/index',['uid'=>$topicData.uid])}"><strong>{$userData.userInfo.username}</strong></a>
-            <span title="{$topicData.create_time}">    {$topicData.create_time|time_format}    </span>
-            <span><i class="mdui-icon material-icons">remove_red_eye</i>{$topicData.views}</span>
+            <a class="mdui-text-color-grey-400" href="{:url('index/user/index',['uid'=>$topicData.uid])}">
+                <strong>{$topicUser.username}</strong>
+            </a>
+            <span title="{$topicData.create_time}"> {$topicData.create_time|time_format} </span>
+            <span>
+                <i class="mdui-icon material-icons">looks</i>{$topicData.views}</span>
         </header>
         <div class="mf-panel-bd">
-            <div class="content">
+            <div class="content mdui-typo" id="mf-content">
                 {$topicData.content|raw}
             </div>
         </div>
     </div>
 
-    <div class="mf-panel" id="comment">
-
-    </div>
-</div>
-<div class="mdui-col-sm-4 mdui-m-y-1">
-    <div class="mf-panel mdui-text-center">
-        <header class="mf-panel-hd mdui-color-theme">
-            <img src="{$userData.userInfo.avatar}" alt="{$userData.userInfo.username}" class="mdui-img-circle" width="64">
-            <br/>
-            <a href="{:url('index/user/index',['uid'=>$topicData.uid])}"><h2>{$userData.userInfo.username}</h2></a>
+    <div class="mf-panel mdui-typo mdui-shadow-5 mdui-hoverable" id="comment">
+        <header class="mf-panel-hd mdui-m-f-2">
+            <h3 class="mf-panel-title mdui-m-f-2">回帖</h3>
         </header>
         <div class="mf-panel-bd">
-            
+            {volist name="commentData" id="vo"}
+            <div class="mdui-row mdui-typo mf-comment mdui-m-b-1">
+                <div class="mdui-col-xs-1">
+                    <a href="{:url('index/user/index',['uid'=>$vo.uid])}">
+                        <img src="{$vo.avatar}" alt="{$vo.username}" class="mdui-img-circle mdui-float-right" width="32">
+                    </a>
+                </div>
+
+                <div class="mdui-col-xs-10 mf-comment-bd">
+                    <header>
+                        <a href="{:url('index/user/index',['uid'=>$vo.uid])}">{$vo.username}</a>
+                        评论于
+                        <span title="{$vo.create_time}">{$vo.create_time|time_format}</span>
+                    </header>
+
+                    <div>
+                        {$vo.content|raw}
+                    </div>
+                </div>
+            </div>
+            {/volist}
+
+            <!-- 回复区域 -->
+            <div>
+                <form>
+                    <div id="editor">
+                    </div>
+                    <input id="reCid" type="hidden" name="reCid" value="">
+                    <input id="content" type="hidden" name="content" value="" required> {:token()}
+                    <button id="submit" class="mdui-btn mdui-color-theme mdui-float-right mdui-m-y-1">回复</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mdui-col-md-4 mdui-m-y-1">
+    <div class="mf-panel mdui-text-center">
+        <header class="mf-panel-hd mdui-color-theme">
+            <img src="{$topicUser.avatar}" alt="{$topicUser.username}" class="mdui-img-circle" width="64">
+            <br/>
+            <a href="{:url('index/user/index',['uid'=>$topicData.uid])}" class="mdui-text-color-white-text">
+                <h2>{$topicUser.username}</h2>
+            </a>
+        </header>
+        <div class="mf-panel-bd">
+            <table class="mdui-table">
+                <thead>
+                    <tr>
+                        <th width="33.3333%">主题数</th>
+                        <th width="33.3333%">回帖数</th>
+                        <th>精华数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{$topicUser.topics}</td>
+                        <td>{$topicUser.comments}</td>
+                        <td>{$topicUser.essence}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
 </div>
-{/block} {block name="js"} {/block}
+{/block} {block name="js"}
+<script src="__JS__/wangEditor.js"></script>
+<script>
+    var E = window.wangEditor;
+    var editor = new E('#editor');
+    var $$ = mdui.JQ;
+    var uploadImg = "{:url('index/expand/picUpload')}",
+        commentUrl = "{:url('index/topic/comment',['tid'=>$topicData.tid])}";
+    //配置颜色
+    editor.customConfig.colors = [
+        '#000000',
+        '#ffffff',
+        '#1c487f',
+        '#4d80bf',
+        '#c24f4a',
+        '#8baa4a',
+        '#7b5ba1',
+        '#46acc8',
+        '#f9963b',
+        '#FF6666',
+    ]
+    editor.customConfig.menus = [
+        'bold',
+        'italic',
+        'underline',
+        'emoticon',
+        'image',
+    ]
+    //配置图片上传
+    editor.customConfig.uploadImgServer = uploadImg;
+    editor.customConfig.uploadFilename = 'file';
+    editor.customConfig.uploadImgMaxLength = 1;
+    editor.customConfig.customAlert = function (info) {
+        layui.use(['layer'],function(){
+            var layer = layui.layer;
+
+            layer.msg(info, { icon: 5 });
+        })
+        
+    }
+    editor.customConfig.onchangeTimeout = 1000;
+    editor.customConfig.onchange = function (html) {
+        $$('#content').val(html);
+    }
+    editor.create();
+
+    $$('#submit').on('click', function () {
+        //获取表单内容
+        var data = $$('form').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: commentUrl,
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                console.log(res);
+                if (res.code == 1) {
+                    mdui.snackbar({
+                        message: res.message,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar({
+                        message: '阿偶？出错了，请重试！\n' + res.message,
+                        position: 'top',
+                    })
+                }
+            }
+        });
+        return false;
+    });
+
+    layui.use(['layer'],function(){
+        var layer = layui.layer;
+        layer.photos({
+            photos: '#mf-content'
+            , anim: 5
+        }); 
+    })
+    
+</script> {/block}

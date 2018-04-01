@@ -43,6 +43,7 @@ class Forum extends Base
             $value['content'] = strip_tags($value['content']);
             $value['time_format'] = time_format($value['create_time']);
             $value['userData'] = $user->where('uid',$value['uid'])->field('username,avatar')->find();
+            $value['Badge'] = outBadge($value);
         }
         return json(['code'=>'0','data'=>$topicData,'pages'=>$pages]);
         

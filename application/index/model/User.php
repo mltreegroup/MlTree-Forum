@@ -52,7 +52,7 @@ class User extends Model
             return [false];
         }
         $groupData = Db::name('group')->where('gid',$userInfo['gid'])->find();
-
+        
         return [
             'groupData' => $groupData,
             'userInfo' => $userInfo,

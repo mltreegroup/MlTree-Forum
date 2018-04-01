@@ -21,38 +21,22 @@
             </div>
             <div id="theme">
                 <ul class="mdui-list">
+                    {volist name="userTopic" id="vo"}
                     <li class="mdui-list-item mdui-ripple">
                         <div class="mdui-list-item-avatar">
-                            <img src="https://mdui-aliyun.cdn.w3cbus.com/docs/assets/docs/img/avatar1.jpg" alt="user-1" title="user-14">
+                            <img src="{$vo.userData.avatar}" alt="{$vo.userData.username}" title="{$vo.userData.username}">
                         </div>
                         <div class="mdui-list-item-content">
-                            <a class="mdui-list-item-title">帖子标题一【综合】</a>
-                            <div class="mdui-list-item-text mdui-list-item-one-line">帖子内容测试，这个一定要长一点点呢。。</div>
+                            <a class="mdui-list-item-title" href="{:url('index/topic/index',['tid'=>$vo.tid])}">{$vo.subject}</a>
+                            <div class="mdui-list-item-text mdui-list-item-one-line">{$vo.content|raw}</div>
                             <div class="mdui-list-item-text">
-                                <a class="mdui-list-item-title">USER NAME</a>
-                                <span title="2018.02.22 16:52">0分钟前</span>
+                                <a class="mdui-list-item-title" href="{:url('index/user/inde',['uid'=>$vo.uid])}">{$vo.userData.username}</a>
+                                <span title="{$vo.create_time}"> {$vo.time_format}</span>
                             </div>
                         </div>
                     </li>
-
                     <li class="mdui-divider-inset mdui-m-y-0"></li>
-
-                    <li class="mdui-list-item mdui-ripple">
-                        <div class="mdui-list-item-avatar">
-                            <img src="https://mdui-aliyun.cdn.w3cbus.com/docs/assets/docs/img/avatar1.jpg" alt="user-1" title="user-14">
-                        </div>
-                        <div class="mdui-list-item-content">
-                            <a class="mdui-list-item-title">帖子标题二【综合】</a>
-                            <div class="mdui-list-item-text mdui-list-item-one-line">帖子内容测试，这个一定要长一点点呢。。</div>
-                            <div class="mdui-list-item-text">
-                                <a class="mdui-list-item-title">USER NAME</a>
-                                <span title="2018.02.22 16:52">0分钟前</span>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="mdui-divider-inset mdui-m-y-0"></li>
-
+                    {/volist}
                 </ul>
             </div>
             <div id="password">

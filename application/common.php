@@ -23,6 +23,10 @@ function createStr($length){
 
 function time_format($time)//输出人性化时间
 {
+    if(gettype($time) === 'integer')
+    {
+        $time = date("Y-m-d H:i:s",$time);
+    }
     $publish_timestamp=strtotime($time);
     $now=date("Y-m-d H:i:s");
     $now_timestamp=strtotime($now);

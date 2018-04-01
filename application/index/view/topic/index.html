@@ -25,28 +25,9 @@
             <h3 class="mf-panel-title mdui-m-f-2">回帖</h3>
         </header>
         <div class="mf-panel-bd">
-            {volist name="commentData" id="vo"}
-            <div class="mdui-row mdui-typo mf-comment mdui-m-b-1">
-                <div class="mdui-col-xs-1">
-                    <a href="{:url('index/user/index',['uid'=>$vo.uid])}">
-                        <img src="{$vo.avatar}" alt="{$vo.username}" class="mdui-img-circle mdui-float-right" width="32">
-                    </a>
-                </div>
+            <div id="comments">
 
-                <div class="mdui-col-xs-10 mf-comment-bd">
-                    <header>
-                        <a href="{:url('index/user/index',['uid'=>$vo.uid])}">{$vo.username}</a>
-                        评论于
-                        <span title="{$vo.create_time}">{$vo.create_time|time_format}</span>
-                    </header>
-
-                    <div>
-                        {$vo.content|raw}
-                    </div>
-                </div>
             </div>
-            {/volist}
-
             <!-- 回复区域 -->
             <div>
                 <form>
@@ -123,12 +104,12 @@
     editor.customConfig.uploadFilename = 'file';
     editor.customConfig.uploadImgMaxLength = 1;
     editor.customConfig.customAlert = function (info) {
-        layui.use(['layer'],function(){
+        layui.use(['layer'], function () {
             var layer = layui.layer;
 
             layer.msg(info, { icon: 5 });
         })
-        
+
     }
     editor.customConfig.onchangeTimeout = 1000;
     editor.customConfig.onchange = function (html) {
@@ -166,12 +147,46 @@
         return false;
     });
 
-    layui.use(['layer'],function(){
-        var layer = layui.layer;
+    layui.use(['layer', 'flow'], function () {
+        var layer = layui.layer,
+            flow = layui.flow,
+            $ = layui.jquery;
+
         layer.photos({
             photos: '#mf-content'
             , anim: 5
-        }); 
+        });
+
+        flow.load({
+            elem: '#comments',
+            isAuto: false,
+            done: function (page, next) {
+                var list = [];
+                $.get('/index/topic/api/tid/{$topicData.tid}/type/comment/page/' + page, function (res) {
+                    layui.each(res.data, function (index, item) {
+                        var html = '<div class="mdui-row mdui-typo mf-comment mdui-m-b-1">';
+                        html = '<div class="mdui-col-xs-1" >'
+                        html = '<a href="/index/user/index/uid/' + item.uid + '">'
+                        html = '<img src="' + item.avatar + '" alt="' + item.username + '" class="mdui-img-circle mdui-float-right" width="32">'
+                        html = '</a>'
+                        html = '</div>'
+                        html = '<div class="mdui-col-xs-10 mf-comment-bd">'
+                        html = '<header>'
+                        html = '<a href="/index/user/index/uid/' + item.uid + '">' + item.username + '</a>'
+                        html = '评论于'
+                        html = '<span title="' + item.create_time + '">' + item.time_format + '</span>'
+                        html = '</header>'
+                        html = '<div>'
+                        html = item.content
+                        html = '</div>'
+                        html = '</div>'
+                        html = '</div >'
+                        list.push(html);
+                    })
+                    next(list.join(''), page < res.pages);
+                })
+            }
+        })
     })
-    
+
 </script> {/block}

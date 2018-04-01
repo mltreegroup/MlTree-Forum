@@ -8,6 +8,7 @@ use app\index\model\Atta;
 use app\index\model\User;
 use app\index\model\Group;
 use app\index\model\Comment;
+use app\index\model\Option;
 use Auth\Auth;
 
 class Topic extends Base
@@ -181,5 +182,41 @@ class Topic extends Base
             return ['code'=>1,'message'=>'回复成功！'];
         }
     }
+
+    public function api($tid,$type,$page=2)
+    {
+        $max = Option::getValue('commentNum');
+        switch ($type) {
+            case 'comment':
+                $comment = Comment::page('comment')->where('tid',$tid)->page($page,$max)->select();
+
+                foreach ($comment as $key => $value) {
+                    $data = Db::name('user')->where('uid',$value['uid'])->find();
+                    $value['username'] = $data['username'];
+                    $value['avatar'] = $data['avatar'];
+                    $value['content'] = strip_tags($value['content']);
+                    $value['time_format'] = time_format($value['create_time']);
+                }
+                $count = Comment::page('comment')->where('tid',$tid)->count('cid');
+                $pages = ceil($count / $max);
+                return json(['code'=>'0','data'=>$comment,'pages'=>$pages]);
+            
+            default:
+                $topicData = topic::get($tid);
+                return json(['code'=>0,'data'=>$topicData]);
+                break;
+        }
+        //数据处理（content等去除标签)
+        $user = model('user');
+        foreach ($topicData as $key => $value) {
+            $value['content'] = strip_tags($value['content']);
+            $value['time_format'] = time_format($value['create_time']);
+            $value['userData'] = $user->where('uid',$value['uid'])->field('username,avatar')->find();
+            $value['Badge'] = outBadge($value);
+        }
+        
+        
+    }
+    
 
 }

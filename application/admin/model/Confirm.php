@@ -1,5 +1,5 @@
 <?php
-namespace app\index\model;
+namespace app\admin\model;
 
 use think\Model;
 use think\Db;
@@ -11,9 +11,6 @@ class Confirm extends Model{
 	}
 	static function getValue($uid){
 		return Db::name('confirm')->where('uid',$uid)->value('code','time');
-	}
-	static function setConfirm($uid){
-		Db::name('confirm')->where('uid',$uid)->delete();
-	}
+    }
 }
 ?>

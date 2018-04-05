@@ -1,0 +1,41 @@
+{extend name="public/admin_public"} {block name="content"}
+<div class="mdui-m-a-1 mdui-typo">
+    <div class="mdui-col-xs-12 mdui-col-sm-6 mf-panel">
+        <div class="mf-panel-hd">
+            <h3>系统信息</h3>
+        </div>
+
+        <div class="mf-panel-bd">
+            <ul>
+                {volist name="serverinfo" id="vo"}
+                <li>{$key} : {$vo}</li>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+    <div class="mdui-col-xs-12 mdui-col-sm-6 mf-panel">
+        <div class="mf-panel-hd">
+            <h3>关于MlTree Forum</h3>
+        </div>
+
+        <div class="mf-panel-bd">
+            <h2>MlTree Forum 1.0.0</h2>
+            <ul>
+                <li>主页：
+                    <a href="https://forum.mltree.top">https://forum.mltree.top</a>
+                </li>
+                <li>Coding：
+                    <a href="https://coding.net/u/Mllb_Kingsr/p/MlTree-Forum/">https://coding.net/u/Mllb_Kingsr/p/MlTree-Forum/</a>
+                </li>
+                <li>许可证：<a href="https://choosealicense.com/licenses/gpl-3.0/">GNU General Public License v3.0</a></li>
+                <li>其他：
+                    <a href="https://t.me/joinchat/Hewif0uvElMgVnAK_WrFJw
+">https://t.me/joinchat/Hewif0uvElMgVnAK_WrFJw
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{/block}

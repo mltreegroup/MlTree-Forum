@@ -1,0 +1,88 @@
+{extend name="public/admin_public"} {block name="content"}
+<div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
+
+    <h1 class="mdui-m-l-3">Forum 管理</h1>
+
+    <div class="mdui-btn-group mdui-m-l-3">
+        <a href="{:url('set/addUser')}" title="添加板块">
+            <button type="button" class="mdui-btn">
+                <i class="mdui-icon material-icons">add</i>
+            </button>
+        </a>
+    </div>
+
+    <table class="mdui-table mdui-textfield mdui-table-hoverable">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Fid</th>
+                <th>板块名称</th>
+                <th>板块描述</th>
+                <th>板块管理</th>
+            </tr>
+        </thead>
+        <tbody>
+            {volist name="forumData" id="vo"}
+            <tr>
+                <td>{$vo.sort}</td>
+                <td>{$vo.fid}</td>
+                <td>{$vo.name}</td>
+                <td>{$vo.introduce}</td>
+                <td>
+                    <div class="mdui-btn-group">
+                        <a href="">
+                            <button type="button" class="mdui-btn">
+                                <i class="mdui-icon material-icons">create</i>
+                                编辑
+                            </button>
+                        </a>
+                        <a href="">
+                            <button type="button" class="mdui-btn">
+                                <i class="mdui-icon material-icons">delete</i>
+                                删除
+                            </button>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+
+</div>
+
+{/block} {block name="js"}
+<script>
+    var $$ = mdui.JQ,
+        data = '';;
+
+    $$('#forum').addClass('mdui-collapse-item-open');
+    $$('#setForum').addClass('mdui-list-item-active');
+
+    $$('#submit').on('click', function () {
+        data = $$('form').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                } else {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+</script> {/block}

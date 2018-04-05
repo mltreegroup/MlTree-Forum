@@ -1,0 +1,77 @@
+{extend name="public/admin_public"} {block name="content"}
+<div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
+    <form>
+        <h1 class="mdui-m-l-3">基础设置</h1>
+        <table class="mdui-table mdui-textfield">
+            <tbody>
+                <tr>
+                    <td witdh="5%">站点主标题</td>
+                    <td>
+                        <input type="text" name="siteTitle" id="siteTitle" class="mdui-textfield-input" value="{$base.siteTitle}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>站点关键词</td>
+                    <td>
+                        <input type="text" name="siteKeywords" id="siteKeywords" class="mdui-textfield-input" value="{$base.siteKeywords}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>站点描述</td>
+                    <td>
+                        <input type="text" name="siteDes" id="siteDes" class="mdui-textfield-input" value="{$base.siteDes}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>页脚代码</td>
+                    <td>
+                        <textarea name="siteFooterJs" id="siteFooterJs" cols="30" rows="10" class="mdui-textfield-input">{$base.siteFooterJs}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <button id="submit" type="submit" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent">保存设置</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </form>
+</div>
+
+{/block} {block name="js"}
+<script>
+    var $$ = mdui.JQ,
+        data = '';;
+
+    $$('#sys').addClass('mdui-collapse-item-open');
+    $$('#base').addClass('mdui-list-item-active');
+
+    $$('#submit').on('click', function () {
+        data = $$('form').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                } else {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+</script> {/block}

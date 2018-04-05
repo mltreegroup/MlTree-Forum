@@ -4,7 +4,7 @@ use Auth\Auth;
 
 function outBadge($data)
 {
-    $value = null;
+    $value = '';
     if ($data['tops'] == 1) {
         $value = ' <span class="mf-badge mf-badge-danger mf-radius mdui-m-r-1">置顶</span>';
     }

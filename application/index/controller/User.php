@@ -4,6 +4,7 @@ namespace app\index\controller;
 use app\index\controller\Base;
 use app\index\model\User as userModel;
 use app\index\model\Option;
+use app\index\model\Confirm;
 use think\Db;
 
 class User extends Base
@@ -86,6 +87,10 @@ class User extends Base
                 $userPass = md5(input('password','','htmlspecialchars').$user->salt.input('post.email'));
                 if($userPass === $user->password)
                 {
+                    $Confirm = Confirm::getValue($user->uid);
+                    if(!empty($Confirm)){
+                        return $this->error('账号尚未激活，请激活账号后再次尝试登陆。');
+                    }
                     session('uid',$user->uid);
                     session('gid',$user->gid);
                     session('salt',$user->salt);
@@ -136,19 +141,32 @@ class User extends Base
             ];
             
             $user = new UserModel;
-            
             $user->allowField(true)->save($userData);
-            if(Option::getValue('reg_email') == '1')
+            $uid = $user->uid;
+
+            if(Option::getValue('regMail') == '1')
             {
-                \app\index\model\Confirm::create([
-                    'code' => rand(100000,999999),
-                    'time' => time(),
+                $code = createStr(6);
+                Confirm::create([
+                    'uid' => $uid,
+                    'code' => $code,
+                    'time' => time() + 300000,
                     'type' => 'register',
                 ]);
 
                 //调用Mailmodel，发送邮件
                 $email = model("Mail");
-                $email->send(input('post.mail'),input('post.username'),Option::getValue('reg_mail_title'),Option::getValue('reg_mail_content'));
+                $arry = [
+                    '{siteTitle}' => Option::getValue('siteTitle'),
+                    '{userName}' => $userData['username'],
+                ];
+                $title = Option::getValue('reg_mail_title');
+                $content = Option::getValue('reg_mail_content');
+
+                $title = strtr($title,$arry);
+                $content = strtr($content,$arry);
+
+                $email->send(input('post.mail'),input('post.username'),$title,$content);
                 return json(['code'=>0,'message'=>'注册成功！我们已经发送了一封激活邮件，赶紧到邮箱中激活吧！','url'=>url('index\user\login')]);
             }else{
                 return json(['code'=>0,'message'=>'注册成功！正在跳转至登陆界面……','url'=>url('index\user\login')]);
@@ -167,6 +185,43 @@ class User extends Base
             return $this->success('退出成功！','index/index/index');
         }else {
             return $this->error('当前无需退出呢！');
+        }
+    }
+
+    public function activity($uid,$code)
+    {
+        $data = Confirm::getValue($uid);
+        if($data['time'] < time())
+        {
+            Confirm::setConfirm($uid);
+            $code = createStr(6);
+            Confirm::create([
+                    'uid' => $uid,
+                    'code' => $code,
+                    'time' => time() + 300000,
+                    'type' => 'register',
+                ]);
+            $user = userModel::get($uid);
+            //调用Mailmodel，发送邮件
+            $email = model("Mail");
+            $arry = [
+                '{siteTitle}' => Option::getValue('siteTitle'),
+                '{userName}' => $userData['username'],
+                '{url}' => $_SERVER['SERVER_NAME'].url('index/User/activity',['uid'=>$uid,'code'=>$code]),
+            ];
+
+            $title = Option::getValue('reg_mail_title');
+            $content = Option::getValue('reg_mail_content');
+
+            $title = strtr($title,$arry);
+            $content = strtr($content,$arry);
+
+            $email->send($user->email,$user->username,$title,$content);
+
+            return $this->error('链接已经过期，已经重新发送一封邮件。');
+        }elseif($data['code'] === $code){
+            Confirm::setConfirm($uid);
+            return $this->success('账户成功激活！','index/User/login');
         }
     }
 }

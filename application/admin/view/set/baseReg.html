@@ -1,0 +1,113 @@
+{extend name="public/admin_public"} {block name="content"}
+<div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
+    <form>
+        <h1 class="mdui-m-l-3">注册 & 访问设置</h1>
+        <table class="mdui-table mdui-textfield">
+            <tbody>
+                <tr>
+                    <td>允许访问</td>
+                    <td>
+                        <label class="mdui-switch">
+                            {if $siteStatus == 1}
+                            <input name="siteStatus" type="checkbox" checked/>
+                            {else}
+                            <input name="siteStatus" type="checkbox" />
+                            {/if}
+                            <i class="mdui-switch-icon"></i>
+                        </label>
+                    </td>
+                    <td>
+                        设置论坛是否可以访问，关闭后仅『超级管理员』权限可以访问
+                    </td>
+                </tr>
+                <tr>
+                    <td>允许注册</td>
+                    <td>
+                        <label class="mdui-switch">
+                            {if $reg.regStatus == 1}
+                            <input name="regStatus" type="checkbox" checked/> {else}
+                            <input name="regStatus" type="checkbox" /> {/if}
+                            <i class="mdui-switch-icon"></i>
+                        </label>
+                    </td>
+                    <td>
+                        是否允许新用户注册
+                    </td>
+                </tr>
+                <tr>
+                    <td>默认用户组</td>
+                    <td>
+                        <select name="defaulegroup" class="mdui-select" mdui-select>
+                            {volist name="userGroup" id="vo"} {if $vo.gid == $reg.defaulegroup}
+                            <option value="{$vo.gid}" selected="selected">{$vo.groupName}</option>
+                            {else /}
+                            <option value="{$vo.gid}">{$vo.groupName}</option>
+                            {/if} {/volist}
+                        </select>
+                    </td>
+                    <td>
+                        用户注册后默认属于的用户组
+                    </td>
+                </tr>
+                <tr>
+                    <td>邮件激活</td>
+                    <td>
+                        <label class="mdui-checkbox">
+                            {if $reg.regMail == 1}
+                            <input name="regMail" type="checkbox" checked/> {else}
+                            <input name="regMail" type="checkbox" /> {/if}
+                            <i class="mdui-checkbox-icon"></i>
+                        </label>
+                    </td>
+                    <td>
+                        启用后，新用户注册需要点击邮件中的激活链接才能完成。请确认邮件发送设置是否正确，否则激活邮件无法送达
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <button id="submit" type="submit" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent">保存设置</button>
+                    </td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </form>
+</div>
+
+{/block} {block name="js"}
+<script>
+    var $$ = mdui.JQ,
+        data = '';;
+
+    $$('#sys').addClass('mdui-collapse-item-open');
+    $$('#baseReg').addClass('mdui-list-item-active');
+
+    $$('#submit').on('click', function () {
+        data = $$('form').serialize();
+        console.log(data);
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                } else {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+</script> {/block}

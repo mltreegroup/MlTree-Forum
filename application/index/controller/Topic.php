@@ -98,13 +98,13 @@ class Topic extends Base
         if($uid == 0)
         {
             $uid = session('uid');
-            }
+        }
         if($uid == 0 || $tid == 0)
         {
             return redirect('index\index\index');
         }elseif(empty(session('uid'))){
             return $this->error('请先登录。','index/user/login');
-            }
+        }
 
 
 
@@ -116,7 +116,7 @@ class Topic extends Base
         //判断是否拥有权限
         $auth = new auth;
 
-        if($auth->check('update',$uid))
+        if($auth->check('update',$uid) || $auth->check('admin',$uid))
         {
             if(!empty(input('post.')))
             {
@@ -145,7 +145,7 @@ class Topic extends Base
                 'userData' => $user->getInfo($uid),
             ]);
         }else{
-            return '没有更新权限';
+            return $this->error('无权限');
         }
     }
 
@@ -216,6 +216,46 @@ class Topic extends Base
         }
         
         
+    }
+
+    public function set($type,$tid)
+    {
+        $auth = new Auth;
+        $uid = session('uid');
+        if (!empty($uid)) {
+            $this->assign('userData',user::get($uid));
+        }
+        if($type === 'top')//置顶操作
+        {
+            if($auth->check('top',$uid) || $auth->check('admin',$uid))
+            {
+                $topic = topicModel::get($tid);
+                $topic->tops = 1;
+                $topic->save();
+                return $this->success('置顶成功');
+            }else{
+                return $this->error('无权限');
+            }
+
+            if($auth->check('essence',$uid) || $auth->check('admin',$uid))
+            {
+                $topic = topicModel::get($tid);
+                $topic->essence = 1;
+                $topic->save();
+                return $this->success('设置精华成功');
+            }else{
+                return $this->error('无权限');
+            }
+
+            if($auth->check('delete',$uid) || $auth->check('admin',$uid))
+            {
+                $topic = topicModel::get($tid);
+                $topic->delete();
+                return $this->success('删除成功');
+            }else{
+                return $this->error('无权限');
+            }
+        }
     }
     
 

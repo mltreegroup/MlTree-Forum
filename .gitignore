@@ -3,3 +3,4 @@ composer.lock
 *.log
 thinkphp
 .vscode/settings.json
+.vscode

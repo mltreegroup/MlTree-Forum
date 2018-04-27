@@ -31,10 +31,15 @@ return [
     // 标签库标签结束标记
     'taglib_end'   => '}',
 
+    'tpl_cache'    => false,
+
+    'TMPL_CACHE_ON'=>false,
+    
     'tpl_replace_string'  =>  [
     '__STATIC__'=>'/static',
     '__JS__' => '/static/js',
     '__CSS__'=>'/static/css',
     '__IMG__'=>'/static/images',
+    '__JQ__'=>'/static/js/jquery-3.3.1.min.js',
     ]
 ];

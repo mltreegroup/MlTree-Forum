@@ -8,10 +8,8 @@ use auth\auth;
 class Base extends Controller
 {
     protected $beforeActionList = [
-        
+        'beforeLogin' => ['only' => 'upload,avatarUpload,picUpload'],
     ];
-
-    
 
     public function siteOption($titleSign = null)
     {
@@ -20,5 +18,13 @@ class Base extends Controller
             $siteData['siteTitle'] = $titleSign.' - '.$siteData['siteTitle'];
         }
         return $siteData;
+    }
+
+    public function beforeLogin()
+    {
+        if(empty(session('uid')))
+        {
+            return json(['code'=>'1000','message'=>'错误，尚未登录','time'=>time()]);
+        }
     }
 }

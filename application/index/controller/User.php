@@ -21,18 +21,33 @@ class User extends Base
             {
                 $uid = session('uid');
             }
-
             //获取用户帖子信息
             $userTopicList = Db::name('topic')->where('uid',$uid)->select();
+            if(empty($userTopicList))
+            {
+                return $this->error('用户不存在。');
+            }
             foreach ($userTopicList as $key => $value) {
-            $value['content'] = strip_tags(htmlspecialchars_decode($value['content']));
-            $value['time_format'] = time_format($value['create_time']);
-            $value['userData'] =Db::name('user')->where('uid',$value['uid'])->field('username,avatar')->find();
-            $userTopicList[$key] = $value;
-        }
-            return view('index',[
+                $value['content'] = strip_tags(htmlspecialchars_decode($value['content']));
+                $value['time_format'] = time_format($value['create_time']);
+                $value['userData'] =Db::name('user')->where('uid',$value['uid'])->field('username,avatar')->find();
+                $userTopicList[$key] = $value;
+            }
+
+            if(session('uid') == $uid)
+            {
+                return view('index',[
+                'option' => $this->siteOption('用户信息'),
+                'userData' => userModel::get(session('uid')),
+                'userTopic' => $userTopicList,
+                ]);
+            }
+            $userInfo = $user->getInfo($uid);
+
+            return view('index_public',[
             'option' => $this->siteOption('用户信息'),
-            'userData' => $user->getInfo($uid),
+            'userData' => userModel::get(session('uid')),
+            'userInfo' => $userInfo,
             'userTopic' => $userTopicList,
             ]);
         }
@@ -88,8 +103,8 @@ class User extends Base
                 if($userPass === $user->password)
                 {
                     $Confirm = Confirm::getValue($user->uid);
-                    if(!empty($Confirm)){
-                        return $this->error('账号尚未激活，请激活账号后再次尝试登陆。');
+                    if(!empty($Confirm['code'])){
+                        return json(['code'=>1,'message'=>'账户未激活，请激活后登陆。']);
                     }
                     session('uid',$user->uid);
                     session('gid',$user->gid);

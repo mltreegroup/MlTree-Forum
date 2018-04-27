@@ -43,21 +43,6 @@ class User extends Model
 		}
 		return true;
     }
-
-    public function getInfo($userId)
-    {
-        $userInfo = Db::name('user')->where('uid',$userId)->find();
-        if(empty($userInfo))
-        {
-            return [false];
-        }
-        $groupData = Db::name('group')->where('gid',$userInfo['gid'])->find();
-        
-        return [
-            'groupData' => $groupData,
-            'userInfo' => $userInfo,
-        ];
-    }
     
 }
 

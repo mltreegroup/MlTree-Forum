@@ -1,11 +1,11 @@
 <?php
 namespace app\index\controller;
 
-use \think\Controller;
+use app\index\controller\Base;
 use \app\index\model\User;
 use \app\index\model\Atta;
 
-class Expand extends Controller
+class Expand extends Base
 {
     public function upload()//普通上传类
     {
@@ -32,7 +32,7 @@ class Expand extends Controller
         }
     }
 
-    public function userUpload()//用户头像上传类
+    public function avatarUpload()//用户头像上传方法
     {
         $file = request()->file('avatar');
         

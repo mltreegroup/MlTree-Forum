@@ -13,14 +13,20 @@ use Auth\Auth;
 
 class Topic extends Base
 {
+    protected function initialize()
+    {
+        if(!empty(session('uid')))
+        {
+            $this->assign('userData',user::get(session('uid')));
+        }
+    }
+
     public function index($tid = 0)
     {
         $user = new User;
         if($tid == 0)
         {
             return \redirect('index\index\index');
-        }elseif (!empty(session('uid'))) {
-            $this->assign('userData',$user->getInfo(session('uid')));
         }
         //获取帖子信息
         $topic = topicModel::get($tid);
@@ -88,7 +94,6 @@ class Topic extends Base
         $forumData = \think\Db::name('forum')->field('fid,name')->select();
         return view('create',[
             'option' => $this->siteOption('发帖'),
-            'userData' => $user->getInfo(session('uid')),
             'forum' => $forumData,
         ]);
     }
@@ -142,7 +147,6 @@ class Topic extends Base
                 'topicData'=> $topic,
                 'forum' => $forumData,
                 'option' => $this->siteOption('编辑 - '.$topic->subject),
-                'userData' => $user->getInfo($uid),
             ]);
         }else{
             return $this->error('无权限');
@@ -183,48 +187,10 @@ class Topic extends Base
         }
     }
 
-    public function api($tid,$type,$page=2)
-    {
-        $max = Option::getValue('commentNum');
-        switch ($type) {
-            case 'comment':
-                $comment = Comment::page('comment')->where('tid',$tid)->page($page,$max)->select();
-
-                foreach ($comment as $key => $value) {
-                    $data = Db::name('user')->where('uid',$value['uid'])->find();
-                    $value['username'] = $data['username'];
-                    $value['avatar'] = $data['avatar'];
-                    $value['content'] = strip_tags($value['content']);
-                    $value['time_format'] = time_format($value['create_time']);
-                }
-                $count = Comment::page('comment')->where('tid',$tid)->count('cid');
-                $pages = ceil($count / $max);
-                return json(['code'=>'0','data'=>$comment,'pages'=>$pages]);
-            
-            default:
-                $topicData = topic::get($tid);
-                return json(['code'=>0,'data'=>$topicData]);
-                break;
-        }
-        //数据处理（content等去除标签)
-        $user = model('user');
-        foreach ($topicData as $key => $value) {
-            $value['content'] = strip_tags($value['content']);
-            $value['time_format'] = time_format($value['create_time']);
-            $value['userData'] = $user->where('uid',$value['uid'])->field('username,avatar')->find();
-            $value['Badge'] = outBadge($value);
-        }
-        
-        
-    }
-
     public function set($type,$tid)
     {
         $auth = new Auth;
         $uid = session('uid');
-        if (!empty($uid)) {
-            $this->assign('userData',user::get($uid));
-        }
         if($type === 'top')//置顶操作
         {
             if($auth->check('top',$uid) || $auth->check('admin',$uid))
@@ -242,6 +208,13 @@ class Topic extends Base
                 $topic = topicModel::get($tid);
                 $topic->essence = 1;
                 $topic->save();
+
+                //增加精华帖子数
+                $topic = topicModel::get($tid);
+                $user = user::get($topic->uid);
+                $user->essence = $user->essence + 1;
+                $user->save();
+
                 return $this->success('设置精华成功');
             }else{
                 return $this->error('无权限');
@@ -250,7 +223,15 @@ class Topic extends Base
             if($auth->check('delete',$uid) || $auth->check('admin',$uid))
             {
                 $topic = topicModel::get($tid);
+
+                //删除用户帖子数
+                $user = user::get($topic->uid);
+                $user->topics = $user->topics - 1;
+                $user->save();
+
+                //执行删除动作
                 $topic->delete();
+
                 return $this->success('删除成功');
             }else{
                 return $this->error('无权限');

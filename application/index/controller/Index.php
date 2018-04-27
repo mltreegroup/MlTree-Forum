@@ -2,6 +2,7 @@
 namespace app\index\controller;
 
 use app\index\controller\Base;
+use app\index\model\User;
 use think\Db;
 
 class Index extends Base
@@ -11,7 +12,7 @@ class Index extends Base
         if(!empty(session('uid')))
         {
             $user = model('user');
-            $this->assign('userData',$user->getInfo(session('uid')));
+            $this->assign('userData',user::get(session('uid')));
         }
         //输出置顶帖子
         $topic = Db::name('topic')->where('tops','in','1')->order('create_time DESC')->select();
@@ -25,6 +26,11 @@ class Index extends Base
         $this->assign('tops',$topic);
         $this->assign('option',$this->siteOption());
         return view();
+    }
+
+    public function Search($keyword = '')
+    {
+        exit;
     }
 
 }

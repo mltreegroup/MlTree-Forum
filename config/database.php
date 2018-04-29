@@ -13,11 +13,11 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
-    'hostname'        => '$_ENV["MYSQL_HOST"]',
+    'hostname'        => 'mysql.coding.io',
     // 数据库名
-    'database'        => '$_ENV["MYSQL_DBNAME"]',
+    'database'        => 'db-rlKkmvbgHP',
     // 用户名
-    'username'        => '$_ENV["MYSQL_USERNAME"]',
+    'username'        => 'user-x7BcSOFXl1,
     // 密码
     'password'        => '$_ENV["MYSQL_PASSWORD"]',
     // 端口

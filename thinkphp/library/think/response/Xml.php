@@ -41,6 +41,7 @@ class Xml extends Response
      */
     protected function output($data)
     {
+<<<<<<< HEAD
         if (is_string($data)) {
             if (0 !== strpos($data, '<?xml')) {
                 $encoding = $this->options['encoding'];
@@ -50,6 +51,8 @@ class Xml extends Response
             return $data;
         }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         // XML数据转换
         return $this->xmlEncode($data, $this->options['root_node'], $this->options['item_node'], $this->options['root_attr'], $this->options['item_key'], $this->options['encoding']);
     }

@@ -1,8 +1,8 @@
 {
     "remotePath": "./",
-    "host": "42.51.4.233",
-    "username": "forum_kingsr_cc",
-    "password": "wjpNfXAXXJ",
+    "host": "*****",
+    "username": "*****",
+    "password": "*****",
     "port": 21,
     "secure": false,
     "protocol": "ftp",

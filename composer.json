@@ -17,11 +17,15 @@
     ],
     "require": {
         "php": ">=5.6.0",
+<<<<<<< HEAD
         "topthink/framework": "5.1.*",
         "topthink/think-captcha": "^2.0",
         "topthink/think-image": "^1.0",
         "topthink/think-worker": "^1.0",
         "workerman/workerman-for-win": "^3.5"
+=======
+        "topthink/framework": "5.1.*"
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     },
     "autoload": {
         "psr-4": {

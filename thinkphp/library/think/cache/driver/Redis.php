@@ -74,7 +74,11 @@ class Redis extends Driver
      */
     public function has($name)
     {
+<<<<<<< HEAD
         return $this->handler->exists($this->getCacheKey($name));
+=======
+        return $this->handler->get($this->getCacheKey($name)) ? true : false;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**

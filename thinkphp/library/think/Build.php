@@ -135,7 +135,11 @@ class Build
 
         // 创建子目录和文件
         foreach ($list as $path => $file) {
+<<<<<<< HEAD
             $modulePath = $this->basePath . $module . DIRECTORY_SEPARATOR;
+=======
+            $modulePath = $this->basePath . $module . '/';
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             if ('__dir__' == $path) {
                 // 生成子目录
                 foreach ($file as $dir) {
@@ -187,7 +191,11 @@ class Build
      * @param  string $layer  控制器层目录名
      * @return string
      */
+<<<<<<< HEAD
     public function buildRoute($suffix = false, $layer = '')
+=======
+    public function buildRoute($alias = false, $layer = '')
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     {
         $namespace = $this->app->getNameSpace();
         $modules   = glob($this->basePath . '*', GLOB_ONLYDIR);
@@ -204,8 +212,16 @@ class Build
                 continue;
             }
 
+<<<<<<< HEAD
             $path = $this->basePath . $module . DIRECTORY_SEPARATOR . $layer . DIRECTORY_SEPARATOR;
             $content .= $this->buildDirRoute($path, $namespace, $module, $suffix, $layer);
+=======
+            $controllers = glob($this->basePath . $module . '/' . $layer . '/*.php');
+
+            foreach ($controllers as $controller) {
+                $content .= $this->getControllerRoute($namespace, $module, basename($controller, '.php'), $alias, $layer);
+            }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         $filename = $this->app->getRuntimePath() . 'build_route.php';
@@ -215,15 +231,24 @@ class Build
     }
 
     /**
+<<<<<<< HEAD
      * 生成子目录控制器类的路由规则
      * @access protected
      * @param  string $path  控制器目录
      * @param  string $namespace 应用命名空间
      * @param  string $module 模块
+=======
+     * 生成控制器类的路由规则
+     * @access protected
+     * @param  string $namespace 应用命名空间
+     * @param  string $module 模块
+     * @param  string $controller 控制器名
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * @param  bool   $suffix 类库后缀
      * @param  string $layer 控制器层目录名
      * @return string
      */
+<<<<<<< HEAD
     protected function buildDirRoute($path, $namespace, $module, $suffix, $layer)
     {
         $content     = '';
@@ -270,6 +295,18 @@ class Build
         $content = '';
         $comment = $class->getDocComment();
 
+=======
+    protected function getControllerRoute($namespace, $module, $controller, $alias = false, $layer = '')
+    {
+        $class   = new \ReflectionClass($namespace . '\\' . $module . '\\' . $layer . '\\' . $controller);
+        $content = '';
+        $comment = $class->getDocComment();
+
+        if ($alias) {
+            $controller = substr($controller, 0, -10);
+        }
+
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         if (false !== strpos($comment, '@route(')) {
             $comment = $this->parseRouteComment($comment);
             $route   = $module . '/' . $controller;

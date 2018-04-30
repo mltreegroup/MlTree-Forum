@@ -187,7 +187,11 @@ class Validate
      */
     public function __construct(array $rules = [], array $message = [], array $field = [])
     {
+<<<<<<< HEAD
         $this->rule    = $rules + $this->rule;
+=======
+        $this->rule    = array_merge($this->rule, $rules);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         $this->message = array_merge($this->message, $message);
         $this->field   = array_merge($this->field, $field);
     }
@@ -198,7 +202,10 @@ class Validate
      * @param  array $rules 验证规则
      * @param  array $message 验证提示信息
      * @param  array $field 验证字段描述信息
+<<<<<<< HEAD
      * @return Validate
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      */
     public static function make(array $rules = [], array $message = [], array $field = [])
     {
@@ -215,7 +222,11 @@ class Validate
     public function rule($name, $rule = '')
     {
         if (is_array($name)) {
+<<<<<<< HEAD
             $this->rule = $name + $this->rule;
+=======
+            $this->rule = array_merge($this->rule, $name);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             if (is_array($rule)) {
                 $this->field = array_merge($this->field, $rule);
             }
@@ -749,7 +760,11 @@ class Validate
                 $result = in_array($value, [true, false, 0, 1, '0', '1'], true);
                 break;
             case 'number':
+<<<<<<< HEAD
                 $result = ctype_digit((string) $value);
+=======
+                $result = is_numeric($value);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                 break;
             case 'array':
                 // 是否为数组
@@ -785,6 +800,7 @@ class Validate
     {
         if (function_exists('exif_imagetype')) {
             return exif_imagetype($image);
+<<<<<<< HEAD
         }
 
         try {
@@ -792,6 +808,15 @@ class Validate
             return $info ? $info[2] : false;
         } catch (\Exception $e) {
             return false;
+=======
+        } else {
+            try {
+                $info = getimagesize($image);
+                return $info ? $info[2] : false;
+            } catch (\Exception $e) {
+                return false;
+            }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
     }
 
@@ -845,9 +870,15 @@ class Validate
             return true;
         } elseif ($file instanceof File) {
             return $file->checkExt($rule);
+<<<<<<< HEAD
         }
 
         return false;
+=======
+        } else {
+            return false;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -868,9 +899,15 @@ class Validate
             return true;
         } elseif ($file instanceof File) {
             return $file->checkMime($rule);
+<<<<<<< HEAD
         }
 
         return false;
+=======
+        } else {
+            return false;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -891,9 +928,15 @@ class Validate
             return true;
         } elseif ($file instanceof File) {
             return $file->checkSize($rule);
+<<<<<<< HEAD
         }
 
         return false;
+=======
+        } else {
+            return false;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -929,9 +972,15 @@ class Validate
             list($w, $h) = $rule;
 
             return $w == $width && $h == $height;
+<<<<<<< HEAD
         }
 
         return in_array($this->getImageType($file->getRealPath()), [1, 2, 3, 6]);
+=======
+        } else {
+            return in_array($this->getImageType($file->getRealPath()), [1, 2, 3, 6]);
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1011,7 +1060,10 @@ class Validate
         if ($db->where($map)->field($pk)->find()) {
             return false;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         return true;
     }
 
@@ -1063,9 +1115,15 @@ class Validate
 
         if ($this->getDataValue($data, $field) == $val) {
             return !empty($value) || '0' == $value;
+<<<<<<< HEAD
         }
 
         return true;
+=======
+        } else {
+            return true;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1082,9 +1140,15 @@ class Validate
 
         if ($result) {
             return !empty($value) || '0' == $value;
+<<<<<<< HEAD
         }
 
         return true;
+=======
+        } else {
+            return true;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1101,9 +1165,15 @@ class Validate
 
         if (!empty($val)) {
             return !empty($value) || '0' == $value;
+<<<<<<< HEAD
         }
 
         return true;
+=======
+        } else {
+            return true;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1185,10 +1255,17 @@ class Validate
             // 长度区间
             list($min, $max) = explode(',', $rule);
             return $length >= $min && $length <= $max;
+<<<<<<< HEAD
         }
 
         // 指定长度
         return $length == $rule;
+=======
+        } else {
+            // 指定长度
+            return $length == $rule;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1323,7 +1400,11 @@ class Validate
             $rule = '/^' . $rule . '$/';
         }
 
+<<<<<<< HEAD
         return is_scalar($value) && 1 === preg_match($rule, (string) $value);
+=======
+        return 1 === preg_match($rule, (string) $value);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1438,7 +1519,11 @@ class Validate
      * 获取数据验证的场景
      * @access protected
      * @param  string $scene  验证场景
+<<<<<<< HEAD
      * @return void
+=======
+     * @return array
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      */
     protected function getScene($scene = '')
     {

@@ -252,12 +252,15 @@ class Request
     protected $isCheckCache;
 
     /**
+<<<<<<< HEAD
      * 请求安全Key
      * @var string
      */
     protected $secureKey;
 
     /**
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * 架构函数
      * @access public
      * @param  array  $options 参数
@@ -285,9 +288,15 @@ class Request
         if (array_key_exists($method, $this->hook)) {
             array_unshift($args, $this);
             return call_user_func_array($this->hook[$method], $args);
+<<<<<<< HEAD
         }
 
         throw new Exception('method not exists:' . static::class . '->' . $method);
+=======
+        } else {
+            throw new Exception('method not exists:' . static::class . '->' . $method);
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -323,12 +332,18 @@ class Request
         $server['PATH_INFO']      = '';
         $server['REQUEST_METHOD'] = strtoupper($method);
         $info                     = parse_url($uri);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         if (isset($info['host'])) {
             $server['SERVER_NAME'] = $info['host'];
             $server['HTTP_HOST']   = $info['host'];
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         if (isset($info['scheme'])) {
             if ('https' === $info['scheme']) {
                 $server['HTTPS']       = 'on';
@@ -338,11 +353,15 @@ class Request
                 $server['SERVER_PORT'] = 80;
             }
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         if (isset($info['port'])) {
             $server['SERVER_PORT'] = $info['port'];
             $server['HTTP_HOST']   = $server['HTTP_HOST'] . ':' . $info['port'];
         }
+<<<<<<< HEAD
 
         if (isset($info['user'])) {
             $server['PHP_AUTH_USER'] = $info['user'];
@@ -361,11 +380,29 @@ class Request
 
         $options[strtolower($method)] = $params;
 
+=======
+        if (isset($info['user'])) {
+            $server['PHP_AUTH_USER'] = $info['user'];
+        }
+        if (isset($info['pass'])) {
+            $server['PHP_AUTH_PW'] = $info['pass'];
+        }
+        if (!isset($info['path'])) {
+            $info['path'] = '/';
+        }
+        $options                      = [];
+        $options[strtolower($method)] = $params;
+        $queryString                  = '';
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         if (isset($info['query'])) {
             parse_str(html_entity_decode($info['query']), $query);
             if (!empty($params)) {
                 $params      = array_replace($query, $params);
+<<<<<<< HEAD
                 $queryString = http_build_query($params, '', '&');
+=======
+                $queryString = http_build_query($query, '', '&');
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             } else {
                 $params      = $query;
                 $queryString = $info['query'];
@@ -373,7 +410,10 @@ class Request
         } elseif (!empty($params)) {
             $queryString = http_build_query($params, '', '&');
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         if ($queryString) {
             parse_str($queryString, $get);
             $options['get'] = isset($options['get']) ? array_merge($get, $options['get']) : $get;
@@ -420,6 +460,7 @@ class Request
     }
 
     /**
+<<<<<<< HEAD
      * 获取当前根域名
      * @access public
      * @return string
@@ -441,6 +482,11 @@ class Request
      * 获取当前子域名
      * @access public
      * @return string
+=======
+     * 获取当前子域名
+     * @access public
+     * @return string|$this
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      */
     public function subDomain()
     {
@@ -471,10 +517,17 @@ class Request
     {
         if (is_null($domain)) {
             return $this->panDomain;
+<<<<<<< HEAD
         }
 
         $this->panDomain = $domain;
         return $this;
+=======
+        } else {
+            $this->panDomain = $domain;
+            return $this;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -626,7 +679,11 @@ class Request
                 }
             }
 
+<<<<<<< HEAD
             $this->pathinfo = empty($_SERVER['PATH_INFO']) || '/' == $_SERVER['PATH_INFO'] ? '' : ltrim($_SERVER['PATH_INFO'], '/');
+=======
+            $this->pathinfo = empty($_SERVER['PATH_INFO']) ? '/' : ltrim($_SERVER['PATH_INFO'], '/');
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         return $this->pathinfo;
@@ -1115,12 +1172,46 @@ class Request
         $files = $this->file;
         if (!empty($files)) {
             // 处理上传文件
+<<<<<<< HEAD
             $array = $this->dealUploadFile($files);
 
             if (strpos($name, '.')) {
                 list($name, $sub) = explode('.', $name);
             }
 
+=======
+            $array = [];
+            foreach ($files as $key => $file) {
+                if (is_array($file['name'])) {
+                    $item  = [];
+                    $keys  = array_keys($file);
+                    $count = count($file['name']);
+                    for ($i = 0; $i < $count; $i++) {
+                        if (empty($file['tmp_name'][$i]) || !is_file($file['tmp_name'][$i])) {
+                            continue;
+                        }
+                        $temp['key'] = $key;
+                        foreach ($keys as $_key) {
+                            $temp[$_key] = $file[$_key][$i];
+                        }
+                        $item[] = (new File($temp['tmp_name']))->setUploadInfo($temp);
+                    }
+                    $array[$key] = $item;
+                } else {
+                    if ($file instanceof File) {
+                        $array[$key] = $file;
+                    } else {
+                        if (empty($file['tmp_name']) || !is_file($file['tmp_name'])) {
+                            continue;
+                        }
+                        $array[$key] = (new File($file['tmp_name']))->setUploadInfo($file);
+                    }
+                }
+            }
+            if (strpos($name, '.')) {
+                list($name, $sub) = explode('.', $name);
+            }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             if ('' === $name) {
                 // 获取全部文件
                 return $array;
@@ -1134,6 +1225,7 @@ class Request
         return;
     }
 
+<<<<<<< HEAD
     protected function dealUploadFile($files)
     {
         $array = [];
@@ -1174,6 +1266,8 @@ class Request
         return $array;
     }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     /**
      * 获取环境变量
      * @access public
@@ -1263,7 +1357,10 @@ class Request
             } else {
                 $type = 's';
             }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             // 按.拆分成多维数组进行判断
             foreach (explode('.', $name) as $val) {
                 if (isset($data[$val])) {
@@ -1273,7 +1370,10 @@ class Request
                     return $default;
                 }
             }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             if (is_object($data)) {
                 return $data;
             }
@@ -1307,9 +1407,15 @@ class Request
     {
         if (is_null($filter)) {
             return $this->filter;
+<<<<<<< HEAD
         }
 
         $this->filter = $filter;
+=======
+        } else {
+            $this->filter = $filter;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     protected function getFilter($filter, $default)
@@ -1529,9 +1635,15 @@ class Request
 
         if (true === $ajax) {
             return $result;
+<<<<<<< HEAD
         }
 
         return $this->param($this->config->get('var_ajax')) ? true : $result;
+=======
+        } else {
+            return $this->param($this->config->get('var_ajax')) ? true : $result;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1546,9 +1658,15 @@ class Request
 
         if (true === $pjax) {
             return $result;
+<<<<<<< HEAD
         }
 
         return $this->param($this->config->get('var_pjax')) ? true : $result;
+=======
+        } else {
+            return $this->param($this->config->get('var_pjax')) ? true : $result;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1567,11 +1685,15 @@ class Request
             return $ip[$type];
         }
 
+<<<<<<< HEAD
         $httpAgentIp = $this->config->get('http_agent_ip');
 
         if ($httpAgentIp && isset($_SERVER[$httpAgentIp])) {
             $ip = $_SERVER[$httpAgentIp];
         } elseif ($adv) {
+=======
+        if ($adv) {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
                 $arr = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
                 $pos = array_search('unknown', $arr);
@@ -1588,6 +1710,7 @@ class Request
             $ip = $_SERVER['REMOTE_ADDR'];
         }
 
+<<<<<<< HEAD
         // IP地址类型
         $ip_mode = (strpos($ip, ':') === false) ? 'ipv4' : 'ipv6';
 
@@ -1600,6 +1723,11 @@ class Request
         $long_ip = ('ipv4' === $ip_mode) ? sprintf("%u", ip2long($ip)) : 0;
 
         $ip = [$ip, $long_ip];
+=======
+        // IP地址合法验证
+        $long = sprintf("%u", ip2long($ip));
+        $ip   = $long ? [$ip, $long] : ['0.0.0.0', 0];
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         return $ip[$type];
     }
@@ -1619,9 +1747,15 @@ class Request
             return true;
         } elseif (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/(blackberry|configuration\/cldc|hp |hp-|htc |htc_|htc-|iemobile|kindle|midp|mmp|motorola|mobile|nokia|opera mini|opera |Googlebot-Mobile|YahooSeeker\/M1A1-R2D2|android|iphone|ipod|mobi|palm|palmos|pocket|portalmmm|ppc;|smartphone|sonyericsson|sqh|spv|symbian|treo|up.browser|up.link|vodafone|windows ce|xda |xda_)/i', $_SERVER['HTTP_USER_AGENT'])) {
             return true;
+<<<<<<< HEAD
         }
 
         return false;
+=======
+        } else {
+            return false;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1719,9 +1853,15 @@ class Request
     {
         if (!empty($route)) {
             $this->routeInfo = $route;
+<<<<<<< HEAD
         }
 
         return $this->routeInfo;
+=======
+        } else {
+            return $this->routeInfo;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1740,6 +1880,7 @@ class Request
     }
 
     /**
+<<<<<<< HEAD
      * 获取当前请求的安全Key
      * @access public
      * @return string
@@ -1754,6 +1895,8 @@ class Request
     }
 
     /**
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * 设置或者获取当前的模块名
      * @access public
      * @param  string $module 模块名
@@ -1764,9 +1907,15 @@ class Request
         if (!is_null($module)) {
             $this->module = $module;
             return $this;
+<<<<<<< HEAD
         }
 
         return $this->module ?: '';
+=======
+        } else {
+            return $this->module ?: '';
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1780,9 +1929,15 @@ class Request
         if (!is_null($controller)) {
             $this->controller = $controller;
             return $this;
+<<<<<<< HEAD
         }
 
         return $this->controller ?: '';
+=======
+        } else {
+            return $this->controller ?: '';
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1793,6 +1948,7 @@ class Request
      */
     public function action($action = null)
     {
+<<<<<<< HEAD
         if (!is_null($action) && !is_bool($action)) {
             $this->action = $action;
             return $this;
@@ -1800,6 +1956,14 @@ class Request
 
         $name = $this->action ?: '';
         return true === $action ? $name : strtolower($name);
+=======
+        if (!is_null($action)) {
+            $this->action = $action;
+            return $this;
+        } else {
+            return $this->action ?: '';
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1813,9 +1977,15 @@ class Request
         if (!is_null($lang)) {
             $this->langset = $lang;
             return $this;
+<<<<<<< HEAD
         }
 
         return $this->langset ?: '';
+=======
+        } else {
+            return $this->langset ?: '';
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1879,6 +2049,7 @@ class Request
             $except = [];
         }
 
+<<<<<<< HEAD
         if (false === $key || !$this->isGet() || $this->isCheckCache || false === $expire) {
             // 关闭当前缓存
             return;
@@ -1940,6 +2111,68 @@ class Request
         }
 
         $this->cache = [$key, $expire, $tag];
+=======
+        if (false !== $key && $this->isGet() && !$this->isCheckCache) {
+            // 标记请求缓存检查
+            $this->isCheckCache = true;
+            if (false === $expire) {
+                // 关闭当前缓存
+                return;
+            }
+
+            foreach ($except as $rule) {
+                if (0 === stripos($this->url(), $rule)) {
+                    return;
+                }
+            }
+
+            if ($key instanceof \Closure) {
+                $key = call_user_func_array($key, [$this]);
+            } elseif (true === $key) {
+                // 自动缓存功能
+                $key = '__URL__';
+            } elseif (strpos($key, '|')) {
+                list($key, $fun) = explode('|', $key);
+            }
+
+            // 特殊规则替换
+            if (false !== strpos($key, '__')) {
+                $key = str_replace(['__MODULE__', '__CONTROLLER__', '__ACTION__', '__URL__'], [$this->module, $this->controller, $this->action, md5($this->url(true))], $key);
+            }
+
+            if (false !== strpos($key, ':')) {
+                $param = $this->param();
+                foreach ($param as $item => $val) {
+                    if (is_string($val) && false !== strpos($key, ':' . $item)) {
+                        $key = str_replace(':' . $item, $val, $key);
+                    }
+                }
+            } elseif (strpos($key, ']')) {
+                if ('[' . $this->ext() . ']' == $key) {
+                    // 缓存某个后缀的请求
+                    $key = md5($this->url());
+                } else {
+                    return;
+                }
+            }
+
+            if (isset($fun)) {
+                $key = $fun($key);
+            }
+            $cache = Container::get('cache');
+            if (strtotime($this->server('HTTP_IF_MODIFIED_SINCE')) + $expire > $_SERVER['REQUEST_TIME']) {
+                // 读取缓存
+                $response = Response::create()->code(304);
+                throw new HttpResponseException($response);
+            } elseif ($cache->has($key)) {
+                list($content, $header) = $cache->get($key);
+                $response               = Response::create($content)->header($header);
+                throw new HttpResponseException($response);
+            } else {
+                $this->cache = [$key, $expire, $tag];
+            }
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1952,6 +2185,7 @@ class Request
         return $this->cache;
     }
 
+<<<<<<< HEAD
     /**
      * 设置请求数据
      * @access public
@@ -1974,4 +2208,6 @@ class Request
         return $this->param($name);
     }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 }

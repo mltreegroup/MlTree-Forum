@@ -62,6 +62,7 @@ class Env
     {
         $result = getenv('PHP_' . $name);
 
+<<<<<<< HEAD
         if (false === $result) {
             return $default;
         }
@@ -77,6 +78,23 @@ class Env
         }
 
         return $result;
+=======
+        if (false !== $result) {
+            if ('false' === $result) {
+                $result = false;
+            } elseif ('true' === $result) {
+                $result = true;
+            }
+
+            if (!isset($this->data[$name])) {
+                $this->data[$name] = $result;
+            }
+
+            return $result;
+        } else {
+            return $default;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**

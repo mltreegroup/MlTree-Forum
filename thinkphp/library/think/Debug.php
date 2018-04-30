@@ -223,8 +223,14 @@ class Debug
         if ($echo) {
             echo($output);
             return;
+<<<<<<< HEAD
         }
         return $output;
+=======
+        } else {
+            return $output;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     public function inject(Response $response, &$content)

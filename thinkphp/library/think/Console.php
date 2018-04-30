@@ -41,7 +41,10 @@ class Console
         "think\\console\\command\\Clear",
         "think\\console\\command\\make\\Controller",
         "think\\console\\command\\make\\Model",
+<<<<<<< HEAD
         "think\\console\\command\\make\\Middleware",
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         "think\\console\\command\\optimize\\Autoload",
         "think\\console\\command\\optimize\\Config",
         "think\\console\\command\\optimize\\Schema",
@@ -49,6 +52,7 @@ class Console
         "think\\console\\command\\RunServer",
     ];
 
+<<<<<<< HEAD
     /**
      * Console constructor.
      * @access public
@@ -57,14 +61,20 @@ class Console
      * @param null|string $user    执行用户
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN', $user = null)
+=======
+    public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     {
         $this->name    = $name;
         $this->version = $version;
 
+<<<<<<< HEAD
         if ($user) {
             $this->setUser($user);
         }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         $this->defaultCommand = 'list';
         $this->definition     = $this->getDefaultInputDefinition();
 
@@ -73,6 +83,7 @@ class Console
         }
     }
 
+<<<<<<< HEAD
     /**
      * 设置执行用户
      * @param $user
@@ -92,14 +103,21 @@ class Console
      * @param  bool $run 是否运行 Console
      * @return int|Console
      */
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     public static function init($run = true)
     {
         static $console;
 
         if (!$console) {
+<<<<<<< HEAD
             $config = Container::get('config')->pull('console');
             // 实例化 console
             $console = new self($config['name'], $config['version'], $config['user']);
+=======
+            // 实例化console
+            $console = new self('Think Console', '0.1');
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
             // 读取指令集
             $file = Container::get('env')->get('app_path') . 'command.php';

@@ -123,8 +123,15 @@ class Url
 
             if ($alias) {
                 // 别名路由解析
+<<<<<<< HEAD
                 foreach ($alias as $key => $item) {
                     $val = $item->getRoute();
+=======
+                foreach ($alias as $key => $val) {
+                    if (is_array($val)) {
+                        $val = $val[0];
+                    }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
                     if (0 === strpos($url, $val)) {
                         $url        = $key . substr($url, strlen($val));
@@ -134,6 +141,7 @@ class Url
                 }
             }
 
+<<<<<<< HEAD
             // 检测URL绑定
             if (!$this->bindCheck) {
                 $bind = $this->app['route']->getBind($domain && is_string($domain) ? $domain : null);
@@ -153,6 +161,8 @@ class Url
                 }
             }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             if (!$matchAlias) {
                 // 路由标识不存在 直接解析
                 $url = $this->parseUrl($url);
@@ -165,6 +175,18 @@ class Url
             }
         }
 
+<<<<<<< HEAD
+=======
+        // 检测URL绑定
+        if (!$this->bindCheck) {
+            $bind = $this->app['route']->getBind();
+
+            if ($bind && 0 === strpos($url, $bind)) {
+                $url = substr($url, strlen($bind) + 1);
+            }
+
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         // 还原URL分隔符
         $depr = $this->app['config']->get('pathinfo_depr');
         $url  = str_replace('/', $depr, $url);
@@ -262,11 +284,19 @@ class Url
             return '';
         }
 
+<<<<<<< HEAD
         $rootDomain = $this->app['request']->rootDomain();
         if (true === $domain) {
 
             // 自动判断域名
             $domain = $this->app['config']->get('app_host') ?: $this->app['request']->host();
+=======
+        if (true === $domain) {
+
+            // 自动判断域名
+            $domain     = $this->app['config']->get('app_host') ?: $this->app['request']->host();
+            $rootDomain = $this->app['config']->get('url_domain_root');
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
             $domains = $this->app['route']->getDomains();
 
@@ -296,8 +326,11 @@ class Url
                     }
                 }
             }
+<<<<<<< HEAD
         } elseif (!strpos($domain, '.')) {
             $domain .= '.' . $rootDomain;
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         if (false !== strpos($domain, '://')) {
@@ -330,13 +363,18 @@ class Url
         foreach ($rule as $item) {
             list($url, $pattern, $domain, $suffix) = $item;
             if (empty($pattern)) {
+<<<<<<< HEAD
                 return [rtrim($url, '?/-'), $domain, $suffix];
+=======
+                return [rtrim($url, '$'), $domain, $suffix];
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             }
 
             $type = $this->app['config']->get('url_common_param');
 
             foreach ($pattern as $key => $val) {
                 if (isset($vars[$key])) {
+<<<<<<< HEAD
                     $url = str_replace(['[:' . $key . ']', '<' . $key . '?>', ':' . $key, '<' . $key . '>'], $type ? $vars[$key] : urlencode($vars[$key]), $url);
                     unset($vars[$key]);
                     $url    = str_replace(['/?', '-?'], ['/', '-'], $url);
@@ -345,6 +383,15 @@ class Url
                     $url    = str_replace(['/[:' . $key . ']', '[:' . $key . ']', '<' . $key . '?>'], '', $url);
                     $url    = str_replace(['/?', '-?'], ['/', '-'], $url);
                     $result = [rtrim($url, '?/-'), $domain, $suffix];
+=======
+                    $url = str_replace(['[:' . $key . ']', '[:' . $key . '$]', '<' . $key . '?>$', '<' . $key . '?>', ':' . $key . '$', ':' . $key . '', '<' . $key . '>$', '<' . $key . '>'], $type ? $vars[$key] : urlencode($vars[$key]), $url);
+                    unset($vars[$key]);
+
+                    $result = [$url, $domain, $suffix];
+                } elseif (2 == $val) {
+                    $url    = str_replace(['/[:' . $key . ']', '/[:' . $key . '$]', '[:' . $key . ']', '[:' . $key . '$]', '<' . $key . '?>$', '<' . $key . '?>'], '', $url);
+                    $result = [$url, $domain, $suffix];
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                 } else {
                     break;
                 }

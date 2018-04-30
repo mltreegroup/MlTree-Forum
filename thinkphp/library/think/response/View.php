@@ -64,6 +64,10 @@ class View extends Response
     {
         if (is_array($name)) {
             $this->vars = array_merge($this->vars, $name);
+<<<<<<< HEAD
+=======
+            return $this;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         } else {
             $this->vars[$name] = $value;
         }

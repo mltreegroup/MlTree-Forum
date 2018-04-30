@@ -19,8 +19,11 @@ class Php
 {
     // 模板引擎参数
     protected $config = [
+<<<<<<< HEAD
         // 默认模板渲染规则 1 解析为小写+下划线 2 全部转换小写
         'auto_rule'   => 1,
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         // 视图基础目录（集中式）
         'view_base'   => '',
         // 模板起始路径
@@ -31,9 +34,12 @@ class Php
         'view_depr'   => DIRECTORY_SEPARATOR,
     ];
 
+<<<<<<< HEAD
     protected $template;
     protected $content;
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     public function __construct($config = [])
     {
         $this->config = array_merge($this->config, (array) $config);
@@ -74,14 +80,28 @@ class Php
             throw new TemplateNotFoundException('template not exists:' . $template, $template);
         }
 
+<<<<<<< HEAD
         $this->template = $template;
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         // 记录视图信息
         Container::get('app')
             ->log('[ VIEW ] ' . $template . ' [ ' . var_export(array_keys($data), true) . ' ]');
 
+<<<<<<< HEAD
         extract($data, EXTR_OVERWRITE);
         include $this->template;
+=======
+        if (isset($data['template'])) {
+            $__template__ = $template;
+            extract($data, EXTR_OVERWRITE);
+            include $__template__;
+        } else {
+            extract($data, EXTR_OVERWRITE);
+            include $template;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -93,10 +113,21 @@ class Php
      */
     public function display($content, $data = [])
     {
+<<<<<<< HEAD
         $this->content = $content;
 
         extract($data, EXTR_OVERWRITE);
         eval('?>' . $this->content);
+=======
+        if (isset($data['content'])) {
+            $__content__ = $content;
+            extract($data, EXTR_OVERWRITE);
+            eval('?>' . $__content__);
+        } else {
+            extract($data, EXTR_OVERWRITE);
+            eval('?>' . $content);
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -136,7 +167,11 @@ class Php
             if ($controller) {
                 if ('' == $template) {
                     // 如果模板文件名为空 按照默认规则定位
+<<<<<<< HEAD
                     $template = str_replace('.', DIRECTORY_SEPARATOR, $controller) . $depr . $this->getActionTemplate($request);
+=======
+                    $template = str_replace('.', DIRECTORY_SEPARATOR, $controller) . $depr . $request->action();
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                 } elseif (false === strpos($template, $depr)) {
                     $template = str_replace('.', DIRECTORY_SEPARATOR, $controller) . $depr . $template;
                 }
@@ -148,6 +183,7 @@ class Php
         return $path . ltrim($template, '/') . '.' . ltrim($this->config['view_suffix'], '.');
     }
 
+<<<<<<< HEAD
     protected function getActionTemplate($request)
     {
         $rule = [$request->action(true), Loader::parseName($request->action(true)), $request->action()];
@@ -156,6 +192,8 @@ class Php
         return isset($rule[$type]) ? $rule[$type] : $rule[0];
     }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     /**
      * 配置模板引擎
      * @access private

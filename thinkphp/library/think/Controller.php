@@ -70,10 +70,19 @@ class Controller
         $this->initialize();
 
         // 前置操作方法
+<<<<<<< HEAD
         foreach ((array) $this->beforeActionList as $method => $options) {
             is_numeric($method) ?
             $this->beforeAction($options) :
             $this->beforeAction($method, $options);
+=======
+        if ($this->beforeActionList) {
+            foreach ($this->beforeActionList as $method => $options) {
+                is_numeric($method) ?
+                $this->beforeAction($options) :
+                $this->beforeAction($method, $options);
+            }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
     }
 
@@ -230,10 +239,19 @@ class Controller
         if (!$v->check($data)) {
             if ($this->failException) {
                 throw new ValidateException($v->getError());
+<<<<<<< HEAD
             }
             return $v->getError();
         }
 
         return true;
+=======
+            } else {
+                return $v->getError();
+            }
+        } else {
+            return true;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 }

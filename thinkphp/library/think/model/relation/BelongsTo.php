@@ -52,7 +52,10 @@ class BelongsTo extends OneToOne
         $foreignKey = $this->foreignKey;
 
         $relationModel = $this->query
+<<<<<<< HEAD
             ->removeWhereField($this->localKey)
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             ->where($this->localKey, $this->parent->$foreignKey)
             ->relation($subRelation)
             ->find();
@@ -70,10 +73,16 @@ class BelongsTo extends OneToOne
      * @param  string  $operator 比较操作符
      * @param  integer $count    个数
      * @param  string  $id       关联表的统计字段
+<<<<<<< HEAD
      * @param  string  $joinType JOIN类型
      * @return Query
      */
     public function has($operator = '>=', $count = 1, $id = '*', $joinType = 'INNER')
+=======
+     * @return Query
+     */
+    public function has($operator = '>=', $count = 1, $id = '*')
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     {
         return $this->parent;
     }
@@ -127,8 +136,11 @@ class BelongsTo extends OneToOne
         }
 
         if (!empty($range)) {
+<<<<<<< HEAD
             $this->query->removeWhereField($localKey);
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             $data = $this->eagerlyWhere([
                 [$localKey, 'in', $range],
             ], $localKey, $relation, $subRelation, $closure);
@@ -172,8 +184,11 @@ class BelongsTo extends OneToOne
         $localKey   = $this->localKey;
         $foreignKey = $this->foreignKey;
 
+<<<<<<< HEAD
         $this->query->removeWhereField($localKey);
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         $data = $this->eagerlyWhere([
             [$localKey, '=', $result->$foreignKey],
         ], $localKey, $relation, $subRelation, $closure);
@@ -227,6 +242,7 @@ class BelongsTo extends OneToOne
 
         return $this->parent->setRelation($this->relation, null);
     }
+<<<<<<< HEAD
 
     /**
      * 执行基础查询（仅执行一次）
@@ -244,4 +260,6 @@ class BelongsTo extends OneToOne
             $this->baseQuery = true;
         }
     }
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 }

@@ -370,7 +370,11 @@ if (!function_exists('input')) {
      * @param string    $filter 过滤方法
      * @return mixed
      */
+<<<<<<< HEAD
     function input($key = '', $default = null, $filter = '')
+=======
+    function input($key = '', $default = null, $filter = null)
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     {
         if (0 === strpos($key, '?')) {
             $key = substr($key, 1);
@@ -653,7 +657,11 @@ if (!function_exists('view')) {
      * @param string    $template 模板文件
      * @param array     $vars 模板变量
      * @param integer   $code 状态码
+<<<<<<< HEAD
      * @param callable  $filter 内容过滤
+=======
+     * @param callable  $filer 内容过滤
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * @return \think\response\View
      */
     function view($template = '', $vars = [], $code = 200, $filter = null)

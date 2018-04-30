@@ -26,17 +26,28 @@ class Resource extends RuleGroup
      * 架构函数
      * @access public
      * @param  Route         $router     路由对象
+<<<<<<< HEAD
      * @param  RuleGroup     $parent     上级对象
+=======
+     * @param  RuleGroup     $group      路由所属分组对象
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * @param  string        $name       资源名称
      * @param  string        $route      路由地址
      * @param  array         $option     路由参数
      * @param  array         $pattern    变量规则
      * @param  array         $rest       资源定义
      */
+<<<<<<< HEAD
     public function __construct(Route $router, RuleGroup $parent = null, $name = '', $route = '', $option = [], $pattern = [], $rest = [])
     {
         $this->router   = $router;
         $this->parent   = $parent;
+=======
+    public function __construct(Route $router, RuleGroup $group = null, $name = '', $route = '', $option = [], $pattern = [], $rest = [])
+    {
+        $this->router   = $router;
+        $this->parent   = $group;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         $this->resource = $name;
         $this->route    = $route;
         $this->name     = strpos($name, '.') ? strstr($name, '.', true) : $name;
@@ -49,11 +60,31 @@ class Resource extends RuleGroup
         $this->pattern = $pattern;
         $this->option  = $option;
         $this->rest    = $rest;
+<<<<<<< HEAD
 
         if ($this->parent) {
             $this->domain = $this->parent->getDomain();
             $this->parent->addRuleItem($this);
         }
+=======
+    }
+
+    /**
+     * 检测分组路由
+     * @access public
+     * @param  Request      $request  请求对象
+     * @param  string       $url      访问地址
+     * @param  string       $depr     路径分隔符
+     * @param  bool         $completeMatch   路由是否完全匹配
+     * @return Dispatch
+     */
+    public function check($request, $url, $depr = '/', $completeMatch = false)
+    {
+        // 生成资源路由的路由规则
+        $this->buildResourceRule($this->resource, $this->option);
+
+        return parent::check($request, $url, $depr, $completeMatch);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -65,9 +96,12 @@ class Resource extends RuleGroup
      */
     protected function buildResourceRule($rule, $option = [])
     {
+<<<<<<< HEAD
         $origin = $this->router->getGroup();
         $this->router->setGroup($this);
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         if (strpos($rule, '.')) {
             // 注册嵌套资源路由
             $array = explode('.', $rule);
@@ -75,12 +109,24 @@ class Resource extends RuleGroup
             $item  = [];
 
             foreach ($array as $val) {
+<<<<<<< HEAD
                 $item[] = $val . '/<' . (isset($option['var'][$val]) ? $option['var'][$val] : $val . '_id') . '>';
+=======
+                $item[] = $val . '/:' . (isset($option['var'][$val]) ? $option['var'][$val] : $val . '_id');
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             }
 
             $rule = implode('/', $item) . '/' . $last;
         }
 
+<<<<<<< HEAD
+=======
+        // 注册分组
+        $group = $this->router->getGroup();
+
+        $this->router->setGroup($this);
+
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         // 注册资源路由
         foreach ($this->rest as $key => $val) {
             if ((isset($option['only']) && !in_array($key, $option['only']))
@@ -88,18 +134,32 @@ class Resource extends RuleGroup
                 continue;
             }
 
+<<<<<<< HEAD
             if (isset($last) && strpos($val[1], '<id>') && isset($option['var'][$last])) {
                 $val[1] = str_replace('<id>', '<' . $option['var'][$last] . '>', $val[1]);
             } elseif (strpos($val[1], '<id>') && isset($option['var'][$rule])) {
                 $val[1] = str_replace('<id>', '<' . $option['var'][$rule] . '>', $val[1]);
+=======
+            if (isset($last) && strpos($val[1], ':id') && isset($option['var'][$last])) {
+                $val[1] = str_replace(':id', ':' . $option['var'][$last], $val[1]);
+            } elseif (strpos($val[1], ':id') && isset($option['var'][$rule])) {
+                $val[1] = str_replace(':id', ':' . $option['var'][$rule], $val[1]);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             }
 
             $option['rest'] = $key;
 
+<<<<<<< HEAD
             $this->addRule(trim($val[1], '/'), $this->route . '/' . $val[2], $val[0], $option);
         }
 
         $this->router->setGroup($origin);
+=======
+            $this->router->rule(trim($val[1], '/'), $this->route . '/' . $val[2], $val[0], $option);
+        }
+
+        $this->router->setGroup($group);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**

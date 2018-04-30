@@ -33,7 +33,10 @@ abstract class Builder
         'parseBetweenTime' => ['BETWEEN TIME', 'NOT BETWEEN TIME'],
         'parseTime'        => ['< TIME', '> TIME', '<= TIME', '>= TIME'],
         'parseExists'      => ['NOT EXISTS', 'EXISTS'],
+<<<<<<< HEAD
         'parseColumn'      => ['COLUMN'],
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     ];
 
     // SQL表达式
@@ -114,12 +117,18 @@ abstract class Builder
         $result = [];
 
         foreach ($data as $key => $val) {
+<<<<<<< HEAD
             $item = $this->parseKey($query, $key, true);
 
             if ($val instanceof Expression) {
                 $result[$item] = $val->getValue();
                 continue;
             } elseif (!is_scalar($val) && (in_array($key, (array) $query->getOptions('json')) || 'json' == $this->connection->getFieldsType($options['table'], $key))) {
+=======
+            $item = $this->parseKey($query, $key);
+
+            if (!is_scalar($val) && (in_array($key, (array) $query->getOptions('json')) || 'json' == $this->connection->getFieldsType($options['table'], $key))) {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                 $val = json_encode($val);
             } elseif (is_object($val) && method_exists($val, '__toString')) {
                 // 对象数据写入
@@ -137,12 +146,24 @@ abstract class Builder
             } elseif (is_null($val)) {
                 $result[$item] = 'NULL';
             } elseif (is_array($val) && !empty($val)) {
+<<<<<<< HEAD
                 switch (strtoupper($val[0])) {
                     case 'INC':
                         $result[$item] = $item . ' + ' . floatval($val[1]);
                         break;
                     case 'DEC':
                         $result[$item] = $item . ' - ' . floatval($val[1]);
+=======
+                switch ($val[0]) {
+                    case 'exp':
+                        $result[$item] = $val[1];
+                        break;
+                    case 'inc':
+                        $result[$item] = $this->parseKey($query, $val[1]) . ' + ' . floatval($val[2]);
+                        break;
+                    case 'dec':
+                        $result[$item] = $this->parseKey($query, $val[1]) . ' - ' . floatval($val[2]);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                         break;
                 }
             } elseif (is_scalar($val)) {
@@ -169,6 +190,7 @@ abstract class Builder
         // 过滤非标量数据
         if (0 === strpos($data, ':') && $query->isBind(substr($data, 1))) {
             return $data;
+<<<<<<< HEAD
         }
 
         $key  = str_replace(['.', '->'], '_', $key);
@@ -177,12 +199,21 @@ abstract class Builder
         $query->bind($name, $data, isset($bind[$key]) ? $bind[$key] : PDO::PARAM_STR);
 
         return ':' . $name;
+=======
+        } else {
+            $key  = str_replace(['.', '->'], '_', $key);
+            $name = 'data__' . $key . $suffix;
+            $query->bind($name, $data, isset($bind[$key]) ? $bind[$key] : PDO::PARAM_STR);
+            return ':' . $name;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
      * 字段名分析
      * @access public
      * @param  Query  $query    查询对象
+<<<<<<< HEAD
      * @param  mixed  $key      字段名
      * @param  bool   $strict   严格检测
      * @return string
@@ -190,6 +221,14 @@ abstract class Builder
     public function parseKey(Query $query, $key, $strict = false)
     {
         return $key instanceof Expression ? $key->getValue() : $key;
+=======
+     * @param  string $key      字段名
+     * @return string
+     */
+    public function parseKey(Query $query, $key)
+    {
+        return $key;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -209,7 +248,11 @@ abstract class Builder
 
             foreach ($fields as $key => $field) {
                 if (!is_numeric($key)) {
+<<<<<<< HEAD
                     $array[] = $this->parseKey($query, $key) . ' AS ' . $this->parseKey($query, $field, true);
+=======
+                    $array[] = $this->parseKey($query, $key) . ' AS ' . $this->parseKey($query, $field);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                 } else {
                     $array[] = $this->parseKey($query, $field);
                 }
@@ -232,7 +275,10 @@ abstract class Builder
     {
         $item    = [];
         $options = $query->getOptions();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         foreach ((array) $tables as $key => $table) {
             if (!is_numeric($key)) {
                 $key    = $this->connection->parseSqlTable($key);
@@ -295,11 +341,14 @@ abstract class Builder
             $str = [];
 
             foreach ($val as $value) {
+<<<<<<< HEAD
                 if ($value instanceof Expression) {
                     $str[] = ' ' . $logic . ' ( ' . $value->getValue() . ' )';
                     continue;
                 }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                 if (is_array($value)) {
                     if (key($value) !== 0) {
                         throw new Exception('where express error:' . var_export($value, true));
@@ -363,6 +412,7 @@ abstract class Builder
     protected function parseWhereItem(Query $query, $field, $val, $rule = '', $binds = [], $bindName = null)
     {
         // 字段分析
+<<<<<<< HEAD
         $key = $field ? $this->parseKey($query, $field, true) : '';
 
         // 查询规则和条件
@@ -370,6 +420,15 @@ abstract class Builder
             $val = is_null($val) ? ['NULL', ''] : ['=', $val];
         }
 
+=======
+        $key = $field ? $this->parseKey($query, $field) : '';
+
+        // 查询规则和条件
+        if (!is_array($val)) {
+            $val = is_null($val) ? ['null', ''] : ['=', $val];
+        }
+      
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         list($exp, $value) = $val;
 
         // 对一个字段使用多个查询条件
@@ -397,26 +456,38 @@ abstract class Builder
             $exp = $this->exp[$exp];
         }
 
+<<<<<<< HEAD
         $bindName = $bindName ?: 'where_' . $rule . '_' . str_replace(['.', '-'], '_', $field);
+=======
+        $bindName = $bindName ?: 'where_' . str_replace(['.', '-'], '_', $field);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         if (preg_match('/\W/', $bindName)) {
             // 处理带非单词字符的字段名
             $bindName = md5($bindName);
         }
 
+<<<<<<< HEAD
         if ($value instanceof Expression) {
 
         } elseif (is_object($value) && method_exists($value, '__toString')) {
+=======
+        if (is_object($value) && method_exists($value, '__toString')) {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             // 对象数据写入
             $value = $value->__toString();
         }
 
+<<<<<<< HEAD
         if (strpos($field, '->')) {
             $jsonType = $query->getJsonFieldType($field);
             $bindType = $this->connection->getFieldBindType($jsonType);
         } else {
             $bindType = isset($binds[$field]) ? $binds[$field] : PDO::PARAM_STR;
         }
+=======
+        $bindType = isset($binds[$field]) ? $binds[$field] : PDO::PARAM_STR;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         if (is_scalar($value) && !in_array($exp, ['EXP', 'NOT NULL', 'NULL', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN']) && strpos($exp, 'TIME') === false) {
             if (strpos($value, ':') !== 0 || !$query->isBind(substr($value, 1))) {
@@ -462,7 +533,11 @@ abstract class Builder
         // 模糊匹配
         if (is_array($value)) {
             foreach ($value as $k => $item) {
+<<<<<<< HEAD
                 $bindKey        = $bindName . '_' . intval($k);
+=======
+                $bindKey        = $bindName . '_' . $k;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                 $bind[$bindKey] = [$item, $bindType];
                 $array[]        = $key . ' ' . $exp . ' :' . $bindKey;
             }
@@ -480,6 +555,7 @@ abstract class Builder
     /**
      * 表达式查询
      * @access protected
+<<<<<<< HEAD
      * @param  Query        $query        查询对象
      * @param  string       $key
      * @param  string       $exp
@@ -517,6 +593,21 @@ abstract class Builder
     {
         // 表达式查询
         return '( ' . $key . ' ' . $value->getValue() . ' )';
+=======
+     * @param  Query     $query        查询对象
+     * @param  string    $key
+     * @param  string    $exp
+     * @param  mixed     $value
+     * @param  string    $field
+     * @param  string    $bindName
+     * @param  integer   $bindType
+     * @return string
+     */
+    protected function parseExp(Query $query, $key, $exp, $value, $field, $bindName, $bindType)
+    {
+        // 表达式查询
+        return '( ' . $key . ' ' . $value . ' )';
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -591,10 +682,13 @@ abstract class Builder
         // EXISTS 查询
         if ($value instanceof \Closure) {
             $value = $this->parseClosure($query, $value, false);
+<<<<<<< HEAD
         } elseif ($value instanceof Expression) {
             $value = $value->getValue();
         } else {
             throw new Exception('where express error:' . $value);
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         return $exp . ' (' . $value . ')';
@@ -776,10 +870,13 @@ abstract class Builder
 
         $bindName = $bindName ?: $key;
 
+<<<<<<< HEAD
         if ($query->isBind($bindName)) {
             $bindName .= '_' . str_replace('.', '_', uniqid('', true));
         }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         $query->bind($bindName, $value, $bindType);
 
         return ':' . $bindName;
@@ -845,6 +942,7 @@ abstract class Builder
             return '';
         }
 
+<<<<<<< HEAD
         $array = [];
 
         foreach ($order as $key => $val) {
@@ -898,6 +996,46 @@ abstract class Builder
         }
 
         return 'field(' . $this->parseKey($query, $key, true) . ',' . implode(',', $val) . ')' . $sort;
+=======
+        if (is_array($order)) {
+            $array = [];
+
+            foreach ($order as $key => $val) {
+                if (is_array($val)) {
+                    if (isset($val['sort'])) {
+                        $sort = ' ' . $val['sort'];
+                        unset($val['sort']);
+                    } else {
+                        $sort = '';
+                    }
+
+                    $options = $query->getOptions();
+                    $bind    = $this->connection->getFieldsBind($options['table']);
+
+                    foreach ($val as $k => $item) {
+                        $val[$k] = $this->parseDataBind($query, $key, $item, $bind, $k);
+                    }
+
+                    $array[] = 'field(' . $this->parseKey($query, $key) . ',' . implode(',', $val) . ')' . $sort;
+                } elseif (is_numeric($key)) {
+                    if ('[rand]' == $val) {
+                        $array[] = $this->parseRand($query);
+                    } elseif (false === strpos($val, '(')) {
+                        $array[] = $this->parseKey($query, $val);
+                    } else {
+                        $array[] = $val;
+                    }
+                } else {
+                    $sort    = in_array(strtolower(trim($val)), ['asc', 'desc']) ? ' ' . $val : '';
+                    $array[] = $this->parseKey($query, $key) . ' ' . $sort;
+                }
+            }
+
+            $order = implode(',', $array);
+        }
+
+        return ' ORDER BY ' . $order;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -909,6 +1047,7 @@ abstract class Builder
      */
     protected function parseGroup(Query $query, $group)
     {
+<<<<<<< HEAD
         if (empty($group)) {
             return '';
         }
@@ -922,6 +1061,9 @@ abstract class Builder
         }
 
         return ' GROUP BY ' . implode(',', $val);
+=======
+        return !empty($group) ? ' GROUP BY ' . $this->parseKey($query, $group) : '';
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -945,10 +1087,13 @@ abstract class Builder
      */
     protected function parseComment(Query $query, $comment)
     {
+<<<<<<< HEAD
         if (false !== strpos($comment, '*/')) {
             $comment = strstr($coment, '*/', true);
         }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         return !empty($comment) ? ' /* ' . $comment . ' */' : '';
     }
 
@@ -1004,7 +1149,15 @@ abstract class Builder
             return '';
         }
 
+<<<<<<< HEAD
         return sprintf(" FORCE INDEX ( %s ) ", is_array($index) ? implode(',', $index) : $index);
+=======
+        if (is_array($index)) {
+            $index = join(",", $index);
+        }
+
+        return sprintf(" FORCE INDEX ( %s ) ", $index);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1145,15 +1298,27 @@ abstract class Builder
      */
     public function selectInsert(Query $query, $fields, $table)
     {
+<<<<<<< HEAD
+=======
+        $options = $query->getOptions();
+
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         if (is_string($fields)) {
             $fields = explode(',', $fields);
         }
 
         foreach ($fields as &$field) {
+<<<<<<< HEAD
             $field = $this->parseKey($query, $field, true);
         }
 
         return 'INSERT INTO ' . $this->parseTable($query, $table) . ' (' . implode(',', $fields) . ') ' . $this->select($query);
+=======
+            $field = $this->parseKey($query, $field);
+        }
+
+        return 'INSERT INTO ' . $this->parseTable($query, $table, $options) . ' (' . implode(',', $fields) . ') ' . $this->select($options);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**

@@ -12,7 +12,10 @@
 namespace think\db\builder;
 
 use think\db\Builder;
+<<<<<<< HEAD
 use think\db\Expression;
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 use think\db\Query;
 
 /**
@@ -32,7 +35,10 @@ class Mysql extends Builder
         'parseBetweenTime' => ['BETWEEN TIME', 'NOT BETWEEN TIME'],
         'parseTime'        => ['< TIME', '> TIME', '<= TIME', '>= TIME'],
         'parseExists'      => ['NOT EXISTS', 'EXISTS'],
+<<<<<<< HEAD
         'parseColumn'      => ['COLUMN'],
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     ];
 
     protected $insertAllSql = '%INSERT% INTO %TABLE% (%FIELD%) VALUES %DATA% %COMMENT%';
@@ -90,6 +96,7 @@ class Mysql extends Builder
     /**
      * 正则查询
      * @access protected
+<<<<<<< HEAD
      * @param  Query        $query        查询对象
      * @param  string       $key
      * @param  string       $exp
@@ -100,12 +107,25 @@ class Mysql extends Builder
     protected function parseRegexp(Query $query, $key, $exp, Expression $value, $field)
     {
         return $key . ' ' . $exp . ' ' . $value->getValue();
+=======
+     * @param  Query     $query        查询对象
+     * @param  string    $key
+     * @param  string    $exp
+     * @param  mixed     $value
+     * @param  string    $field
+     * @return string
+     */
+    protected function parseRegexp(Query $query, $key, $exp, $value, $field)
+    {
+        return $key . ' ' . $exp . ' ' . $value;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
      * 字段和表名处理
      * @access public
      * @param  Query     $query 查询对象
+<<<<<<< HEAD
      * @param  mixed     $key   字段名
      * @param  bool      $strict   严格检测
      * @return string
@@ -118,13 +138,29 @@ class Mysql extends Builder
             return $key->getValue();
         }
 
+=======
+     * @param  string    $key   字段名
+     * @return string
+     */
+    public function parseKey(Query $query, $key)
+    {
+        if (is_int($key)) {
+            return $key;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         $key = trim($key);
 
         if (strpos($key, '->') && false === strpos($key, '(')) {
             // JSON字段支持
+<<<<<<< HEAD
             list($field, $name) = explode('->', $key, 2);
 
             return 'json_extract(' . $this->parseKey($query, $field) . ', \'$.' . str_replace('->', '.', $name) . '\')';
+=======
+            list($field, $name) = explode('->', $key);
+
+            $key = 'json_extract(' . $this->parseKey($query, $field) . ', \'$.' . $name . '\')';
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         } elseif (strpos($key, '.') && !preg_match('/[,\'\"\(\)`\s]/', $key)) {
             list($table, $key) = explode('.', $key, 2);
 
@@ -140,7 +176,11 @@ class Mysql extends Builder
             }
         }
 
+<<<<<<< HEAD
         if ('*' != $key && ($strict || !preg_match('/[,\'\"\*\(\)`.\s]/', $key))) {
+=======
+        if (!preg_match('/[,\'\"\*\(\)`.\s]/', $key)) {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             $key = '`' . $key . '`';
         }
 
@@ -156,6 +196,62 @@ class Mysql extends Builder
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * field分析
+     * @access protected
+     * @param  Query     $query     查询对象
+     * @param  mixed     $fields    字段名
+     * @return string
+     */
+    protected function parseField(Query $query, $fields)
+    {
+        $fieldsStr = parent::parseField($query, $fields);
+        $options   = $query->getOptions();
+
+        if (!empty($options['point'])) {
+            $array = [];
+            foreach ($options['point'] as $key => $field) {
+                $key     = !is_numeric($key) ? $key : $field;
+                $array[] = 'AsText(' . $this->parseKey($query, $key) . ') AS ' . $this->parseKey($query, $field);
+            }
+            $fieldsStr .= ',' . implode(',', $array);
+        }
+
+        return $fieldsStr;
+    }
+
+    /**
+     * 数组数据解析
+     * @access protected
+     * @param  array  $data
+     * @return mixed
+     */
+    protected function parseArrayData($data)
+    {
+        list($type, $value) = $data;
+
+        switch (strtolower($type)) {
+            case 'exp':
+                $result = $value;
+                break;
+            case 'point':
+                $fun   = isset($data[2]) ? $data[2] : 'GeomFromText';
+                $point = isset($data[3]) ? $data[3] : 'POINT';
+                if (is_array($value)) {
+                    $value = implode(' ', $value);
+                }
+                $result = $fun . '(\'' . $point . '(' . $value . ')\')';
+                break;
+            default:
+                $result = false;
+        }
+
+        return $result;
+    }
+
+    /**
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * 随机排序
      * @access protected
      * @param  Query     $query        查询对象

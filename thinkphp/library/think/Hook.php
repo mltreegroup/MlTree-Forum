@@ -116,9 +116,15 @@ class Hook
         if (empty($tag)) {
             //获取全部的插件信息
             return $this->tags;
+<<<<<<< HEAD
         }
 
         return array_key_exists($tag, $this->tags) ? $this->tags[$tag] : [];
+=======
+        } else {
+            return array_key_exists($tag, $this->tags) ? $this->tags[$tag] : [];
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -137,7 +143,14 @@ class Hook
         foreach ($tags as $key => $name) {
             $results[$key] = $this->execTag($name, $tag, $params);
 
+<<<<<<< HEAD
             if (false === $results[$key] || (!is_null($results[$key]) && $once)) {
+=======
+            if (false === $results[$key]) {
+                // 如果返回false 则中断行为执行
+                break;
+            } elseif (!is_null($results[$key]) && $once) {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                 break;
             }
         }

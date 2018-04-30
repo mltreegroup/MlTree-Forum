@@ -104,8 +104,13 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
      * @param       $items
      * @param       $listRows
      * @param null  $currentPage
+<<<<<<< HEAD
      * @param null  $total
      * @param bool  $simple
+=======
+     * @param bool  $simple
+     * @param null  $total
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * @param array $options
      * @return Paginator
      */
@@ -150,7 +155,11 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
 
         $url = $path;
         if (!empty($parameters)) {
+<<<<<<< HEAD
             $url .= '?' . http_build_query($parameters, null, '&');
+=======
+            $url .= '?' . urldecode(http_build_query($parameters, null, '&'));
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         return $url . $this->buildFragment();
@@ -431,6 +440,7 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
 
     public function __call($name, $arguments)
     {
+<<<<<<< HEAD
         $collection = $this->getCollection();
 
         $result = call_user_func_array([$collection, $name], $arguments);
@@ -440,6 +450,9 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
         }
 
         return $result;
+=======
+        return call_user_func_array([$this->getCollection(), $name], $arguments);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
 }

@@ -14,10 +14,15 @@ namespace think;
 use Closure;
 use InvalidArgumentException;
 use ReflectionClass;
+<<<<<<< HEAD
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
 use think\exception\ClassNotFoundException;
+=======
+use ReflectionFunction;
+use ReflectionMethod;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
 class Container
 {
@@ -40,12 +45,15 @@ class Container
     protected $bind = [];
 
     /**
+<<<<<<< HEAD
      * 容器标识别名
      * @var array
      */
     protected $name = [];
 
     /**
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * 获取当前容器的实例（单例）
      * @access public
      * @return static
@@ -85,6 +93,7 @@ class Container
     }
 
     /**
+<<<<<<< HEAD
      * 移除容器中的对象实例
      * @access public
      * @param  string  $abstract    类标识、接口
@@ -106,6 +115,8 @@ class Container
     }
 
     /**
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * 绑定一个类、闭包、实例、接口实现到容器
      * @access public
      * @param  string|array  $abstract    类标识、接口
@@ -171,7 +182,11 @@ class Container
      * 创建类的实例
      * @access public
      * @param  string        $abstract       类名或者标识
+<<<<<<< HEAD
      * @param  array|true    $vars           变量
+=======
+     * @param  array|true    $args           变量
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * @param  bool          $newInstance    是否每次创建新的实例
      * @return object
      */
@@ -183,6 +198,7 @@ class Container
             $vars        = [];
         }
 
+<<<<<<< HEAD
         $abstract = isset($this->name[$abstract]) ? $this->name[$abstract] : $abstract;
 
         if (isset($this->instances[$abstract]) && !$newInstance) {
@@ -236,17 +252,46 @@ class Container
         $this->instances = [];
         $this->bind      = [];
         $this->name      = [];
+=======
+        if (isset($this->instances[$abstract]) && !$newInstance) {
+            $object = $this->instances[$abstract];
+        } else {
+            if (isset($this->bind[$abstract])) {
+                $concrete = $this->bind[$abstract];
+
+                if ($concrete instanceof Closure) {
+                    $object = $this->invokeFunction($concrete, $vars);
+                } else {
+                    $object = $this->make($concrete, $vars, $newInstance);
+                }
+            } else {
+                $object = $this->invokeClass($abstract, $vars);
+            }
+
+            if (!$newInstance) {
+                $this->instances[$abstract] = $object;
+            }
+        }
+
+        return $object;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
      * 执行函数或者闭包方法 支持参数调用
      * @access public
+<<<<<<< HEAD
      * @param  mixed  $function 函数或者闭包
      * @param  array  $vars     参数
+=======
+     * @param  string|array|\Closure $function 函数或者闭包
+     * @param  array                 $vars     变量
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * @return mixed
      */
     public function invokeFunction($function, $vars = [])
     {
+<<<<<<< HEAD
         try {
             $reflect = new ReflectionFunction($function);
 
@@ -256,17 +301,29 @@ class Container
         } catch (ReflectionException $e) {
             throw new Exception('function not exists: ' . $function . '()');
         }
+=======
+        $reflect = new ReflectionFunction($function);
+        $args    = $this->bindParams($reflect, $vars);
+
+        return $reflect->invokeArgs($args);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
      * 调用反射执行类的方法 支持参数绑定
      * @access public
+<<<<<<< HEAD
      * @param  mixed   $method 方法
      * @param  array   $vars   参数
+=======
+     * @param  string|array $method 方法
+     * @param  array        $vars   变量
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * @return mixed
      */
     public function invokeMethod($method, $vars = [])
     {
+<<<<<<< HEAD
         try {
             if (is_array($method)) {
                 $class   = is_object($method[0]) ? $method[0] : $this->invokeClass($method[0]);
@@ -297,33 +354,64 @@ class Container
         $args = $this->bindParams($reflect, $vars);
 
         return $reflect->invokeArgs($instance, $args);
+=======
+        if (is_array($method)) {
+            $class   = is_object($method[0]) ? $method[0] : $this->invokeClass($method[0]);
+            $reflect = new ReflectionMethod($class, $method[1]);
+        } else {
+            // 静态方法
+            $reflect = new ReflectionMethod($method);
+        }
+
+        $args = $this->bindParams($reflect, $vars);
+
+        return $reflect->invokeArgs(isset($class) ? $class : null, $args);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
      * 调用反射执行callable 支持参数绑定
      * @access public
      * @param  mixed $callable
+<<<<<<< HEAD
      * @param  array $vars   参数
+=======
+     * @param  array $vars   变量
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * @return mixed
      */
     public function invoke($callable, $vars = [])
     {
         if ($callable instanceof Closure) {
+<<<<<<< HEAD
             return $this->invokeFunction($callable, $vars);
         }
 
         return $this->invokeMethod($callable, $vars);
+=======
+            $result = $this->invokeFunction($callable, $vars);
+        } else {
+            $result = $this->invokeMethod($callable, $vars);
+        }
+
+        return $result;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
      * 调用反射执行类的实例化 支持依赖注入
      * @access public
      * @param  string    $class 类名
+<<<<<<< HEAD
      * @param  array     $vars  参数
+=======
+     * @param  array     $vars  变量
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * @return mixed
      */
     public function invokeClass($class, $vars = [])
     {
+<<<<<<< HEAD
         try {
             $reflect = new ReflectionClass($class);
 
@@ -335,17 +423,34 @@ class Container
         } catch (ReflectionException $e) {
             throw new ClassNotFoundException('class not exists: ' . $class, $class);
         }
+=======
+        $reflect     = new ReflectionClass($class);
+        $constructor = $reflect->getConstructor();
+
+        if ($constructor) {
+            $args = $this->bindParams($constructor, $vars);
+        } else {
+            $args = [];
+        }
+
+        return $reflect->newInstanceArgs($args);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
      * 绑定参数
      * @access protected
      * @param  \ReflectionMethod|\ReflectionFunction $reflect 反射类
+<<<<<<< HEAD
      * @param  array                                 $vars    参数
+=======
+     * @param  array                                 $vars    变量
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * @return array
      */
     protected function bindParams($reflect, $vars = [])
     {
+<<<<<<< HEAD
         if ($reflect->getNumberOfParameters() == 0) {
             return [];
         }
@@ -370,6 +475,32 @@ class Container
                 $args[] = $param->getDefaultValue();
             } else {
                 throw new InvalidArgumentException('method param miss:' . $name);
+=======
+        $args = [];
+
+        if ($reflect->getNumberOfParameters() > 0) {
+            // 判断数组类型 数字数组时按顺序绑定参数
+            reset($vars);
+            $type   = key($vars) === 0 ? 1 : 0;
+            $params = $reflect->getParameters();
+
+            foreach ($params as $param) {
+                $name  = $param->getName();
+                $class = $param->getClass();
+
+                if ($class) {
+                    $className = $class->getName();
+                    $args[]    = $this->make($className);
+                } elseif (1 == $type && !empty($vars)) {
+                    $args[] = array_shift($vars);
+                } elseif (0 == $type && isset($vars[$name])) {
+                    $args[] = $vars[$name];
+                } elseif ($param->isDefaultValueAvailable()) {
+                    $args[] = $param->getDefaultValue();
+                } else {
+                    throw new InvalidArgumentException('method param miss:' . $name);
+                }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             }
         }
 

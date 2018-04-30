@@ -12,7 +12,10 @@
 namespace think\db\builder;
 
 use think\db\Builder;
+<<<<<<< HEAD
 use think\db\Expression;
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 use think\db\Query;
 
 /**
@@ -36,6 +39,7 @@ class Sqlsrv extends Builder
      */
     protected function parseOrder(Query $query, $order)
     {
+<<<<<<< HEAD
         if (empty($order)) {
             return ' ORDER BY rand()';
         }
@@ -60,6 +64,30 @@ class Sqlsrv extends Builder
         }
 
         return ' ORDER BY ' . implode(',', $array);
+=======
+        if (is_array($order)) {
+            $array = [];
+
+            foreach ($order as $key => $val) {
+                if (is_numeric($key)) {
+                    if (false === strpos($val, '(')) {
+                        $array[] = $this->parseKey($query, $val);
+                    } elseif ('[rand]' == $val) {
+                        $array[] = $this->parseRand($query);
+                    } else {
+                        $array[] = $val;
+                    }
+                } else {
+                    $sort    = in_array(strtolower(trim($val)), ['asc', 'desc']) ? ' ' . $val : '';
+                    $array[] = $this->parseKey($query, $key) . ' ' . $sort;
+                }
+            }
+
+            $order = implode(',', $array);
+        }
+
+        return !empty($order) ? ' ORDER BY ' . $order : ' ORDER BY rand()';
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -77,6 +105,7 @@ class Sqlsrv extends Builder
      * 字段和表名处理
      * @access public
      * @param  Query     $query     查询对象
+<<<<<<< HEAD
      * @param  mixed     $key       字段名
      * @param  bool      $strict   严格检测
      * @return string
@@ -89,6 +118,13 @@ class Sqlsrv extends Builder
             return $key->getValue();
         }
 
+=======
+     * @param  string    $key       字段名
+     * @return string
+     */
+    public function parseKey(Query $query, $key)
+    {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         $key = trim($key);
 
         if (strpos($key, '.') && !preg_match('/[,\'\"\(\)\[\s]/', $key)) {
@@ -106,7 +142,11 @@ class Sqlsrv extends Builder
             }
         }
 
+<<<<<<< HEAD
         if ('*' != $key && ($strict || !preg_match('/[,\'\"\*\(\)\[.\s]/', $key))) {
+=======
+        if (!is_numeric($key) && !preg_match('/[,\'\"\*\(\)\[.\s]/', $key)) {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             $key = '[' . $key . ']';
         }
 

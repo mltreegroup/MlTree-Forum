@@ -13,6 +13,7 @@ class Api extends Base
         
     }
 
+<<<<<<< HEAD
     public function Search($keyword = '',$type = 'topic')
     {
         switch ($type) {
@@ -31,6 +32,8 @@ class Api extends Base
         }
     }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     public function commentList($tid,$page=1)
     {
         $max = Option::getValue('commentNum');

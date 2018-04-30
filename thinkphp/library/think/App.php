@@ -20,7 +20,11 @@ use think\route\Dispatch;
  */
 class App implements \ArrayAccess
 {
+<<<<<<< HEAD
     const VERSION = '5.1.12';
+=======
+    const VERSION = '5.1.5';
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
     /**
      * 当前模块路径
@@ -126,7 +130,11 @@ class App implements \ArrayAccess
 
     public function __construct($appPath = '')
     {
+<<<<<<< HEAD
         $this->appPath   = $appPath ? realpath($appPath) . DIRECTORY_SEPARATOR : $this->getAppPath();
+=======
+        $this->appPath   = $appPath ?: realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../application') . '/';
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         $this->container = Container::getInstance();
     }
 
@@ -163,11 +171,19 @@ class App implements \ArrayAccess
     {
         $this->beginTime   = microtime(true);
         $this->beginMem    = memory_get_usage();
+<<<<<<< HEAD
         $this->thinkPath   = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
         $this->rootPath    = dirname($this->appPath) . DIRECTORY_SEPARATOR;
         $this->runtimePath = $this->rootPath . 'runtime' . DIRECTORY_SEPARATOR;
         $this->routePath   = $this->rootPath . 'route' . DIRECTORY_SEPARATOR;
         $this->configPath  = $this->rootPath . 'config' . DIRECTORY_SEPARATOR;
+=======
+        $this->thinkPath   = dirname(dirname(__DIR__)) . '/';
+        $this->rootPath    = dirname(realpath($this->appPath)) . '/';
+        $this->runtimePath = $this->rootPath . 'runtime/';
+        $this->routePath   = $this->rootPath . 'route/';
+        $this->configPath  = $this->rootPath . 'config/';
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         // 设置路径环境变量
         $this->env->set([
@@ -177,8 +193,13 @@ class App implements \ArrayAccess
             'config_path'  => $this->configPath,
             'route_path'   => $this->routePath,
             'runtime_path' => $this->runtimePath,
+<<<<<<< HEAD
             'extend_path'  => $this->rootPath . 'extend' . DIRECTORY_SEPARATOR,
             'vendor_path'  => $this->rootPath . 'vendor' . DIRECTORY_SEPARATOR,
+=======
+            'extend_path'  => $this->rootPath . 'extend/',
+            'vendor_path'  => $this->rootPath . 'vendor/',
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         ]);
 
         // 加载环境变量配置文件
@@ -228,9 +249,12 @@ class App implements \ArrayAccess
         // 设置系统时区
         date_default_timezone_set($this->config('app.default_timezone'));
 
+<<<<<<< HEAD
         // 读取语言包
         $this->loadLangPack();
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         // 监听app_init
         $this->hook->listen('app_init');
     }
@@ -255,10 +279,14 @@ class App implements \ArrayAccess
         } else {
             // 加载行为扩展文件
             if (is_file($path . 'tags.php')) {
+<<<<<<< HEAD
                 $tags = include $path . 'tags.php';
                 if (is_array($tags)) {
                     $this->hook->import($tags);
                 }
+=======
+                $this->hook->import(include $path . 'tags.php');
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             }
 
             // 加载公共文件
@@ -271,6 +299,7 @@ class App implements \ArrayAccess
                 include $this->thinkPath . 'helper.php';
             }
 
+<<<<<<< HEAD
             // 加载中间件
             if (is_file($path . 'middleware.php')) {
                 $middleware = include $path . 'middleware.php';
@@ -285,6 +314,11 @@ class App implements \ArrayAccess
                 if (is_array($provider)) {
                     $this->container->bind($provider);
                 }
+=======
+            // 注册服务的容器对象实例
+            if (is_file($path . 'provider.php')) {
+                $this->container->bind(include $path . 'provider.php');
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             }
 
             // 自动读取配置文件
@@ -315,10 +349,17 @@ class App implements \ArrayAccess
      */
     public function run()
     {
+<<<<<<< HEAD
         try {
             // 初始化应用
             $this->initialize();
 
+=======
+        // 初始化应用
+        $this->initialize();
+
+        try {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             if ($this->bind) {
                 // 模块/控制器绑定
                 $this->route->bind($this->bind);
@@ -330,18 +371,40 @@ class App implements \ArrayAccess
                 }
             }
 
+<<<<<<< HEAD
+=======
+            // 读取默认语言
+            $this->lang->range($this->config('app.default_lang'));
+            if ($this->config('app.lang_switch_on')) {
+                // 开启多语言机制 检测当前语言
+                $this->lang->detect();
+            }
+
+            $this->request->langset($this->lang->range());
+
+            // 加载系统语言包
+            $this->lang->load([
+                $this->thinkPath . 'lang/' . $this->request->langset() . '.php',
+                $this->appPath . 'lang/' . $this->request->langset() . '.php',
+            ]);
+
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             // 监听app_dispatch
             $this->hook->listen('app_dispatch');
 
             // 获取应用调度信息
             $dispatch = $this->dispatch;
             if (empty($dispatch)) {
+<<<<<<< HEAD
                 // 路由检测
                 $this->route
                     ->lazy($this->config('app.url_lazy_route'))
                     ->autoSearchController($this->config('app.controller_auto_search'))
                     ->mergeRuleRegex($this->config('app.route_rule_merge'));
 
+=======
+                // 进行URL路由检测
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                 $dispatch = $this->routeCheck();
             }
 
@@ -365,6 +428,7 @@ class App implements \ArrayAccess
                 $this->config('app.request_cache_except')
             );
 
+<<<<<<< HEAD
             $data = null;
         } catch (HttpResponseException $exception) {
             $dispatch = null;
@@ -381,6 +445,16 @@ class App implements \ArrayAccess
                 }
             }
 
+=======
+            // 执行调度
+            $data = $dispatch->run();
+
+        } catch (HttpResponseException $exception) {
+            $data = $exception->getResponse();
+        }
+
+        $this->middlewareDispatcher->add(function (Request $request, $next) use ($data) {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             // 输出数据到客户端
             if ($data instanceof Response) {
                 $response = $data;
@@ -396,7 +470,11 @@ class App implements \ArrayAccess
             return $response;
         });
 
+<<<<<<< HEAD
         $response = $this->middleware->dispatch($this->request);
+=======
+        $response = $this->middlewareDispatcher->dispatch($this->request);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         // 监听app_end
         $this->hook->listen('app_end', $response);
@@ -404,6 +482,7 @@ class App implements \ArrayAccess
         return $response;
     }
 
+<<<<<<< HEAD
     protected function loadLangPack()
     {
         // 读取默认语言
@@ -422,6 +501,8 @@ class App implements \ArrayAccess
         ]);
     }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     /**
      * 设置当前请求的调度信息
      * @access public
@@ -441,9 +522,15 @@ class App implements \ArrayAccess
      * @param  string $type 信息类型
      * @return void
      */
+<<<<<<< HEAD
     public function log($msg, $type = 'info')
     {
         $this->debug && $this->log->record($msg, $type);
+=======
+    public function log($log, $type = 'info')
+    {
+        $this->debug && $this->log->record($log, $type);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -493,10 +580,13 @@ class App implements \ArrayAccess
             }
         }
 
+<<<<<<< HEAD
         if (is_file($this->runtimePath . 'rule_regex.php')) {
             $this->route->setRuleRegexs(include $this->runtimePath . 'rule_regex.php');
         }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         // 是否强制路由模式
         $must = !is_null($this->routeMust) ? $this->routeMust : $this->config('app.url_route_must');
 
@@ -611,9 +701,15 @@ class App implements \ArrayAccess
             return $this->__get($class);
         } elseif ($empty && class_exists($emptyClass = $this->parseClass($module, $layer, $empty, $appendSuffix))) {
             return $this->__get($emptyClass);
+<<<<<<< HEAD
         }
 
         throw new ClassNotFoundException('class not exists:' . $class, $class);
+=======
+        } else {
+            throw new ClassNotFoundException('class not exists:' . $class, $class);
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -755,10 +851,13 @@ class App implements \ArrayAccess
      */
     public function getAppPath()
     {
+<<<<<<< HEAD
         if (is_null($this->appPath)) {
             $this->appPath = Loader::getRootPath() . 'application' . DIRECTORY_SEPARATOR;
         }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         return $this->appPath;
     }
 
@@ -891,7 +990,11 @@ class App implements \ArrayAccess
 
     public function __unset($name)
     {
+<<<<<<< HEAD
         $this->container->delete($name);
+=======
+        $this->container->__unset($name);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     public function offsetExists($key)

@@ -51,6 +51,7 @@ trait SoftDelete
         if ($field) {
             return $model
                 ->db(false)
+<<<<<<< HEAD
                 ->useSoftDelete($field, $model->getWithTrashedExp());
         }
 
@@ -66,6 +67,12 @@ trait SoftDelete
     {
         return is_null($this->defaultSoftDelete) ?
         ['notnull', ''] : ['<>', $this->defaultSoftDelete];
+=======
+                ->useSoftDelete($field, ['not null', '']);
+        } else {
+            return $model->db(false);
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -155,20 +162,33 @@ trait SoftDelete
         $name = $this->getDeleteTimeField();
 
         if (empty($where)) {
+<<<<<<< HEAD
             $pk = $this->getPk();
 
             $where[] = [$pk, '=', $this->getData($pk)];
+=======
+            $pk         = $this->getPk();
+            $where[$pk] = [$pk, '=', $this->getData($pk)];
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         if ($name) {
             // 恢复删除
             return $this->db(false)
                 ->where($where)
+<<<<<<< HEAD
                 ->useSoftDelete($name, $this->getWithTrashedExp())
                 ->update([$name => $this->defaultSoftDelete]);
         }
 
         return 0;
+=======
+                ->useSoftDelete($name, ['not null', ''])
+                ->update([$name => null]);
+        } else {
+            return 0;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -196,6 +216,7 @@ trait SoftDelete
 
         return $field;
     }
+<<<<<<< HEAD
 
     /**
      * 查询的时候默认排除软删除数据
@@ -211,4 +232,6 @@ trait SoftDelete
             $query->useSoftDelete($field, $this->defaultSoftDelete);
         }
     }
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 }

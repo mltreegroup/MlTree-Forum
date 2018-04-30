@@ -34,7 +34,11 @@ abstract class Rule
     // 路由变量规则
     protected $pattern = [];
     // 需要合并的路由参数
+<<<<<<< HEAD
     protected $mergeOptions = ['after', 'before', 'model', 'header', 'response', 'append', 'middleware'];
+=======
+    protected $mergeOptions = ['after', 'before', 'model'];
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
     abstract public function check($request, $url, $depr = '/');
 
@@ -75,14 +79,24 @@ abstract class Rule
     }
 
     /**
+<<<<<<< HEAD
      * 设置标识
      * @access public
      * @param  string  $name 标识名
+=======
+     * 设置Name
+     * @access public
+     * @param  string|array  $name 变量名
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * @return $this
      */
     public function name($name)
     {
+<<<<<<< HEAD
         $this->name = $name;
+=======
+        $this->name = '/' != $name ? ltrim($name, '/') : '/';
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         return $this;
     }
@@ -98,6 +112,7 @@ abstract class Rule
     }
 
     /**
+<<<<<<< HEAD
      * 获取Parent对象
      * @access public
      * @return $this|null
@@ -108,6 +123,8 @@ abstract class Rule
     }
 
     /**
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * 获取变量规则定义
      * @access public
      * @param  string  $name 变量名
@@ -138,6 +155,26 @@ abstract class Rule
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * 附加路由隐式参数
+     * @access public
+     * @param  array     $append
+     * @return $this
+     */
+    public function append(array $append = [])
+    {
+        if (isset($this->option['append'])) {
+            $this->option['append'] = array_merge($this->option['append'], $append);
+        } else {
+            $this->option['append'] = $append;
+        }
+
+        return $this;
+    }
+
+    /**
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * 设置路由请求类型
      * @access public
      * @param  string     $method
@@ -213,9 +250,13 @@ abstract class Rule
      */
     public function model($var, $model = null, $exception = true)
     {
+<<<<<<< HEAD
         if ($var instanceof \Closure) {
             $this->option['model'][] = $var;
         } elseif (is_array($var)) {
+=======
+        if (is_array($var)) {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             $this->option['model'] = $var;
         } elseif (is_null($model)) {
             $this->option['model']['id'] = [$var, true];
@@ -227,6 +268,7 @@ abstract class Rule
     }
 
     /**
+<<<<<<< HEAD
      * 附加路由隐式参数
      * @access public
      * @param  array     $append
@@ -244,6 +286,8 @@ abstract class Rule
     }
 
     /**
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * 绑定验证
      * @access public
      * @param  mixed    $validate 验证器类
@@ -267,8 +311,12 @@ abstract class Rule
      */
     public function response($response)
     {
+<<<<<<< HEAD
         $this->option['response'][] = $response;
         return $this;
+=======
+        return $this->option('response', $response);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -280,6 +328,7 @@ abstract class Rule
      */
     public function header($header, $value = null)
     {
+<<<<<<< HEAD
         if (is_array($header)) {
             $this->option['header'] = $header;
         } else {
@@ -304,6 +353,16 @@ abstract class Rule
             foreach ((array) $middleware as $item) {
                 $this->option['middleware'][] = [$item, $param];
             }
+=======
+        if (empty($this->option['header'])) {
+            $this->option['header'] = [];
+        }
+
+        if (is_array($header)) {
+            $this->option['header'] = array_merge($this->option['header'], $header);
+        } else {
+            $this->option['header'][$header] = $value;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         return $this;
@@ -445,7 +504,11 @@ abstract class Rule
         }
 
         if ($allow && $this->parent) {
+<<<<<<< HEAD
             $this->parent->addRuleItem($this, 'options');
+=======
+            $this->parent->addRule($this, 'options');
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         return $this->option('cross_domain', $allow);
@@ -513,8 +576,11 @@ abstract class Rule
         }
 
         $this->option = array_merge($parentOption, $this->option);
+<<<<<<< HEAD
 
         return $this->option;
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -605,15 +671,44 @@ abstract class Rule
         // 替换路由地址中的变量
         if (is_string($route) && !empty($matches)) {
             foreach ($matches as $key => $val) {
+<<<<<<< HEAD
                 if (false !== strpos($route, '<' . $key . '>')) {
                     $route = str_replace('<' . $key . '>', $val, $route);
                 } elseif (false !== strpos($route, ':' . $key)) {
+=======
+                if (false !== strpos($route, ':' . $key)) {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                     $route = str_replace(':' . $key, $val, $route);
                 }
             }
         }
 
+<<<<<<< HEAD
         $this->afterMatchRule($request, $option, $matches);
+=======
+        // 绑定模型数据
+        if (isset($option['model'])) {
+            $this->createBindModel($option['model'], $matches);
+        }
+
+        // 指定Header数据
+        if (!empty($option['header'])) {
+            $header = $option['header'];
+            Container::get('hook')->add('response_send', function ($response) use ($header) {
+                $response->header($header);
+            });
+        }
+
+        // 指定Response响应数据
+        if (!empty($option['response'])) {
+            Container::get('hook')->add('response_send', $option['response']);
+        }
+
+        // 开启请求缓存
+        if (isset($option['cache']) && $request->isGet()) {
+            $this->parseRequestCache($request, $option['cache']);
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         // 解析额外参数
         $count = substr_count($rule, '/');
@@ -641,6 +736,7 @@ abstract class Rule
         return $this->dispatch($request, $route, $option);
     }
 
+<<<<<<< HEAD
     protected function afterMatchRule($request, $option = [], $matches = [])
     {
         // 添加中间件
@@ -676,6 +772,8 @@ abstract class Rule
         }
     }
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     /**
      * 验证数据
      * @access protected
@@ -741,8 +839,11 @@ abstract class Rule
      */
     protected function checkAfter($after)
     {
+<<<<<<< HEAD
         Container::get('log')->notice('路由后置行为建议使用中间件替代！');
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         $hook = Container::get('hook');
 
         $result = null;
@@ -760,9 +861,15 @@ abstract class Rule
             return new ResponseDispatch($result);
         } elseif ($result instanceof Dispatch) {
             return $result;
+<<<<<<< HEAD
         }
 
         return false;
+=======
+        } else {
+            return false;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -787,6 +894,7 @@ abstract class Rule
             $result = new RedirectDispatch($route, [], isset($option['status']) ? $option['status'] : 301);
         } elseif (false !== strpos($route, '\\')) {
             // 路由到方法
+<<<<<<< HEAD
             $result = $this->dispatchMethod($route);
         } elseif (0 === strpos($route, '@')) {
             // 路由到控制器
@@ -794,6 +902,26 @@ abstract class Rule
         } else {
             // 路由到模块/控制器/操作
             $result = $this->dispatchModule($request, $route);
+=======
+            list($path, $var) = $this->parseUrlPath($route);
+            $route            = str_replace('/', '@', implode('/', $path));
+            $method           = strpos($route, '@') ? explode('@', $route) : $route;
+            $result           = new CallbackDispatch($method, $var);
+        } elseif (0 === strpos($route, '@')) {
+            // 路由到控制器
+            $route             = substr($route, 1);
+            list($route, $var) = $this->parseUrlPath($route);
+            $result            = new ControllerDispatch(implode('/', $route), $var);
+
+            $request->action(array_pop($route));
+            $app = Container::get('app');
+            $request->controller($route ? array_pop($route) : $app->config('default_controller'));
+            $request->module($route ? array_pop($route) : $app->config('default_module'));
+            $app->setModulePath($app->getAppPath() . ($app->config('app_multi_module') ? $request->module() . DIRECTORY_SEPARATOR : ''));
+        } else {
+            // 路由到模块/控制器/操作
+            $result = $this->parseModule($route);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         return $result;
@@ -802,6 +930,7 @@ abstract class Rule
     /**
      * 解析URL地址为 模块/控制器/操作
      * @access protected
+<<<<<<< HEAD
      * @param  string    $route 路由地址
      * @return CallbackDispatch
      */
@@ -853,6 +982,20 @@ abstract class Rule
         $controller = !empty($path) ? array_pop($path) : null;
         $module     = $config->get('app_multi_module') && !empty($path) ? array_pop($path) : null;
         $method     = $request->method();
+=======
+     * @param  string    $url URL地址
+     * @return array
+     */
+    protected function parseModule($url)
+    {
+        list($path, $var) = $this->parseUrlPath($url);
+        $config           = Container::get('config');
+        $request          = Container::get('request');
+        $action           = array_pop($path);
+        $controller       = !empty($path) ? array_pop($path) : null;
+        $module           = $config->get('app_multi_module') && !empty($path) ? array_pop($path) : null;
+        $method           = $request->method();
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         if ($config->get('use_action_prefix') && $this->router->getMethodPrefix($method)) {
             $prefix = $this->router->getMethodPrefix($method);
@@ -864,7 +1007,11 @@ abstract class Rule
         $request->route($var);
 
         // 路由到模块/控制器/操作
+<<<<<<< HEAD
         return new ModuleDispatch([$module, $controller, $action], [], false);
+=======
+        return (new ModuleDispatch([$module, $controller, $action]))->convert(false);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -968,6 +1115,7 @@ abstract class Rule
     }
 
     /**
+<<<<<<< HEAD
      * 生成路由的正则规则
      * @access protected
      * @param  string    $rule 路由规则
@@ -1078,6 +1226,8 @@ abstract class Rule
     }
 
     /**
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * 设置路由参数
      * @access public
      * @param  string    $method     方法名

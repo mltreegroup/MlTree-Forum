@@ -72,11 +72,20 @@ class Config implements \ArrayAccess
                 return $this->set(include $file, $name);
             } elseif ('yaml' == $type && function_exists('yaml_parse_file')) {
                 return $this->set(yaml_parse_file($file), $name);
+<<<<<<< HEAD
             }
             return $this->parse($file, $type, $name);
         }
 
         return $this->config;
+=======
+            } else {
+                return $this->parse($file, $type, $name);
+            }
+        } else {
+            return $this->config;
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -89,12 +98,20 @@ class Config implements \ArrayAccess
     {
         // 如果尚未载入 则动态加载配置文件
         $module = Container::get('request')->module();
+<<<<<<< HEAD
         $module = $module ? $module . DIRECTORY_SEPARATOR : '';
+=======
+        $module = $module ? $module . '/' : '';
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         $app    = Container::get('app');
         $path   = $app->getAppPath() . $module;
 
         if (is_dir($path . 'config')) {
+<<<<<<< HEAD
             $file = $path . 'config' . DIRECTORY_SEPARATOR . $name . $app->getConfigExt();
+=======
+            $file = $path . 'config/' . $name . $app->getConfigExt();
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         } elseif (is_dir($app->getConfigPath() . $module)) {
             $file = $app->getConfigPath() . $module . $name . $app->getConfigExt();
         }
@@ -116,7 +133,11 @@ class Config implements \ArrayAccess
             $name = $this->prefix . '.' . $name;
         }
 
+<<<<<<< HEAD
         return !is_null($this->get($name)) ? true : false;
+=======
+        return $this->get($name) ? true : false;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**

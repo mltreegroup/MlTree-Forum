@@ -11,7 +11,10 @@
 
 namespace think\route\dispatch;
 
+<<<<<<< HEAD
 use ReflectionMethod;
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 use think\Container;
 use think\exception\ClassNotFoundException;
 use think\exception\HttpException;
@@ -20,6 +23,7 @@ use think\route\Dispatch;
 
 class Module extends Dispatch
 {
+<<<<<<< HEAD
     protected $controller;
     protected $actionName;
 
@@ -33,6 +37,9 @@ class Module extends Dispatch
     }
 
     protected function init()
+=======
+    public function run()
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     {
         $result = $this->dispatch;
 
@@ -67,7 +74,11 @@ class Module extends Dispatch
                 $this->app->init($module);
 
                 // 加载当前模块语言包
+<<<<<<< HEAD
                 $this->app['lang']->load($this->app->getAppPath() . $module . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . $this->app['request']->langset() . '.php');
+=======
+                $this->app['lang']->load($this->app->getAppPath() . $module . '/lang/' . $this->app['request']->langset() . '.php');
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
                 // 模块请求缓存检查
                 $this->app['request']->cache(
@@ -85,11 +96,16 @@ class Module extends Dispatch
         }
 
         // 当前模块路径
+<<<<<<< HEAD
         $this->app->setModulePath($this->app->getAppPath() . ($module ? $module . DIRECTORY_SEPARATOR : ''));
+=======
+        $this->app->setModulePath($this->app->getAppPath() . ($module ? $module . '/' : ''));
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         // 是否自动转换控制器和操作名
         $convert = is_bool($this->convert) ? $this->convert : $this->app->config('app.url_convert');
         // 获取控制器名
+<<<<<<< HEAD
         $controller       = strip_tags($result[1] ?: $this->app->config('app.default_controller'));
         $this->controller = $convert ? strtolower($controller) : $controller;
 
@@ -103,12 +119,28 @@ class Module extends Dispatch
 
     public function run()
     {
+=======
+        $controller = strip_tags($result[1] ?: $this->app->config('app.default_controller'));
+        $controller = $convert ? strtolower($controller) : $controller;
+
+        // 获取操作名
+        $actionName = strip_tags($result[2] ?: $this->app->config('app.default_action'));
+        $actionName = $convert ? strtolower($actionName) : $actionName;
+
+        // 设置当前请求的控制器、操作
+        $this->app['request']->controller(Loader::parseName($controller, 1))->action($actionName);
+
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         // 监听module_init
         $this->app['hook']->listen('module_init');
 
         // 实例化控制器
         try {
+<<<<<<< HEAD
             $instance = $this->app->controller($this->controller,
+=======
+            $instance = $this->app->controller($controller,
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                 $this->app->config('app.url_controller_layer'),
                 $this->app->config('app.controller_suffix'),
                 $this->app->config('app.empty_controller'));
@@ -117,11 +149,16 @@ class Module extends Dispatch
         }
 
         // 获取当前操作名
+<<<<<<< HEAD
         $action = $this->actionName . $this->app->config('app.action_suffix');
+=======
+        $action = $actionName . $this->app->config('app.action_suffix');
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         if (is_callable([$instance, $action])) {
             // 执行操作方法
             $call = [$instance, $action];
+<<<<<<< HEAD
 
             // 严格获取当前操作方法名
             $reflect    = new ReflectionMethod($instance, $action);
@@ -130,21 +167,33 @@ class Module extends Dispatch
             $actionName = $suffix ? substr($methodName, 0, -strlen($suffix)) : $methodName;
             $this->app['request']->action($actionName);
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             // 自动获取请求变量
             $vars = $this->app->config('app.url_param_type')
             ? $this->app['request']->route()
             : $this->app['request']->param();
         } elseif (is_callable([$instance, '_empty'])) {
             // 空操作
+<<<<<<< HEAD
             $call    = [$instance, '_empty'];
             $vars    = [$this->actionName];
             $reflect = new ReflectionMethod($instance, '_empty');
+=======
+            $call = [$instance, '_empty'];
+            $vars = [$actionName];
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         } else {
             // 操作不存在
             throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . $action . '()');
         }
 
         $this->app['hook']->listen('action_begin', $call);
+<<<<<<< HEAD
         return Container::getInstance()->invokeReflectMethod($instance, $reflect, $vars);
+=======
+
+        return Container::getInstance()->invokeMethod($call, $vars);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 }

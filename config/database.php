@@ -13,13 +13,13 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
-    'hostname'        => '127.0.0.1',
+    'hostname'        => $_ENV['MYSQL_HOST'],
     // 数据库名
-    'database'        => 'forum_kingsr_cc',
+    'database'        => $_ENV['MYSQL_DBNAME'],
     // 用户名
-    'username'        => 'forum_kingsr_cc',
+    'username'        => $_ENV['MYSQL_USERNAME'],
     // 密码
-    'password'        => '4biEGJhrr4',
+    'password'        => $_ENV['MYSQL_PASSWORD'],
     // 端口
     'hostport'        => '',
     // 连接dsn

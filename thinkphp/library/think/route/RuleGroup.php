@@ -12,7 +12,10 @@
 namespace think\route;
 
 use think\Container;
+<<<<<<< HEAD
 use think\Exception;
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 use think\Request;
 use think\Response;
 use think\Route;
@@ -44,29 +47,44 @@ class RuleGroup extends Rule
     // 完整名称
     protected $fullName;
 
+<<<<<<< HEAD
     // 所在域名
     protected $domain;
 
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     /**
      * 架构函数
      * @access public
      * @param  Route       $router   路由对象
+<<<<<<< HEAD
      * @param  RuleGroup   $parent   上级对象
+=======
+     * @param  RuleGroup   $group    路由所属分组对象
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * @param  string      $name     分组名称
      * @param  mixed       $rule     分组路由
      * @param  array       $option   路由参数
      * @param  array       $pattern  变量规则
      */
+<<<<<<< HEAD
     public function __construct(Route $router, RuleGroup $parent = null, $name = '', $rule = [], $option = [], $pattern = [])
     {
         $this->router  = $router;
         $this->parent  = $parent;
+=======
+    public function __construct(Route $router, RuleGroup $group = null, $name = '', $rule = [], $option = [], $pattern = [])
+    {
+        $this->router  = $router;
+        $this->parent  = $group;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         $this->rule    = $rule;
         $this->name    = trim($name, '/');
         $this->option  = $option;
         $this->pattern = $pattern;
 
         $this->setFullName();
+<<<<<<< HEAD
 
         if ($this->parent) {
             $this->domain = $this->parent->getDomain();
@@ -76,11 +94,14 @@ class RuleGroup extends Rule
         if (!empty($option['cross_domain'])) {
             $this->router->setCrossDomainRule($this);
         }
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
      * 设置分组的路由规则
      * @access public
+<<<<<<< HEAD
      * @return void
      */
     protected function setFullName()
@@ -89,6 +110,12 @@ class RuleGroup extends Rule
             $this->name = preg_replace(['/\[\:(\w+)\]/', '/\:(\w+)/'], ['<\1?>', '<\1>'], $this->name);
         }
 
+=======
+     * @return $this
+     */
+    protected function setFullName()
+    {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         if ($this->parent && $this->parent->getFullName()) {
             $this->fullName = $this->parent->getFullName() . ($this->name ? '/' . $this->name : '');
         } else {
@@ -97,6 +124,7 @@ class RuleGroup extends Rule
     }
 
     /**
+<<<<<<< HEAD
      * 获取所属域名
      * @access public
      * @return string
@@ -104,6 +132,17 @@ class RuleGroup extends Rule
     public function getDomain()
     {
         return $this->domain;
+=======
+     * 设置分组的路由规则
+     * @access public
+     * @param  mixed      $rule     路由规则
+     * @return $this
+     */
+    public function setRule($rule)
+    {
+        $this->rule = $rule;
+        return $this;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -118,6 +157,7 @@ class RuleGroup extends Rule
     public function check($request, $url, $depr = '/', $completeMatch = false)
     {
         if ($dispatch = $this->checkCrossDomain($request)) {
+<<<<<<< HEAD
             // 跨域OPTIONS请求
             return $dispatch;
         }
@@ -131,10 +171,39 @@ class RuleGroup extends Rule
         if ($this instanceof Resource) {
             $this->buildResourceRule($this->resource, $this->option);
         } elseif ($this->rule) {
+=======
+            // 允许跨域
+            return $dispatch;
+        }
+
+        // 检查参数有效性
+        if (!$this->checkOption($this->option, $request)) {
+            return false;
+        }
+
+        if ($this->fullName) {
+            // 分组URL匹配检查
+            $pos = strpos(str_replace('<', ':', $this->fullName), ':');
+
+            if (false !== $pos) {
+                $str = substr($this->fullName, 0, $pos);
+            } else {
+                $str = $this->fullName;
+            }
+
+            if (0 !== stripos(str_replace('|', '/', $url), $str)) {
+                return false;
+            }
+        }
+
+        if ($this->rule) {
+            // 延迟解析分组路由
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             if ($this->rule instanceof Response) {
                 return new ResponseDispatch($this->rule);
             }
 
+<<<<<<< HEAD
             $this->parseGroupRule($this->rule);
         }
 
@@ -151,22 +220,69 @@ class RuleGroup extends Rule
             $this->mergeGroupOptions();
             // 合并分组变量规则
             $this->pattern = array_merge($this->parent->getPattern(), $this->pattern);
+=======
+            $group = $this->router->getGroup();
+
+            $this->router->setGroup($this);
+
+            $this->router->parseGroupRule($this, $this->rule);
+
+            $this->router->setGroup($group);
+
+            $this->rule = null;
+        }
+
+        // 分组匹配后执行的行为
+
+        // 指定Response响应数据
+        if (!empty($this->option['response'])) {
+            Container::get('hook')->add('response_send', $this->option['response']);
+        }
+
+        // 开启请求缓存
+        if (isset($this->option['cache']) && $request->isGet()) {
+            $this->parseRequestCache($request, $this->option['cache']);
+        }
+
+        // 获取当前路由规则
+        $method = strtolower($request->method());
+        $rules  = array_merge($this->rules['*'], $this->rules[$method]);
+
+        if ($this->parent) {
+            // 合并分组参数
+            $this->mergeGroupOptions();
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         if (isset($this->option['complete_match'])) {
             $completeMatch = $this->option['complete_match'];
         }
 
+<<<<<<< HEAD
         if (!empty($this->option['merge_rule_regex'])) {
             // 合并路由正则规则进行路由匹配检查
             $result = $this->checkMergeRuleRegex($request, $rules, $url, $depr, $completeMatch);
+=======
+        if (!empty($this->option['append'])) {
+            $request->route($this->option['append']);
+        }
+
+        if (isset($rules[$url])) {
+            // 快速定位
+            $item   = $rules[$url];
+            $result = $item->check($request, $url, $depr, $completeMatch);
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
             if (false !== $result) {
                 return $result;
             }
         }
 
+<<<<<<< HEAD
         // 检查分组路由
+=======
+        // 遍历分组路由
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         foreach ($rules as $key => $item) {
             $result = $item->check($request, $url, $depr, $completeMatch);
 
@@ -175,10 +291,17 @@ class RuleGroup extends Rule
             }
         }
 
+<<<<<<< HEAD
         if ($this->auto) {
             // 自动解析URL地址
             $result = new UrlDispatch($this->auto . '/' . $url, ['depr' => $depr, 'auto_search' => false]);
         } elseif ($this->miss && in_array($this->miss->getMethod(), ['*', $method])) {
+=======
+        if (isset($this->auto)) {
+            // 自动解析URL地址
+            $result = new UrlDispatch($this->auto->getRoute() . '/' . $url, ['depr' => $depr, 'auto_search' => false]);
+        } elseif (isset($this->miss)) {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             // 未匹配所有路由的路由规则处理
             $result = $this->parseRule($request, '', $this->miss->getRoute(), $url, $this->miss->getOption());
         } else {
@@ -189,6 +312,7 @@ class RuleGroup extends Rule
     }
 
     /**
+<<<<<<< HEAD
      * 获取当前请求的路由规则（包括子分组、资源路由）
      * @access protected
      * @param  string      $method
@@ -237,10 +361,21 @@ class RuleGroup extends Rule
             $this->rule = null;
         }
 
+=======
+     * 设置自动路由
+     * @access public
+     * @param  RuleItem     $rule   路由规则
+     * @return $this
+     */
+    public function setAutoRule(RuleItem $rule)
+    {
+        $this->auto = $rule;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         return $this;
     }
 
     /**
+<<<<<<< HEAD
      * 解析分组和域名的路由规则及绑定
      * @access public
      * @param  mixed        $rule    路由规则
@@ -391,11 +526,23 @@ class RuleGroup extends Rule
         $this->miss = $ruleItem;
 
         return $ruleItem;
+=======
+     * 设置为MISS路由
+     * @access public
+     * @param  RuleItem     $rule   路由规则
+     * @return $this
+     */
+    public function setMissRule(RuleItem $rule)
+    {
+        $this->miss = $rule;
+        return $this;
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
      * 添加分组下的路由规则或者子分组
      * @access public
+<<<<<<< HEAD
      * @param  string    $rule       路由规则
      * @param  string    $route      路由地址
      * @param  string    $method     请求类型
@@ -458,6 +605,13 @@ class RuleGroup extends Rule
     }
 
     public function addRuleItem($rule, $method = '*')
+=======
+     * @param  Rule     $rule   路由规则
+     * @param  string   $method 请求类型
+     * @return $this
+     */
+    public function addRule($rule, $method = '*')
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     {
         if (strpos($method, '|')) {
             $rule->method($method);
@@ -477,7 +631,11 @@ class RuleGroup extends Rule
      */
     public function prefix($prefix)
     {
+<<<<<<< HEAD
         if ($this->parent && $this->parent->getOption('prefix')) {
+=======
+        if ($this->parent->getOption('prefix')) {
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             $prefix = $this->parent->getOption('prefix') . $prefix;
         }
 
@@ -485,6 +643,7 @@ class RuleGroup extends Rule
     }
 
     /**
+<<<<<<< HEAD
      * 合并分组的路由规则正则
      * @access public
      * @param  bool     $merge
@@ -496,6 +655,8 @@ class RuleGroup extends Rule
     }
 
     /**
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * 获取完整分组Name
      * @access public
      * @return string
@@ -515,9 +676,15 @@ class RuleGroup extends Rule
     {
         if ('' === $method) {
             return $this->rules;
+<<<<<<< HEAD
         }
 
         return isset($this->rules[strtolower($method)]) ? $this->rules[strtolower($method)] : [];
+=======
+        } else {
+            return isset($this->rules[strtolower($method)]) ? $this->rules[strtolower($method)] : [];
+        }
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
 }

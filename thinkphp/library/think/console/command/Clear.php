@@ -24,14 +24,18 @@ class Clear extends Command
         $this
             ->setName('clear')
             ->addOption('path', 'd', Option::VALUE_OPTIONAL, 'path to clear', null)
+<<<<<<< HEAD
             ->addOption('cache', 'c', Option::VALUE_NONE, 'clear cache file')
             ->addOption('log', 'l', Option::VALUE_NONE, 'clear log file')
             ->addOption('dir', 'r', Option::VALUE_NONE, 'clear empty dir')
+=======
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             ->setDescription('Clear runtime file');
     }
 
     protected function execute(Input $input, Output $output)
     {
+<<<<<<< HEAD
         if ($input->getOption('cache')) {
             $path = App::getRuntimePath() . 'cache';
         } elseif ($input->getOption('log')) {
@@ -59,5 +63,19 @@ class Clear extends Command
                 unlink($path . $file);
             }
         }
+=======
+        $path  = $input->getOption('path') ?: App::getRuntimePath();
+        $files = scandir($path);
+        if ($files) {
+            foreach ($files as $file) {
+                if ('.' != $file && '..' != $file && is_dir($path . $file)) {
+                    array_map('unlink', glob($path . $file . '/*.*'));
+                } elseif ('.gitignore' != $file && is_file($path . $file)) {
+                    unlink($path . $file);
+                }
+            }
+        }
+        $output->writeln("<info>Clear Successed</info>");
+>>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 }

@@ -1,5 +1,6 @@
 .idea
-composer.lock
 *.log
-thinkphp
-.vscode/settings.json
+.vscode
+public/uploads/
+public/avatar/
+public/.well-known/

@@ -1,5 +1,5 @@
 <!-- 论坛右侧各类信息展示 -->
-<div class="mdui-hidden-xs mdui-col-sm-4">
+<div class="mdui-hidden-xs mdui-col-sm-4 mdui-typo">
     <!-- 公告栏 -->
     <div class="mdui-card mdui-m-b-1">
         <div class="mdui-card-header">
@@ -11,7 +11,7 @@
             <img src="__IMG__/card.png" />
         </div>
 
-        <div class="mdui-card-content">子曰：「学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知，而不愠，不亦君子乎？」</div>
+        <div class="mdui-card-content">{$option.notice|raw}</div>
     </div>
 
     <!-- 发帖 -->
@@ -19,11 +19,11 @@
 
     <!-- 搜索 -->
     <div class="mdui-m-b-1">
-        <form action="" method="post">
+        <form action="{:url('search')}" method="GET">
             <div class="mdui-textfield mdui-textfield-floating-label">
                 <i class="mdui-icon material-icons">search</i>
                 <label class="mdui-textfield-label">Search</label>
-                <input class="mdui-textfield-input" type="search" />
+                <input class="mdui-textfield-input" type="search" name="keyword"/>
             </div>
         </form>
     </div>

@@ -14,7 +14,7 @@
 
         <div class="mdui-card-content">
 
-            <ul class="mdui-list mdui-list-dense">
+            <ul class="mdui-list">
                 {volist name="tops" id="vo"}
                 <li class="mdui-list-item mdui-ripple">
                     <div class="mdui-list-item-avatar">
@@ -24,7 +24,7 @@
                         <a class="mdui-list-item-title" href="{:url('index/topic/index',['tid'=>$vo.tid])}">{$vo.subject} {:outBadge($vo)}</a>
                         <div class="mdui-list-item-text mdui-list-item-one-line">{$vo.content|raw}</div>
                         <div class="mdui-list-item-text">
-                            <a class="mdui-list-item-title" href="{:url('index/user/inde',['uid'=>$vo.uid])}">{$vo.userData.username}</a>
+                            <a href="{:url('index/user/inde',['uid'=>$vo.uid])}">{$vo.userData.username}</a>
                             <span title="{$vo.create_time}"> {$vo.time_format}</span>
                             <span class="mdui-float-right">
                                 <i class="mdui-icon material-icons">looks</i>{$vo.views}</span>
@@ -53,13 +53,13 @@
     </div>
 
     <div id="topic-all">
-        <ul class="mdui-list mdui-list-dense" id="topic-cps">
+        <ul class="mdui-list" id="topic-cps">
 
         </ul>
     </div>
 
     <div id="topic-essence">
-        <ul class="mdui-list mdui-list-dense" id="topic-ess">
+        <ul class="mdui-list" id="topic-ess">
 
         </ul>
     </div>
@@ -67,4 +67,9 @@
 </div>
 {include file="/../template@default/right_tool"} {/block}{block name="js"}
 <script src="__JS__/mltree-flow.js"></script>
+<script>
+    //调用flow加载
+    var flow = new mfFlow('index');
+    flow.flow();
+</script>
 {/block}

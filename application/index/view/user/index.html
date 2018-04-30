@@ -7,10 +7,10 @@
         </div>
         <div class="mdui-card-primary">
             <div class="">
-                <img src="{$userData.userInfo.avatar}" alt="{$userData.userInfo.username}" class="mdui-img-circle mdui-float-left" width="60">
+                <img src="{$userData.avatar}" alt="{$userData.username}" class="mdui-img-circle mdui-float-left" width="60">
             </div>
-            <div class="mdui-card-primary-title">{$userData.userInfo.username}</div>
-            <div class="mdui-card-primary-subtitle">{$userData.userInfo.motto|default="这家伙很懒，什么也没留下"}</div>
+            <div class="mdui-card-primary-title">{$userData.username}</div>
+            <div class="mdui-card-primary-subtitle">{$userData.motto|default="这家伙很懒，什么也没留下"}</div>
         </div>
 
         <div class="mdui-card-content">
@@ -67,7 +67,7 @@
             </div>
             <div id="avatar" class="mdui-text-center">
                 <div class="mdui-m-y-1">
-                    <img id="avatar_new" src="{$userData.userInfo.avatar}" alt="{$userData.userInfo.username}" width="80">
+                    <img id="avatar_new" src="{$userData.avatar}" alt="{$userData.username}" width="80">
                 </div>
                 <div class="mdui-m-y-1">
                     <button class="mdui-btn mdui-color-pink" id="avatar_btn">上传新头像</button>
@@ -115,8 +115,8 @@
             elem: '#avatar_btn'
             , accept: 'images'
             , field: 'avatar'
-            , data: { uid: '{$userData.userInfo.uid}' }
-            , url: '{:url("index/expand/userUpload")}'
+            , data: { uid: '{$userData.uid}' }
+            , url: '{:url("index/expand/avatarUpload")}'
             , done: function (res) {
                 if (res.code == 0) {
                     layer.msg('上传成功！', {

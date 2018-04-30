@@ -7,15 +7,15 @@
 
     <div class="mdui-container">
         <div class="mdui-row mdui-text-center">
-            <div class="system-message">
-                <header>
+            <div class="system-message mf-panel mdui-m-y-3 mdui-typo">
+                <header class="mf-panel-hd">
                     <h3>出现错误！</h3>
                 </header>
-                <div class="content">
+                <div class="content mf-panel-bd">
                     <p><?php echo(strip_tags($msg));?></p>
                     <p>将于：<b id="wait">
                         <?php echo($wait);?>
-                    </b>页面自动<a id="href" href="<?php echo($url);?>">跳转</a></p>
+                    </b>后页面自动<a id="href" href="<?php echo($url);?>">跳转</a></p>
                 </div>
             </div>
         </div>

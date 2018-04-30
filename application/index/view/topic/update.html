@@ -26,7 +26,7 @@
         <div id="editor">
             {$topicData.content|raw}
         </div>
-        
+        <div class="mdui-m-y-1"></div>
         <input id="content" type="hidden" name="content" value="" required>
         <input id="files" type="hidden" name="files" value=""> {:token()}
         <button id="create" class="mdui-btn mdui-color-theme mdui-float-right">修改主题</button>
@@ -45,9 +45,9 @@
 <script>
     var uploadImg = "{:url('index/expand/picUpload')}",
         uploadFile = '{:url("index/expand/upload")}',
-        uid = '{$userData.userInfo.uid}',
+        uid = '{$userData.uid}',
         createUrl = '{:url("index/topic/update",["tid"=>$topicData.tid])}';
 </script>
 <script src="__JS__/wangEditor.js"></script>
-<script src="__JS__/mltree-function.js"></script>
+<script src="__JS__/mltree-editor.js"></script>
 {/block}

@@ -4,11 +4,9 @@
     <h1 class="mdui-m-l-3">Forum 管理</h1>
 
     <div class="mdui-btn-group mdui-m-l-3">
-        <a href="{:url('set/addUser')}" title="添加板块">
-            <button type="button" class="mdui-btn">
-                <i class="mdui-icon material-icons">add</i>
-            </button>
-        </a>
+        <button type="button" class="mdui-btn" mdui-dialog="{target: '#addForum'}">
+            <i class="mdui-icon material-icons">add</i>
+        </button>
     </div>
 
     <table class="mdui-table mdui-textfield mdui-table-hoverable">
@@ -49,6 +47,28 @@
         </tbody>
     </table>
 
+    <div class="mdui-dialog mdui-typo" id="addForum">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title">添加板块</div>
+            <form class="layui-form layui-form-pane mdui-m-y-1">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">板块名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" required lay-verify="required" placeholder="请输入板块名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">板块描述</label>
+                    <div class="layui-input-block">
+                        <textarea name="introduce" placeholder="请输入板块描述" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="submit">添加</button>
+        </div>
+    </div>
 </div>
 
 {/block} {block name="js"}
@@ -61,7 +81,6 @@
 
     $$('#submit').on('click', function () {
         data = $$('form').serialize();
-
         $$.ajax({
             method: 'post',
             url: '',

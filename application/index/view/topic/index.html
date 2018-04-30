@@ -1,6 +1,6 @@
 {extend name="../template@default/forum_public"} {block name="content"}
 
-<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-m-y-1">
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-m-y-1 mdui-typo">
     <div class="mf-panel mdui-shadow-10">
         <header class="mf-panel-hd">
             <h3>{$topicData.subject}
@@ -14,34 +14,27 @@
                 <i class="mdui-icon material-icons">looks</i>{$topicData.views}</span>
         </header>
         <div class="mf-panel-bd">
-            <div class="content mdui-typo" id="mf-content">
+            <div class="content" id="mf-content">
                 {$topicData.content|raw}
             </div>
         </div>
     </div>
 
-    <div class="mf-panel mdui-typo mdui-shadow-5 mdui-hoverable" id="comment">
+    <div class="mf-panel mdui-shadow-5 mdui-hoverable" id="comment">
         <header class="mf-panel-hd mdui-m-f-2">
-            <h3 class="mf-panel-title mdui-m-f-2">回帖</h3>
+            <h3 class="mf-panel-title mdui-m-f-2">回帖
+                <button class="mdui-btn mdui-float-right mdui-ripple mdui-color-theme-accent mdui-btn-raised" id="reply">回复</button>
+            </h3>
+
         </header>
         <div class="mf-panel-bd">
-            <div id="comments">
+            <div id="mf-comments">
 
-            </div>
-            <!-- 回复区域 -->
-            <div>
-                <form>
-                    <div id="editor">
-                    </div>
-                    <input id="reCid" type="hidden" name="reCid" value="">
-                    <input id="content" type="hidden" name="content" value="" required> {:token()}
-                    <button id="submit" class="mdui-btn mdui-color-theme mdui-float-right mdui-m-y-1">回复</button>
-                </form>
             </div>
         </div>
     </div>
 </div>
-<div class="mdui-col-md-4 mdui-m-y-1">
+<div class="mdui-col-xs-0 mdui-col-md-4 mdui-m-y-1 mdui-hidden-xs">
     <div class="mf-panel mdui-text-center">
         <header class="mf-panel-hd mdui-color-theme">
             <img src="{$topicUser.avatar}" alt="{$topicUser.username}" class="mdui-img-circle" width="64">
@@ -71,122 +64,83 @@
     </div>
 
 </div>
+
+<!-- 回复区域 -->
+<form class="mdui-hidden" id="replyPanel">
+    <div id="editor">
+
+    </div>
+    <input type="hidden" id="content" name="content">
+</form>
+
 {/block} {block name="js"}
 <script src="__JS__/wangEditor.js"></script>
+<script src="__JS__/mltree-flow.js"></script>
+<script src="__JS__/mltree-editor.js"></script>
 <script>
-    var E = window.wangEditor;
-    var editor = new E('#editor');
-    var $$ = mdui.JQ;
-    var uploadImg = "{:url('index/expand/picUpload')}",
-        commentUrl = "{:url('index/topic/comment',['tid'=>$topicData.tid])}";
-    //配置颜色
-    editor.customConfig.colors = [
-        '#000000',
-        '#ffffff',
-        '#1c487f',
-        '#4d80bf',
-        '#c24f4a',
-        '#8baa4a',
-        '#7b5ba1',
-        '#46acc8',
-        '#f9963b',
-        '#FF6666',
-    ]
-    editor.customConfig.menus = [
-        'bold',
-        'italic',
-        'underline',
-        'emoticon',
-        'image',
-    ]
-    //配置图片上传
-    editor.customConfig.uploadImgServer = uploadImg;
-    editor.customConfig.uploadFilename = 'file';
-    editor.customConfig.uploadImgMaxLength = 1;
-    editor.customConfig.customAlert = function (info) {
-        layui.use(['layer'], function () {
-            var layer = layui.layer;
-
-            layer.msg(info, { icon: 5 });
-        })
-
+    var option = {
+        uploadImg: "{:url('index/expand/picUpload')}",
+        commentUrl: "{:url('index/topic/comment',['tid'=>$topicData.tid])}",
+        uid: "{:session('uid')}",
+        subject: "{$topicData.subject}",
     }
-    editor.customConfig.onchangeTimeout = 1000;
-    editor.customConfig.onchange = function (html) {
-        $$('#content').val(html);
-    }
-    editor.create();
+    //调用flow加载
+    var flow = new mfFlow('comment');
+    flow.flow('{$topicData.tid}');
 
-    $$('#submit').on('click', function () {
-        //获取表单内容
-        var data = $$('form').serialize();
+    regEditor(type = 'comment', option);
 
-        $$.ajax({
-            method: 'post',
-            url: commentUrl,
-            data: data,
-            dataType: 'json',
-            success: function (res) {
-                console.log(res);
-                if (res.code == 1) {
-                    mdui.snackbar({
-                        message: res.message,
-                        position: 'top',
-                        onClosed: function () {
-                            location.reload();
+    $$('.mf-btn-reply').on('click', function () {
+        var cid = $$(this).data('cid');
+        var userName = $$(this).data('username');
+        console.log(cid, userName);
+        setContent('回复 <a href="javascript:;" onmouseover="reContent(' + cid + ')" onmouseout="layer.closeAll();">@' + userName + '</a>')
+        $$('#replyPanel').toggleClass('mdui-hidden');
+        var device = layui.device(),
+            k = '824px';
+        if (device.weixin || device.android || device.ios) {
+            k = '100%';
+        }
+        layer.open({
+            type: 1,
+            anim: 2,
+            title: '回复『' + option.subject + '』',
+            area: k,
+            offset: 'b',
+            btn: '发布',
+            content: $('#replyPanel'),
+            cancel: function (index, layero) {
+                $$('#replyPanel').toggleClass('mdui-hidden');
+            },
+            yes: function (index, layero) {
+                var data = $$('#replyPanel').serialize();
+                layer.close(index);
+                $$.ajax({
+                    method: 'post',
+                    url: option.commentUrl,
+                    data: data,
+                    dataType: 'json',
+                    success: function (res) {
+                        console.log(res);
+                        if (res.code == 1) {
+                            mdui.snackbar({
+                                message: res.message,
+                                position: 'top',
+                                onClosed: function () {
+
+                                    location.reload();
+                                }
+                            })
+                        } else {
+                            mdui.snackbar({
+                                message: '阿偶？出错了。<br/>' + res.message,
+                                position: 'top',
+                            })
                         }
-                    })
-                } else {
-                    mdui.snackbar({
-                        message: '阿偶？出错了，请重试！\n' + res.message,
-                        position: 'top',
-                    })
-                }
+                    }
+                });
             }
         });
-        return false;
     });
 
-    layui.use(['layer', 'flow'], function () {
-        var layer = layui.layer,
-            flow = layui.flow,
-            $ = layui.jquery;
-
-        layer.photos({
-            photos: '#mf-content'
-            , anim: 5
-        });
-
-        flow.load({
-            elem: '#comments',
-            isAuto: false,
-            done: function (page, next) {
-                var list = [];
-                $.get('/index/topic/api/tid/{$topicData.tid}/type/comment/page/' + page, function (res) {
-                    layui.each(res.data, function (index, item) {
-                        var html = '<div class="mdui-row mdui-typo mf-comment mdui-m-b-1">';
-                        html = '<div class="mdui-col-xs-1" >'
-                        html = '<a href="/index/user/index/uid/' + item.uid + '">'
-                        html = '<img src="' + item.avatar + '" alt="' + item.username + '" class="mdui-img-circle mdui-float-right" width="32">'
-                        html = '</a>'
-                        html = '</div>'
-                        html = '<div class="mdui-col-xs-10 mf-comment-bd">'
-                        html = '<header>'
-                        html = '<a href="/index/user/index/uid/' + item.uid + '">' + item.username + '</a>'
-                        html = '评论于'
-                        html = '<span title="' + item.create_time + '">' + item.time_format + '</span>'
-                        html = '</header>'
-                        html = '<div>'
-                        html = item.content
-                        html = '</div>'
-                        html = '</div>'
-                        html = '</div >'
-                        list.push(html);
-                    })
-                    next(list.join(''), page < res.pages);
-                })
-            }
-        })
-    })
-
-</script> {/block}
+</script>{/block}

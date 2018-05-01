@@ -17,26 +17,13 @@ use think\route\Dispatch;
 
 class Url extends Dispatch
 {
-<<<<<<< HEAD
-    protected function init()
-=======
     public function run()
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     {
         // 解析默认的URL规则
         $url    = str_replace($this->param['depr'], '|', $this->dispatch);
         $result = $this->parseUrl($url);
 
-<<<<<<< HEAD
-        $this->dispatch = new Module($result);
-    }
-
-    public function run()
-    {
-        return $this->dispatch->run();
-=======
         return (new Module($result))->run();
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**

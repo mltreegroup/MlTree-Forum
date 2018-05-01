@@ -43,11 +43,7 @@ class File extends Driver
         }
 
         if (empty($this->options['path'])) {
-<<<<<<< HEAD
-            $this->options['path'] = Container::get('app')->getRuntimePath() . 'cache' . DIRECTORY_SEPARATOR;
-=======
             $this->options['path'] = Container::get('app')->getRuntimePath() . 'cache/';
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         } elseif (substr($this->options['path'], -1) != DIRECTORY_SEPARATOR) {
             $this->options['path'] .= DIRECTORY_SEPARATOR;
         }
@@ -63,18 +59,10 @@ class File extends Driver
     private function init()
     {
         // 创建项目缓存目录
-<<<<<<< HEAD
-        try {
-            if (!is_dir($this->options['path']) && mkdir($this->options['path'], 0755, true)) {
-                return true;
-            }
-        } catch (\Exception $e) {
-=======
         if (!is_dir($this->options['path'])) {
             if (mkdir($this->options['path'], 0755, true)) {
                 return true;
             }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         return false;
@@ -104,14 +92,7 @@ class File extends Driver
         $dir      = dirname($filename);
 
         if ($auto && !is_dir($dir)) {
-<<<<<<< HEAD
-            try {
-                mkdir($dir, 0755, true);
-            } catch (\Exception $e) {
-            }
-=======
             mkdir($dir, 0755, true);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         return $filename;
@@ -261,14 +242,7 @@ class File extends Driver
     {
         $this->writeTimes++;
 
-<<<<<<< HEAD
-        try {
-            return $this->unlink($this->getCacheKey($name));
-        } catch (\Exception $e) {
-        }
-=======
         return $this->unlink($this->getCacheKey($name));
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -295,11 +269,7 @@ class File extends Driver
 
         foreach ($files as $path) {
             if (is_dir($path)) {
-<<<<<<< HEAD
-                $matches = glob($path . DIRECTORY_SEPARATOR . '*.php');
-=======
                 $matches = glob($path . '/*.php');
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                 if (is_array($matches)) {
                     array_map('unlink', $matches);
                 }

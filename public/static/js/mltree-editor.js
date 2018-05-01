@@ -115,6 +115,7 @@ function regEditor(type = 'def', option = {}) {
                         mdui.snackbar({
                             message: res.message,
                             position: 'top',
+                            timeout: 1500,
                             onClosed: function () {
                                 window.location.href = res.url;
                             }
@@ -147,7 +148,7 @@ function regEditor(type = 'def', option = {}) {
                     title: '回复『' + option.subject + '』',
                     area: k,
                     offset: 'b',
-                    btn: '发布',
+                    btn: '评论',
                     content: $('#replyPanel'),
                     cancel: function (index, layero) {
                         $$('#replyPanel').toggleClass('mdui-hidden');
@@ -166,6 +167,7 @@ function regEditor(type = 'def', option = {}) {
                                     mdui.snackbar({
                                         message: res.message,
                                         position: 'top',
+                                        timeout: 1500,
                                         onClosed: function () {
 
                                             location.reload();

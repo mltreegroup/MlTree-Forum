@@ -88,13 +88,6 @@ class Facade
      */
     public static function instance(...$args)
     {
-<<<<<<< HEAD
-        if (__CLASS__ != static::class) {
-            return self::__callStatic('instance', $args);
-        }
-
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         return self::createFacade('', $args);
     }
 

@@ -42,12 +42,14 @@
 </div>
 
 {/block} {block name="js"}
-<script>
-    var uploadImg = "{:url('index/expand/picUpload')}",
-        uploadFile = '{:url("index/expand/upload")}',
-        uid = '{$userData.uid}',
-        createUrl = '{:url("index/topic/update",["tid"=>$topicData.tid])}';
-</script>
 <script src="__JS__/wangEditor.js"></script>
 <script src="__JS__/mltree-editor.js"></script>
-{/block}
+<script>
+    var option = {
+        uploadImg: "{:url('index/expand/picUpload')}",
+        uploadFile: '{:url("index/expand/upload")}',
+        uid: "{:session('uid')}",
+        createUrl: '{:url("index/topic/create")}',
+    }
+    regEditor('def', option)
+</script> {/block}

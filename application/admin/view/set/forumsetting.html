@@ -1,0 +1,115 @@
+{extend name="public/admin_public"} {block name="content"}
+<div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
+
+    <h1 class="mdui-m-l-3">Forum 拓展管理</h1>
+
+    <div class="mdui-btn-group mdui-m-l-3">
+        <button type="button" class="mdui-btn" mdui-dialog="{target: '#addLink'}">
+            <i class="mdui-icon material-icons">add</i>
+        </button>
+    </div>
+
+    <table class="mdui-table mdui-textfield">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>链接名称</th>
+                <th>URL</th>
+                <th>链接图片</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {volist name="links" id="vo"}
+            <tr>
+                <td>{$vo.sold}</td>
+                <td>{$vo.title}</td>
+                <td>
+                    <a href="{$vo.url}" target="_blank">{$vo.url}</a>
+                </td>
+                <td>
+                    <a href="{$vo.picurl|default='__IMG__/link.jpg'}" target="_blank">{$vo.picurl|default='__IMG__/link.jpg'}</a>
+                </td>
+                <td>
+                    <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="editorForum()">编辑</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="del()">删除</button>
+                    </div>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+
+    <div class="mdui-dialog mdui-typo" id="addLink">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title">添加Link</div>
+            <form id="addForm" class="layui-form layui-form-pane mdui-m-y-1">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">Link名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" required lay-verify="required" placeholder="请输入Link名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">Link地址</label>
+                    <div class="layui-input-block">
+                        <input type="url" name="url" required lay-verify="required" placeholder="请输入LinkURL" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">图片地址</label>
+                    <div class="layui-input-block">
+                        <input type="url" name="picurl" placeholder="请输入Link图片地址" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="solt" placeholder="请输入排序默认0" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="submit">添加</button>
+        </div>
+    </div>
+
+</div>
+
+{/block} {block name="js"}
+<script>
+    var $$ = mdui.JQ,
+        data = '';;
+
+    $$('#forum').addClass('mdui-collapse-item-open');
+    $$('#forumSetting').addClass('mdui-list-item-active');
+
+    $$('#submit').on('click', function () {
+        data = $$('form').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                } else {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+</script> {/block}

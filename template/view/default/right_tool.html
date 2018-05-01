@@ -33,10 +33,12 @@
         <header>
             <h5>友情链接</h5>
         </header>
+        {volist name="links" id="vo"}
         <div class="mdui-chip">
-            <img class="mdui-chip-icon" src="https://cn.gravatar.com/avatar/dce77d27fc8bd42ef671230baf5795a8?s=64&d=mm&r=g" />
-            <a class="mdui-chip-title" href="https://blog.kingsr.cc">作者博客</a>
+            <img class="mdui-chip-icon" src="{$vo.picurl|default='__IMG__/link.jpg'}" />
+            <a class="mdui-chip-title" href="$vo.url">{$vo.title}</a>
         </div>
+        {/volist}
     </div>
 
 </div>

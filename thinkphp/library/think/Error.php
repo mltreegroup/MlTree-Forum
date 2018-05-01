@@ -66,15 +66,9 @@ class Error
         if (error_reporting() & $errno) {
             // 将错误信息托管至 think\exception\ErrorException
             throw $exception;
-<<<<<<< HEAD
-        }
-
-        self::getExceptionHandler()->report($exception);
-=======
         } else {
             self::getExceptionHandler()->report($exception);
         }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**

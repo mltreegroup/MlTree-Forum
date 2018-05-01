@@ -57,13 +57,8 @@ function time_format($time)//输出人性化时间
     return $format_time;
 }
 
-function password_encode($password,$salt)
+function password_encode($password)
 {
-    $hash = password_hash($password.$salt, PASSWORD_BCRYPT);
-    return $encode;
-}
-
-function password_decode($password,$hash)
-{
-    return password_verify($password,$hash);
+    $hash = password_hash($password, PASSWORD_BCRYPT);
+    return $hash;
 }

@@ -1,6 +1,7 @@
 .idea
 *.log
-.vscode
+.vscode/*
 public/uploads/
 public/avatar/
 public/.well-known/
+.vscode/ftp-sync.json

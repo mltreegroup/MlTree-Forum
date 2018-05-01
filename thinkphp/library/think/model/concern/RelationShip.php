@@ -89,14 +89,9 @@ trait RelationShip
             return $this->relation;
         } elseif (array_key_exists($name, $this->relation)) {
             return $this->relation[$name];
-<<<<<<< HEAD
-        }
-        return;
-=======
         } else {
             return;
         }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -147,16 +142,9 @@ trait RelationShip
      * @param  mixed   $operator 比较操作符
      * @param  integer $count    个数
      * @param  string  $id       关联表的统计字段
-<<<<<<< HEAD
-     * @param  string  $joinType JOIN类型
-     * @return Query
-     */
-    public static function has($relation, $operator = '>=', $count = 1, $id = '*', $joinType = 'INNER')
-=======
      * @return Query
      */
     public static function has($relation, $operator = '>=', $count = 1, $id = '*')
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     {
         $relation = (new static())->$relation();
 
@@ -164,11 +152,7 @@ trait RelationShip
             return $relation->hasWhere($operator);
         }
 
-<<<<<<< HEAD
-        return $relation->has($operator, $count, $id, $joinType);
-=======
         return $relation->has($operator, $count, $id);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**

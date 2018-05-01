@@ -30,11 +30,7 @@ return [
         // 默认JSONP处理方法
         'var_jsonp_handler'      => 'callback',
         // 默认时区
-<<<<<<< HEAD
         'default_timezone'       => 'Asia/Shanghai',
-=======
-        'default_timezone'       => 'PRC',
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         // 是否开启多语言
         'lang_switch_on'         => false,
         // 默认全局过滤方法 用逗号分隔多个
@@ -83,11 +79,8 @@ return [
         'pathinfo_depr'          => '/',
         // HTTPS代理标识
         'https_agent_name'       => '',
-<<<<<<< HEAD
         // IP代理获取标识
         'http_agent_ip'          => 'X-REAL-IP',
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         // URL伪静态后缀
         'url_html_suffix'        => 'html',
         // URL普通方式参数 用于自动生成
@@ -98,11 +91,8 @@ return [
         'url_lazy_route'         => false,
         // 是否强制使用路由
         'url_route_must'         => false,
-<<<<<<< HEAD
         // 合并路由规则
         'route_rule_merge'       => false,
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         // 路由是否完全匹配
         'route_complete_match'   => false,
         // 使用注解路由
@@ -150,11 +140,6 @@ return [
     // +----------------------------------------------------------------------
 
     'template' => [
-<<<<<<< HEAD
-        // 默认模板渲染规则 1 解析为小写+下划线 2 全部转换小写
-        'auto_rule'    => 1,
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         // 模板引擎类型 支持 php think 支持扩展
         'type'         => 'Think',
         // 视图基础目录，配置目录为所有模块的视图起始目录
@@ -308,13 +293,4 @@ return [
         'list_rows' => 15,
     ],
 
-<<<<<<< HEAD
-    //控制台配置
-    'console'  => [
-        'name'    => 'Think Console',
-        'version' => '0.1',
-        'user'    => null,
-    ],
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 ];

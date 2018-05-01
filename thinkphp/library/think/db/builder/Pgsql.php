@@ -50,26 +50,11 @@ class Pgsql extends Builder
      * 字段和表名处理
      * @access public
      * @param  Query     $query     查询对象
-<<<<<<< HEAD
-     * @param  mixed     $key       字段名
-     * @param  bool      $strict   严格检测
-     * @return string
-     */
-    public function parseKey(Query $query, $key, $strict = false)
-    {
-        if (is_int($key)) {
-            return $key;
-        } elseif ($key instanceof Expression) {
-            return $key->getValue();
-        }
-
-=======
      * @param  string    $key       字段名
      * @return string
      */
     public function parseKey(Query $query, $key)
     {
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         $key = trim($key);
 
         if (strpos($key, '->') && false === strpos($key, '(')) {

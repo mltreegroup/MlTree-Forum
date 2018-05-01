@@ -99,11 +99,7 @@ class Schema extends Command
             $info    = $class::getConnection()->getFields($table);
             $content .= var_export($info, true) . ';';
 
-<<<<<<< HEAD
-            file_put_contents(App::getRuntimePath() . 'schema' . DIRECTORY_SEPARATOR . $dbName . '.' . $table . '.php', $content);
-=======
             file_put_contents(App::getRuntimePath() . 'schema/' . $dbName . '.' . $table . '.php', $content);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
     }
 

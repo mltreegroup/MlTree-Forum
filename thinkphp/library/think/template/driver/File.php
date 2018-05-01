@@ -15,11 +15,6 @@ use think\Exception;
 
 class File
 {
-<<<<<<< HEAD
-    protected $cacheFile;
-
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     /**
      * 写入编译缓存
      * @access public
@@ -51,22 +46,13 @@ class File
      */
     public function read($cacheFile, $vars = [])
     {
-<<<<<<< HEAD
-        $this->cacheFile = $cacheFile;
-
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         if (!empty($vars) && is_array($vars)) {
             // 模板阵列变量分解成为独立变量
             extract($vars, EXTR_OVERWRITE);
         }
 
         //载入模版缓存文件
-<<<<<<< HEAD
-        include $this->cacheFile;
-=======
         include $cacheFile;
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**

@@ -8,13 +8,6 @@
 // | Author: Kingsr <kingsrml@vip.qq.com>
 // +----------------------------------------------------------------------
 
-//返回顶部
-$("#fixbar-top").click(function () {
-    console.log('OK');
-    $('body,html').animate({ scrollTop: 0 }, 1000);
-    return false;
-});
-
 //判断是否为手机版，是则自动进入全屏模式
 var device = layui.device();
 if (device.weixin || device.android || device.ios) {

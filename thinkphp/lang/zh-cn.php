@@ -24,10 +24,6 @@ return [
     'dispatch type not support'                                 => '不支持的调度类型',
     'method param miss'                                         => '方法参数错误',
     'method not exists'                                         => '方法不存在',
-<<<<<<< HEAD
-    'function not exists'                                       => '函数不存在',
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     'module not exists'                                         => '模块不存在',
     'controller not exists'                                     => '控制器不存在',
     'class not exists'                                          => '类不存在',
@@ -36,11 +32,7 @@ return [
     'illegal controller name'                                   => '非法的控制器名称',
     'illegal action name'                                       => '非法的操作名称',
     'url suffix deny'                                           => '禁止的URL后缀访问',
-<<<<<<< HEAD
-    'Route Not Found'                                           => '当前访问路由未定义或不匹配',
-=======
     'Route Not Found'                                           => '当前访问路由未定义',
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     'Undefined db type'                                         => '未定义数据库类型',
     'variable type error'                                       => '变量类型错误',
     'PSR-4 error'                                               => 'PSR-4 规范错误',
@@ -74,12 +66,6 @@ return [
     'relation data not exists'                                  => '关联数据不存在',
     'relation not support'                                      => '关联不支持',
     'chunk not support order'                                   => 'Chunk不支持调用order方法',
-<<<<<<< HEAD
-    'route pattern error'                                       => '路由变量规则定义错误',
-    'route behavior will not support'                           => '路由行为废弃（使用中间件替代）',
-    'closure not support cache(true)'                           => '使用闭包查询不支持cache(true)，请指定缓存Key',
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
     // 上传错误信息
     'unknown upload error'                                      => '未知上传错误！',
@@ -97,11 +83,6 @@ return [
     'filesize not match'                                        => '上传文件大小不符！',
     'directory {:path} creation failed'                         => '目录 {:path} 创建失败！',
 
-<<<<<<< HEAD
-    'The middleware must return Response instance'              => '中间件方法必须返回Response对象实例',
-    'The queue was exhausted, with no response returned'        => '中间件队列为空',
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     // Validate Error Message
     ':attribute require'                                        => ':attribute不能为空',
     ':attribute must'                                           => ':attribute必须',

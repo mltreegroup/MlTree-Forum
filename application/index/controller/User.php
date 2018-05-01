@@ -69,8 +69,7 @@ class User extends Base
             if(input('post.type') == 'pass')
             {
                 $user = userModel::get(session('uid'));
-                $userPass = md5(input('oldpassword','','htmlspecialchars').$user->salt.$user->email);
-                if($userPass !== $user->password)
+                if(password_verify(input('post.password'),$user->password))
                 {
                     return ['code'=>'-1','message'=>'新密码不一致或旧密码不正确。'];
                 }elseif (input('password') !== input('repassword')) {
@@ -99,8 +98,7 @@ class User extends Base
             {
                 return json(['code'=>'-1','message'=>'用户或不存在']);
             }else{
-                $userPass = md5(input('password','','htmlspecialchars').$user->salt.input('post.email'));
-                if($userPass === $user->password)
+                if(password_verify(input('post.password'),$user->password))
                 {
                     $Confirm = Confirm::getValue($user->uid);
                     if(!empty($Confirm['code'])){
@@ -108,7 +106,6 @@ class User extends Base
                     }
                     session('uid',$user->uid);
                     session('gid',$user->gid);
-                    session('salt',$user->salt);
                     session('username',$user->username);
                     Db::name('user')->where('uid',$user->uid)->setInc('logins');//增加登录次数值
                     return json(['code'=>'0','message'=>'登录成功！欢迎回来……','url'=>url('index\user\index')]);

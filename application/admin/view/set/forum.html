@@ -21,25 +21,15 @@
         </thead>
         <tbody>
             {volist name="forumData" id="vo"}
-            <tr>
+            <tr id="{$vo.fid}">
                 <td>{$vo.sort}</td>
                 <td>{$vo.fid}</td>
                 <td>{$vo.name}</td>
                 <td>{$vo.introduce}</td>
                 <td>
-                    <div class="mdui-btn-group">
-                        <a href="">
-                            <button type="button" class="mdui-btn">
-                                <i class="mdui-icon material-icons">create</i>
-                                编辑
-                            </button>
-                        </a>
-                        <a href="">
-                            <button type="button" class="mdui-btn">
-                                <i class="mdui-icon material-icons">delete</i>
-                                删除
-                            </button>
-                        </a>
+                    <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="editorForum('#{$vo.fid}')">编辑</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="del('{vo.fid}')">删除</button>
                     </div>
                 </td>
             </tr>
@@ -50,7 +40,7 @@
     <div class="mdui-dialog mdui-typo" id="addForum">
         <div class="mdui-dialog-content">
             <div class="mdui-dialog-title">添加板块</div>
-            <form class="layui-form layui-form-pane mdui-m-y-1">
+            <form id="addForm" class="layui-form layui-form-pane mdui-m-y-1">
                 <div class="layui-form-item">
                     <label class="layui-form-label">板块名称</label>
                     <div class="layui-input-block">
@@ -69,18 +59,43 @@
             <button class="mdui-btn mdui-ripple" id="submit">添加</button>
         </div>
     </div>
+
+    <div class="mdui-dialog mdui-typo" id="editorForum">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title">编辑板块</div>
+            <form id="editForm" class="layui-form layui-form-pane mdui-m-y-1">
+                <div class="layui-form-item">
+                    <input type="hidden" name="fid" id="editfid">
+                    <label class="layui-form-label">板块名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" required lay-verify="required" placeholder="请输入板块名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">板块描述</label>
+                    <div class="layui-input-block">
+                        <textarea name="introduce" placeholder="请输入板块描述" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="edit">保存</button>
+        </div>
+    </div>
 </div>
 
 {/block} {block name="js"}
 <script>
     var $$ = mdui.JQ,
-        data = '';;
+        data = '',
+        inst = new mdui.Dialog('#editorForum');//注册对话框
 
     $$('#forum').addClass('mdui-collapse-item-open');
     $$('#setForum').addClass('mdui-list-item-active');
 
     $$('#submit').on('click', function () {
-        data = $$('form').serialize();
+        data = $$('#addForm').serialize();
         $$.ajax({
             method: 'post',
             url: '',
@@ -90,7 +105,10 @@
                 if (res.code == 0) {
                     mdui.snackbar(res.message, {
                         timeout: 2000,
-                        position: 'top'
+                        position: 'top',
+                        onClosed:function(){
+                            location.reload();
+                        }
                     })
                 } else {
                     mdui.snackbar(res.message, {
@@ -104,4 +122,53 @@
 
         return false;
     })
+    $$('#edit').on('click', function () {
+        data = $$('#editForm').serialize();
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClose: function () {
+                            inst.close();
+                        },
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClose: function () {
+                            inst.close();
+                        }
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+
+    function editorForum(id) {
+        var data = $$(id).find('td');
+
+        $$('#editorForum [name="fid"]').val(data[1].innerText);
+        $$('#editorForum [name="name"]').val(data[2].innerText);
+        $$('#editorForum textarea').val(data[3].innerText);
+
+        inst.open();
+
+    }
+
+    function del(id) {
+        
+    }
 </script> {/block}

@@ -26,13 +26,6 @@ class Index extends Base
         $this->assign('option',$this->siteOption());
         return view();
     }
-<<<<<<< HEAD
-=======
 
-    public function Search($keyword = '')
-    {
-        
-    }
 
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 }

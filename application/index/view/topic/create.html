@@ -37,16 +37,14 @@
 </div>
 
 {/block} {block name="js"}
-<script>
-    var uploadImg = "{:url('index/expand/picUpload')}",
-        uploadFile = '{:url("index/expand/upload")}',
-        uid = '{$userData.userInfo.uid}',
-        createUrl = '{:url("index/topic/create")}';
-</script>
 <script src="__JS__/wangEditor.js"></script>
-<<<<<<< HEAD
 <script src="__JS__/mltree-editor.js"></script>
-{/block}
-=======
-<script src="__JS__/mltree-function.js"></script> {/block}
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
+<script>
+    var option = {
+        uploadImg: "{:url('index/expand/picUpload')}",
+        uploadFile: '{:url("index/expand/upload")}',
+        uid: "{:session('uid')}",
+        createUrl: '{:url("index/topic/create")}',
+    }
+    regEditor('def', option)
+</script> {/block}

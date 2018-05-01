@@ -124,6 +124,24 @@ class Set extends Base
     {
         $fourm = Db::name('forum')->select();
 
+        if(!empty(input('post.')))
+        {
+            if(empty(input('post.fid')))
+            {
+                Db::name('forum')->strict(false)->insert(input('post.'));
+                return json(['code'=>0,'message'=>'添加板块成功']);
+            }else{
+                $res = Db::name('forum')->where('fid',input('post.fid'))->find();
+                if(empty($res))
+                {
+                    return json(['code'=>'2041','message'=>'该板块不存在！']);
+                }
+                Db::name('forum')->update(input('post.'));
+                return json(['code'=>0,'message'=>'修改板块成功']);
+            }
+            
+        }
+
         return view('forum',[
             'forumData' => $fourm,
         ]);
@@ -132,9 +150,36 @@ class Set extends Base
     public function topic()
     {
         $topic = Db::name('topic')->select();
-        
+        foreach ($topic as $key => $value) {
+            $value['content'] = strip_tags($value['content']);
+            $topic[$key] = $value;
+        }
         return view('topic',[
             'topicData' => $topic,
+        ]);
+    }
+
+    public function forumsetting()
+    {
+        $link = Db::name('links')->order('sold')->select();
+
+        if (!empty(input('post.'))) {
+            if(empty(input('post.Id')))
+            {
+                Db::name('links')->strict(false)->insert(input('post.'));
+                return json(['code'=>0,'message'=>'添加成功','time'=>time()]);
+            }else{
+                $res = Db::name('links')->where('Id',input('post.Id'))->find();
+                if(empty($res))
+                {
+                    return json(['code'=>'2050','message'=>'该Link不存在！']);
+                }
+                Db::name('links')->update(input('post.'));
+                return json(['code'=>0,'message'=>'修改Link成功']);
+            }
+        }
+        return view('forumsetting',[
+            'links' => $link,
         ]);
     }
 

@@ -1,3 +1,11 @@
 <footer class="mdui-bottom-nav">
     <div>©MlTree Forum</div>
 </footer>
+<script>
+    //返回顶部
+    $("#fixbar-top").click(function () {
+        console.log('OK');
+        $('body,html').animate({ scrollTop: 0 }, 1000);
+        return false;
+    });
+</script>

@@ -40,10 +40,6 @@ Container::getInstance()->bind([
     'hook'                  => Hook::class,
     'lang'                  => Lang::class,
     'log'                   => Log::class,
-<<<<<<< HEAD
-    'middleware'            => Middleware::class,
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     'request'               => Request::class,
     'response'              => Response::class,
     'route'                 => Route::class,
@@ -51,37 +47,13 @@ Container::getInstance()->bind([
     'url'                   => Url::class,
     'validate'              => Validate::class,
     'view'                  => View::class,
-<<<<<<< HEAD
-    'rule_name'             => route\RuleName::class,
-=======
     'middlewareDispatcher'  => http\middleware\Dispatcher::class,
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     // 接口依赖注入
     'think\LoggerInterface' => Log::class,
 ]);
 
 // 注册核心类的静态代理
 Facade::bind([
-<<<<<<< HEAD
-    facade\App::class        => App::class,
-    facade\Build::class      => Build::class,
-    facade\Cache::class      => Cache::class,
-    facade\Config::class     => Config::class,
-    facade\Cookie::class     => Cookie::class,
-    facade\Debug::class      => Debug::class,
-    facade\Env::class        => Env::class,
-    facade\Hook::class       => Hook::class,
-    facade\Lang::class       => Lang::class,
-    facade\Log::class        => Log::class,
-    facade\Middleware::class => Middleware::class,
-    facade\Request::class    => Request::class,
-    facade\Response::class   => Response::class,
-    facade\Route::class      => Route::class,
-    facade\Session::class    => Session::class,
-    facade\Url::class        => Url::class,
-    facade\Validate::class   => Validate::class,
-    facade\View::class       => View::class,
-=======
     facade\App::class      => App::class,
     facade\Build::class    => Build::class,
     facade\Cache::class    => Cache::class,
@@ -99,7 +71,6 @@ Facade::bind([
     facade\Url::class      => Url::class,
     facade\Validate::class => Validate::class,
     facade\View::class     => View::class,
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 ]);
 
 // 注册类库别名

@@ -90,11 +90,6 @@ abstract class Connection
         'master_num'      => 1,
         // 指定从服务器序号
         'slave_no'        => '',
-<<<<<<< HEAD
-        // 模型写入后自动读取主服务器
-        'read_master'     => false,
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         // 是否严格检查字段是否存在
         'fields_strict'   => true,
         // 数据集返回类型
@@ -111,11 +106,6 @@ abstract class Connection
         'query'           => '\\think\\db\\Query',
         // 是否需要断线重连
         'break_reconnect' => false,
-<<<<<<< HEAD
-        // 断线标识字符串
-        'break_match_str' => [],
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     ];
 
     // PDO连接参数
@@ -127,24 +117,6 @@ abstract class Connection
         PDO::ATTR_EMULATE_PREPARES  => false,
     ];
 
-<<<<<<< HEAD
-    // 服务器断线标识字符
-    protected $breakMatchStr = [
-        'server has gone away',
-        'no connection to the server',
-        'Lost connection',
-        'is dead or not enabled',
-        'Error while sending',
-        'decryption failed or bad record mac',
-        'server closed the connection unexpectedly',
-        'SSL connection has been closed unexpectedly',
-        'Error writing data to the connection',
-        'Resource deadlock avoided',
-        'failed with errno',
-    ];
-
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     // 绑定参数
     protected $bind = [];
 
@@ -221,15 +193,9 @@ abstract class Connection
     {
         if (!empty($this->builderClassName)) {
             return $this->builderClassName;
-<<<<<<< HEAD
-        }
-
-        return $this->getConfig('builder') ?: '\\think\\db\\builder\\' . ucfirst($this->getConfig('type'));
-=======
         } else {
             return $this->getConfig('builder') ?: '\\think\\db\\builder\\' . ucfirst($this->getConfig('type'));
         }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -385,12 +351,7 @@ abstract class Connection
 
         if (!isset(self::$info[$schema])) {
             // 读取缓存
-<<<<<<< HEAD
-            $cacheFile = Container::get('app')->getRuntimePath() . 'schema' . DIRECTORY_SEPARATOR . $schema . '.php';
-
-=======
             $cacheFile = Container::get('app')->getRuntimePath() . 'schema/' . $schema . '.php';
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             if (!$this->config['debug'] && is_file($cacheFile)) {
                 $info = include $cacheFile;
             } else {
@@ -404,10 +365,6 @@ abstract class Connection
                 // 记录字段类型
                 $type[$key] = $val['type'];
                 $bind[$key] = $this->getFieldBindType($val['type']);
-<<<<<<< HEAD
-
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                 if (!empty($val['primary'])) {
                     $pk[] = $key;
                 }
@@ -515,57 +472,6 @@ abstract class Connection
      */
     public function connect(array $config = [], $linkNum = 0, $autoConnection = false)
     {
-<<<<<<< HEAD
-        if (isset($this->links[$linkNum])) {
-            return $this->links[$linkNum];
-        }
-
-        if (!$config) {
-            $config = $this->config;
-        } else {
-            $config = array_merge($this->config, $config);
-        }
-
-        // 连接参数
-        if (isset($config['params']) && is_array($config['params'])) {
-            $params = $config['params'] + $this->params;
-        } else {
-            $params = $this->params;
-        }
-
-        // 记录当前字段属性大小写设置
-        $this->attrCase = $params[PDO::ATTR_CASE];
-
-        if (!empty($config['break_match_str'])) {
-            $this->breakMatchStr = array_merge($this->breakMatchStr, (array) $config['break_match_str']);
-        }
-
-        try {
-            if (empty($config['dsn'])) {
-                $config['dsn'] = $this->parseDsn($config);
-            }
-
-            if ($config['debug']) {
-                $startTime = microtime(true);
-            }
-
-            $this->links[$linkNum] = new PDO($config['dsn'], $config['username'], $config['password'], $params);
-
-            if ($config['debug']) {
-                // 记录数据库连接信息
-                $this->log('[ DB ] CONNECT:[ UseTime:' . number_format(microtime(true) - $startTime, 6) . 's ] ' . $config['dsn']);
-            }
-
-            return $this->links[$linkNum];
-        } catch (\PDOException $e) {
-            if ($autoConnection) {
-                $this->log($e->getMessage(), 'error');
-                return $this->connect($autoConnection, $linkNum);
-            } else {
-                throw $e;
-            }
-        }
-=======
         if (!isset($this->links[$linkNum])) {
             if (!$config) {
                 $config = $this->config;
@@ -609,7 +515,6 @@ abstract class Connection
         }
 
         return $this->links[$linkNum];
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -630,15 +535,9 @@ abstract class Connection
     {
         if (!$this->linkID) {
             return false;
-<<<<<<< HEAD
-        }
-
-        return $this->linkID;
-=======
         } else {
             return $this->linkID;
         }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -690,11 +589,7 @@ abstract class Connection
         $this->PDOStatement->execute();
 
         // 调试结束
-<<<<<<< HEAD
-        $this->debug(false, '', $master);
-=======
         $this->debug(false);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         // 返回结果集
         while ($result = $this->PDOStatement->fetch($this->fetchType)) {
@@ -768,11 +663,7 @@ abstract class Connection
             $this->PDOStatement->execute();
 
             // 调试结束
-<<<<<<< HEAD
-            $this->debug(false, '', $master);
-=======
             $this->debug(false);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
             // 返回结果集
             return $this->getResult($pdo, $procedure);
@@ -802,21 +693,13 @@ abstract class Connection
      * @access public
      * @param  string        $sql sql指令
      * @param  array         $bind 参数绑定
-<<<<<<< HEAD
-     * @param  Query         $query 查询对象
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
      * @return int
      * @throws BindParamException
      * @throws \PDOException
      * @throws \Exception
      * @throws \Throwable
      */
-<<<<<<< HEAD
-    public function execute($sql, $bind = [], Query $query = null)
-=======
     public function execute($sql, $bind = [])
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     {
         $this->initConnect(true);
 
@@ -858,46 +741,26 @@ abstract class Connection
             $this->PDOStatement->execute();
 
             // 调试结束
-<<<<<<< HEAD
-            $this->debug(false, '', true);
-
-            if ($query && !empty($this->config['deploy']) && !empty($this->config['read_master'])) {
-                $query->readMaster();
-            }
-=======
             $this->debug(false);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
             $this->numRows = $this->PDOStatement->rowCount();
 
             return $this->numRows;
         } catch (\PDOException $e) {
             if ($this->isBreak($e)) {
-<<<<<<< HEAD
-                return $this->close()->execute($sql, $bind, $query);
-=======
                 return $this->close()->execute($sql, $bind);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             }
 
             throw new PDOException($e, $this->config, $this->getLastsql());
         } catch (\Throwable $e) {
             if ($this->isBreak($e)) {
-<<<<<<< HEAD
-                return $this->close()->execute($sql, $bind, $query);
-=======
                 return $this->close()->execute($sql, $bind);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             }
 
             throw $e;
         } catch (\Exception $e) {
             if ($this->isBreak($e)) {
-<<<<<<< HEAD
-                return $this->close()->execute($sql, $bind, $query);
-=======
                 return $this->close()->execute($sql, $bind);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             }
 
             throw $e;
@@ -920,18 +783,11 @@ abstract class Connection
         $pk      = $query->getPk($options);
 
         if (!empty($options['cache']) && true === $options['cache']['key'] && is_string($pk) && isset($options['where']['AND'][$pk])) {
-<<<<<<< HEAD
-            $key = $this->getCacheKey($query, $options['where']['AND'][$pk]);
-        }
-
-        $data = $options['data'];
-=======
             $key = $this->getCacheKey($options['where']['AND'][$pk], $options);
         }
 
         $data   = $options['data'];
         $result = false;
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         if (empty($options['fetch_sql']) && !empty($options['cache'])) {
             // 判断查询缓存
@@ -940,59 +796,6 @@ abstract class Connection
             if (is_string($cache['key'])) {
                 $key = $cache['key'];
             } elseif (!isset($key)) {
-<<<<<<< HEAD
-                $key = $this->getCacheKey($query, $data);
-            }
-
-            $result = Container::get('cache')->get($key);
-
-            if (false !== $result) {
-                return $result;
-            }
-        }
-
-        if (is_string($pk) && !is_array($data)) {
-            if (isset($key) && strpos($key, '|')) {
-                list($a, $val) = explode('|', $key);
-                $item[$pk]     = $val;
-            } else {
-                $item[$pk] = $data;
-            }
-            $data = $item;
-        }
-
-        $query->setOption('data', $data);
-        $query->setOption('limit', 1);
-
-        // 生成查询SQL
-        $sql = $this->builder->select($query);
-
-        $bind = $query->getBind();
-
-        if (!empty($options['fetch_sql'])) {
-            // 获取实际执行的SQL语句
-            return $this->getRealSql($sql, $bind);
-        }
-
-        // 事件回调
-        $result = $query->trigger('before_find');
-
-        if (!$result) {
-            // 执行查询
-            $resultSet = $this->query($sql, $bind, $options['master'], $options['fetch_pdo']);
-
-            if ($resultSet instanceof \PDOStatement) {
-                // 返回PDOStatement对象
-                return $resultSet;
-            }
-
-            $result = isset($resultSet[0]) ? $resultSet[0] : null;
-        }
-
-        if (isset($cache) && $result) {
-            // 缓存数据
-            $this->cacheData($key, $result, $cache);
-=======
                 $key = $this->getCacheKey($data, $options, $query->getBind(false));
             }
 
@@ -1042,7 +845,6 @@ abstract class Connection
                 // 缓存数据
                 $this->cacheData($key, $result, $cache);
             }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         return $result;
@@ -1083,43 +885,6 @@ abstract class Connection
     public function select(Query $query)
     {
         // 分析查询表达式
-<<<<<<< HEAD
-        $options = $query->getOptions();
-
-        if (empty($options['fetch_sql']) && !empty($options['cache'])) {
-            $resultSet = $this->getCacheData($query, $options['cache'], null, $key);
-
-            if (false !== $resultSet) {
-                return $resultSet;
-            }
-        }
-
-        // 生成查询SQL
-        $sql = $this->builder->select($query);
-
-        $bind = $query->getBind();
-
-        if (!empty($options['fetch_sql'])) {
-            // 获取实际执行的SQL语句
-            return $this->getRealSql($sql, $bind);
-        }
-
-        $resultSet = $query->trigger('before_select');
-
-        if (!$resultSet) {
-            // 执行查询操作
-            $resultSet = $this->query($sql, $bind, $options['master'], $options['fetch_pdo']);
-
-            if ($resultSet instanceof \PDOStatement) {
-                // 返回PDOStatement对象
-                return $resultSet;
-            }
-        }
-
-        if (!empty($options['cache']) && false !== $resultSet) {
-            // 缓存数据集
-            $this->cacheData($key, $resultSet, $options['cache']);
-=======
         $options   = $query->getOptions();
         $resultSet = false;
 
@@ -1156,7 +921,6 @@ abstract class Connection
                 // 缓存数据集
                 $this->cacheData($key, $resultSet, $cache);
             }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         return $resultSet;
@@ -1187,11 +951,7 @@ abstract class Connection
         }
 
         // 执行操作
-<<<<<<< HEAD
-        $result = $this->execute($sql, $bind, $query);
-=======
         $result = $this->execute($sql, $bind);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         if ($result) {
             $sequence  = $sequence ?: (isset($options['sequence']) ? $options['sequence'] : null);
@@ -1248,18 +1008,10 @@ abstract class Connection
                 foreach ($array as $item) {
                     $sql  = $this->builder->insertAll($query, $item, $replace);
                     $bind = $query->getBind();
-<<<<<<< HEAD
-
-                    if (!empty($options['fetch_sql'])) {
-                        $fetchSql[] = $this->getRealSql($sql, $bind);
-                    } else {
-                        $count += $this->execute($sql, $bind, $query);
-=======
                     if (!empty($options['fetch_sql'])) {
                         $fetchSql[] = $this->getRealSql($sql, $bind);
                     } else {
                         $count += $this->execute($sql, $bind);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                     }
                 }
 
@@ -1280,19 +1032,12 @@ abstract class Connection
         $bind = $query->getBind();
 
         if (!empty($options['fetch_sql'])) {
-<<<<<<< HEAD
-            return $this->getRealSql($sql, $bind);
-        }
-
-        return $this->execute($sql, $bind, $query);
-=======
             // 获取实际执行的SQL语句
             return $this->getRealSql($sql, $bind);
         } else {
             // 执行操作
             return $this->execute($sql, $bind);
         }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1309,10 +1054,7 @@ abstract class Connection
         // 分析查询表达式
         $options = $query->getOptions();
 
-<<<<<<< HEAD
-=======
         // 生成SQL语句
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         $table = $this->parseSqlTable($table);
 
         $sql = $this->builder->selectInsert($query, $fields, $table);
@@ -1320,19 +1062,12 @@ abstract class Connection
         $bind = $query->getBind();
 
         if (!empty($options['fetch_sql'])) {
-<<<<<<< HEAD
-            return $this->getRealSql($sql, $bind);
-        }
-
-        return $this->execute($sql, $bind, $query);
-=======
             // 获取实际执行的SQL语句
             return $this->getRealSql($sql, $bind);
         } else {
             // 执行操作
             return $this->execute($sql, $bind);
         }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1359,11 +1094,7 @@ abstract class Connection
             if (is_string($pk) && isset($data[$pk])) {
                 $where[$pk] = [$pk, '=', $data[$pk]];
                 if (!isset($key)) {
-<<<<<<< HEAD
-                    $key = $this->getCacheKey($query, $data[$pk]);
-=======
                     $key = $this->getCacheKey($data[$pk], $options);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
                 }
                 unset($data[$pk]);
             } elseif (is_array($pk)) {
@@ -1387,11 +1118,7 @@ abstract class Connection
                 $query->setOption('where', ['AND' => $where]);
             }
         } elseif (!isset($key) && is_string($pk) && isset($options['where']['AND'][$pk])) {
-<<<<<<< HEAD
-            $key = $this->getCacheKey($query, $options['where']['AND'][$pk]);
-=======
             $key = $this->getCacheKey($options['where']['AND'][$pk], $options);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         // 更新数据
@@ -1404,36 +1131,6 @@ abstract class Connection
         if (!empty($options['fetch_sql'])) {
             // 获取实际执行的SQL语句
             return $this->getRealSql($sql, $bind);
-<<<<<<< HEAD
-        }
-
-        // 检测缓存
-        $cache = Container::get('cache');
-
-        if (isset($key) && $cache->get($key)) {
-            // 删除缓存
-            $cache->rm($key);
-        } elseif (!empty($options['cache']['tag'])) {
-            $cache->clear($options['cache']['tag']);
-        }
-
-        // 执行操作
-        $result = '' == $sql ? 0 : $this->execute($sql, $bind, $query);
-
-        if ($result) {
-            if (is_string($pk) && isset($where[$pk])) {
-                $data[$pk] = $where[$pk];
-            } elseif (is_string($pk) && isset($key) && strpos($key, '|')) {
-                list($a, $val) = explode('|', $key);
-                $data[$pk]     = $val;
-            }
-
-            $query->setOption('data', $data);
-            $query->trigger('after_update');
-        }
-
-        return $result;
-=======
         } else {
             // 检测缓存
             $cache = Container::get('cache');
@@ -1462,7 +1159,6 @@ abstract class Connection
 
             return $result;
         }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**
@@ -1483,15 +1179,9 @@ abstract class Connection
         if (isset($options['cache']) && is_string($options['cache']['key'])) {
             $key = $options['cache']['key'];
         } elseif (!is_null($data) && true !== $data && !is_array($data)) {
-<<<<<<< HEAD
-            $key = $this->getCacheKey($query, $data);
-        } elseif (is_string($pk) && isset($options['where']['AND'][$pk])) {
-            $key = $this->getCacheKey($query, $options['where']['AND'][$pk]);
-=======
             $key = $this->getCacheKey($data, $options);
         } elseif (is_string($pk) && isset($options['where']['AND'][$pk])) {
             $key = $this->getCacheKey($options['where']['AND'][$pk], $options);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         if (true !== $data && empty($options['where'])) {
@@ -1520,11 +1210,7 @@ abstract class Connection
         }
 
         // 执行操作
-<<<<<<< HEAD
-        $result = $this->execute($sql, $bind, $query);
-=======
         $result = $this->execute($sql, $bind);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         if ($result) {
             if (!is_array($data) && is_string($pk) && isset($key) && strpos($key, '|')) {
@@ -1553,46 +1239,6 @@ abstract class Connection
     {
         $options = $query->getOptions();
 
-<<<<<<< HEAD
-        if (empty($options['fetch_sql']) && !empty($options['cache'])) {
-            $cache  = $options['cache'];
-            $result = $this->getCacheData($query, $cache, $field, $key);
-
-            if (false !== $result) {
-                return $result;
-            }
-        }
-
-        if (isset($options['field'])) {
-            $query->removeOption('field');
-        }
-
-        if (is_string($field)) {
-            $field = array_map('trim', explode(',', $field));
-        }
-
-        $query->setOption('field', $field);
-        $query->setOption('limit', 1);
-
-        // 生成查询SQL
-        $sql = $this->builder->select($query);
-
-        $bind = $query->getBind();
-
-        if (!empty($options['fetch_sql'])) {
-            // 获取实际执行的SQL语句
-            return $this->getRealSql($sql, $bind);
-        }
-
-        // 执行查询操作
-        $pdo = $this->query($sql, $bind, $options['master'], true);
-
-        $result = $pdo->fetchColumn();
-
-        if (isset($cache) && false !== $result) {
-            // 缓存数据
-            $this->cacheData($key, $result, $cache);
-=======
         $result = false;
         if (empty($options['fetch_sql']) && !empty($options['cache'])) {
             // 判断查询缓存
@@ -1637,7 +1283,6 @@ abstract class Connection
                 // 缓存数据
                 $this->cacheData($key, $result, $cache);
             }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         return false !== $result ? $result : $default;
@@ -1653,11 +1298,7 @@ abstract class Connection
      */
     public function aggregate(Query $query, $aggregate, $field)
     {
-<<<<<<< HEAD
-        $field = $aggregate . '(' . $this->builder->parseKey($query, $field, true) . ') AS tp_' . strtolower($aggregate);
-=======
         $field = $aggregate . '(' . $this->builder->parseKey($query, $field) . ') AS tp_' . strtolower($aggregate);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
         return $this->value($query, $field, 0);
     }
@@ -1674,90 +1315,12 @@ abstract class Connection
     {
         $options = $query->getOptions();
 
-<<<<<<< HEAD
-=======
         $result = false;
 
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         if (empty($options['fetch_sql']) && !empty($options['cache'])) {
             // 判断查询缓存
             $cache = $options['cache'];
 
-<<<<<<< HEAD
-            $guid = is_string($cache['key']) ? $cache['key'] : $this->getCacheKey($query, $field);
-
-            $result = Container::get('cache')->get($guid);
-
-            if (false !== $result) {
-                return $result;
-            }
-        }
-
-        if (isset($options['field'])) {
-            $query->removeOption('field');
-        }
-
-        if (is_null($field)) {
-            $field = '*';
-        } elseif ($key && '*' != $field) {
-            $field = $key . ',' . $field;
-        }
-
-        if (is_string($field)) {
-            $field = array_map('trim', explode(',', $field));
-        }
-
-        $query->setOption('field', $field);
-
-        // 生成查询SQL
-        $sql = $this->builder->select($query);
-
-        $bind = $query->getBind();
-
-        if (!empty($options['fetch_sql'])) {
-            // 获取实际执行的SQL语句
-            return $this->getRealSql($sql, $bind);
-        }
-
-        // 执行查询操作
-        $pdo = $this->query($sql, $bind, $options['master'], true);
-
-        if (1 == $pdo->columnCount()) {
-            $result = $pdo->fetchAll(PDO::FETCH_COLUMN);
-        } else {
-            $resultSet = $pdo->fetchAll(PDO::FETCH_ASSOC);
-
-            if ('*' == $field && $key) {
-                $result = array_column($resultSet, null, $key);
-            } elseif ($resultSet) {
-                $fields = array_keys($resultSet[0]);
-                $count  = count($fields);
-                $key1   = array_shift($fields);
-                $key2   = $fields ? array_shift($fields) : '';
-                $key    = $key ?: $key1;
-
-                if (strpos($key, '.')) {
-                    list($alias, $key) = explode('.', $key);
-                }
-
-                if (2 == $count) {
-                    $column = $key2;
-                } elseif (1 == $count) {
-                    $column = $key1;
-                } else {
-                    $column = null;
-                }
-
-                $result = array_column($resultSet, $column, $key);
-            } else {
-                $result = [];
-            }
-        }
-
-        if (isset($cache) && isset($guid)) {
-            // 缓存数据
-            $this->cacheData($guid, $result, $cache);
-=======
             $guid   = is_string($cache['key']) ? $cache['key'] : md5($field . serialize($options) . serialize($query->getBind(false)));
             $result = Container::get('cache')->get($guid);
         }
@@ -1828,7 +1391,6 @@ abstract class Connection
                 // 缓存数据
                 $this->cacheData($guid, $result, $cache);
             }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
 
         return $result;
@@ -2222,11 +1784,6 @@ abstract class Connection
             return false;
         }
 
-<<<<<<< HEAD
-        $error = $e->getMessage();
-
-        foreach ($this->breakMatchStr as $msg) {
-=======
         $info = [
             'server has gone away',
             'no connection to the server',
@@ -2243,7 +1800,6 @@ abstract class Connection
         $error = $e->getMessage();
 
         foreach ($info as $msg) {
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             if (false !== stripos($error, $msg)) {
                 return true;
             }
@@ -2308,16 +1864,9 @@ abstract class Connection
      * @access protected
      * @param  boolean $start 调试开始标记 true 开始 false 结束
      * @param  string  $sql 执行的SQL语句 留空自动获取
-<<<<<<< HEAD
-     * @param  bool    $master 主从标记
-     * @return void
-     */
-    protected function debug($start, $sql = '', $master = false)
-=======
      * @return void
      */
     protected function debug($start, $sql = '')
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     {
         if (!empty($this->config['debug'])) {
             // 开启数据库调试模式
@@ -2338,11 +1887,7 @@ abstract class Connection
                 }
 
                 // SQL监听
-<<<<<<< HEAD
-                $this->triggerSql($sql, $runtime, $result, $master);
-=======
                 $this->triggerSql($sql, $runtime, $result);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             }
         }
     }
@@ -2364,42 +1909,19 @@ abstract class Connection
      * @param  string    $sql SQL语句
      * @param  float     $runtime SQL运行时间
      * @param  mixed     $explain SQL分析
-<<<<<<< HEAD
-     * @param  bool      $master 主从标记
-     * @return void
-     */
-    protected function triggerSql($sql, $runtime, $explain = [], $master = false)
-=======
      * @return bool
      */
     protected function triggerSql($sql, $runtime, $explain = [])
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     {
         if (!empty(self::$event)) {
             foreach (self::$event as $callback) {
                 if (is_callable($callback)) {
-<<<<<<< HEAD
-                    call_user_func_array($callback, [$sql, $runtime, $explain, $master]);
-                }
-            }
-        } else {
-            if ($this->config['deploy']) {
-                // 分布式记录当前操作的主从
-                $master = $master ? 'master|' : 'slave|';
-            } else {
-                $master = '';
-            }
-
-            // 未注册监听则记录到日志中
-            $this->log('[ SQL ] ' . $sql . ' [ ' . $master . 'RunTime:' . $runtime . 's ]');
-=======
                     call_user_func_array($callback, [$sql, $runtime, $explain]);
                 }
             }
         } else {
             // 未注册监听则记录到日志中
             $this->log('[ SQL ] ' . $sql . ' [ RunTime:' . $runtime . 's ]');
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 
             if (!empty($explain)) {
                 $this->log('[ EXPLAIN : ' . var_export($explain, true) . ' ]');
@@ -2525,48 +2047,6 @@ abstract class Connection
     }
 
     /**
-<<<<<<< HEAD
-     * 获取缓存数据
-     * @access protected
-     * @param  Query     $query   查询对象
-     * @param  mixed     $cache   缓存设置
-     * @param  array     $options 缓存
-     * @return mixed
-     */
-    protected function getCacheData(Query $query, $cache, $data, &$key = null)
-    {
-        // 判断查询缓存
-        $key = is_string($cache['key']) ? $cache['key'] : $this->getCacheKey($query, $data);
-
-        return Container::get('cache')->get($key);
-    }
-
-    /**
-     * 生成缓存标识
-     * @access protected
-     * @param  Query     $query   查询对象
-     * @param  mixed     $value   缓存数据
-     * @return string
-     */
-    protected function getCacheKey(Query $query, $value)
-    {
-        if (is_scalar($value)) {
-            $data = $value;
-        } elseif (is_array($value) && isset($value[1], $value[2]) && in_array($value[1], ['=', 'eq'], true) && is_scalar($value[2])) {
-            $data = $value[2];
-        }
-
-        $prefix = 'think:' . $this->getConfig('database') . '.';
-
-        if (isset($data)) {
-            return $prefix . $query->getTable() . '|' . $data;
-        }
-
-        try {
-            return md5($prefix . serialize($query->getOptions()) . serialize($query->getBind(false)));
-        } catch (\Exception $e) {
-            throw new Exception('closure not support cache(true)');
-=======
      * 生成缓存标识
      * @access protected
      * @param  mixed     $value   缓存数据
@@ -2590,7 +2070,6 @@ abstract class Connection
             } catch (\Exception $e) {
                 return;
             }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
         }
     }
 

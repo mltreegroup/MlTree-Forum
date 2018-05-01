@@ -27,12 +27,7 @@ class User extends Model
     }
     protected function setPasswordAttr($val,$data)
     {
-        if(!empty(session('uid')) && !empty(session('salt')))//用户已经登录
-        {
-            $userData = Db::name('user')->where('uid',session('uid'))->find();
-            return md5($val.$userData['salt'].$userData['email']);
-        }
-        return md5($data['password'].$data['salt'].$data['email']);
+        return password_encode($data['password']);
     }
     
 

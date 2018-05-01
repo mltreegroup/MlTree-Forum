@@ -52,10 +52,6 @@ class HasOne extends OneToOne
 
         // 判断关联类型执行查询
         $relationModel = $this->query
-<<<<<<< HEAD
-            ->removeWhereField($this->foreignKey)
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             ->where($this->foreignKey, $this->parent->$localKey)
             ->relation($subRelation)
             ->find();
@@ -70,19 +66,9 @@ class HasOne extends OneToOne
     /**
      * 根据关联条件查询当前模型
      * @access public
-<<<<<<< HEAD
-     * @param  string  $operator 比较操作符
-     * @param  integer $count    个数
-     * @param  string  $id       关联表的统计字段
-     * @param  string  $joinType JOIN类型
-     * @return Query
-     */
-    public function has($operator = '>=', $count = 1, $id = '*', $joinType = 'INNER')
-=======
      * @return Query
      */
     public function has()
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     {
         $table      = $this->query->getTable();
         $model      = basename(str_replace('\\', '/', get_class($this->parent)));
@@ -148,11 +134,6 @@ class HasOne extends OneToOne
         }
 
         if (!empty($range)) {
-<<<<<<< HEAD
-            $this->query->removeWhereField($foreignKey);
-
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             $data = $this->eagerlyWhere([
                 [$foreignKey, 'in', $range],
             ], $foreignKey, $relation, $subRelation, $closure);
@@ -195,14 +176,7 @@ class HasOne extends OneToOne
     {
         $localKey   = $this->localKey;
         $foreignKey = $this->foreignKey;
-<<<<<<< HEAD
-
-        $this->query->removeWhereField($foreignKey);
-
-        $data = $this->eagerlyWhere([
-=======
         $data       = $this->eagerlyWhere([
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
             [$foreignKey, '=', $result->$localKey],
         ], $foreignKey, $relation, $subRelation, $closure);
 
@@ -223,23 +197,4 @@ class HasOne extends OneToOne
         }
     }
 
-<<<<<<< HEAD
-    /**
-     * 执行基础查询（仅执行一次）
-     * @access protected
-     * @return void
-     */
-    protected function baseQuery()
-    {
-        if (empty($this->baseQuery)) {
-            if (isset($this->parent->{$this->localKey})) {
-                // 关联查询带入关联条件
-                $this->query->where($this->foreignKey, '=', $this->parent->{$this->localKey});
-            }
-
-            $this->baseQuery = true;
-        }
-    }
-=======
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 }

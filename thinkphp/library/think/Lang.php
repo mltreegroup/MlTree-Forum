@@ -79,15 +79,9 @@ class Lang
 
         if (is_array($name)) {
             return $this->lang[$range] = array_change_key_case($name) + $this->lang[$range];
-<<<<<<< HEAD
-        }
-
-        return $this->lang[$range][strtolower($name)] = $value;
-=======
         } else {
             return $this->lang[$range][strtolower($name)] = $value;
         }
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 
     /**

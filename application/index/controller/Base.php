@@ -11,6 +11,12 @@ class Base extends Controller
         'beforeLogin' => ['only' => 'upload,avatarUpload,picUpload'],
     ];
 
+    protected function initialize()
+    {
+        $data = Db::name('links')->order('sold')->select();
+        $this->assign('links',$data);
+    }
+
     public function siteOption($titleSign = null)
     {
         $siteData = \app\index\model\Option::getValues(['base']);
@@ -27,4 +33,5 @@ class Base extends Controller
             return json(['code'=>'1000','message'=>'错误，尚未登录','time'=>time()]);
         }
     }
+    
 }

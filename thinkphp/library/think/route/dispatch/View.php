@@ -11,11 +11,7 @@
 
 namespace think\route\dispatch;
 
-<<<<<<< HEAD
-use think\Response;
-=======
 use think\Container;
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
 use think\route\Dispatch;
 
 class View extends Dispatch
@@ -25,12 +21,8 @@ class View extends Dispatch
         // 渲染模板输出
         $vars = array_merge($this->app['request']->param(), $this->param);
 
-<<<<<<< HEAD
-        return Response::create($this->dispatch, 'view')->assign($vars);
-=======
         return Container::get('view')
             ->init(Container::get('config')->pull('template'))
             ->fetch($this->dispatch, $vars);
->>>>>>> 6928a1dd3b68a0566efc3d1ca688202d4372c416
     }
 }

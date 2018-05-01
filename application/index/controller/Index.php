@@ -25,6 +25,9 @@ class Index extends Base
         }
         $this->assign('tops',$topic);
         $this->assign('option',$this->siteOption());
+
+        // echo password_encode('wyml1008');
+        // dump(password_verify('wyml1008','$2y$10$8KDQ.vfyU1GrRKZY2LBKMeBzV/.rnhSDHlxoom29Ax1RWIQXFgpwG'));
         return view();
     }
 

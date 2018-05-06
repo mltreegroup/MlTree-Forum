@@ -4,6 +4,8 @@ namespace app\api\controller;
 use app\api\controller\Base;
 use app\index\model\Option;
 use app\index\model\Comment;
+use app\index\model\Topic;
+use app\index\model\User;
 use think\Db;
 use Auth\Auth;
 
@@ -84,6 +86,34 @@ class Api extends Base
         $comment = Comment::get($cid);
         $comment->userData = Db::name('user')->where('uid',$comment->uid)->field('username')->find();
         return json(['code'=>'3001','message'=>$comment,'time'=>time()]);
+    }
+
+    public function topiclist($page=2,$t=1)
+    {
+        $max = Option::getValue('forumNum');
+        switch ($t) {
+            case 2:
+                $topicData = topic::page('topic')->where('essence',1)->page($page,$max)->order('create_Time DESC')->select();
+                $count = topic::page('topic')->where('essence',1)->count('tid');
+                $pages = ceil($count / $max);
+                break;
+            
+            default:
+                $topicData = topic::page($page,$max)->order('create_Time DESC')->select();
+                $count = topic::count('tid');
+                $pages = ceil($count / $max);
+                break;
+        }
+        //数据处理（content等去除标签)
+        $user = new User;
+        foreach ($topicData as $key => $value) {
+            $value['content'] = strip_tags($value['content']);
+            $value['time_format'] = time_format($value['create_time']);
+            $value['userData'] = $user->where('uid',$value['uid'])->field('username,avatar')->find();
+            $value['Badge'] = outBadge($value);
+        }
+        return json(['code'=>'0','data'=>$topicData,'pages'=>$pages]);
+        
     }
 
 }

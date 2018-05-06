@@ -9,11 +9,11 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-Route::get('think', function () {
-    return 'hello,ThinkPHP5!';
-});
 
-Route::get('hello/:name', 'index/hello');
+Route::get('topic/:tid', 'index/topic/index');
+
+Route::get('user', 'index/user/index');
+Route::get('index', 'index/index/index');
 
 return [
 

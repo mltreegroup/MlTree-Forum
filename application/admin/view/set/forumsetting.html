@@ -10,6 +10,7 @@
     </div>
 
     <table class="mdui-table mdui-textfield">
+        <caption>友情链接(Links)管理</caption>
         <thead>
             <tr>
                 <th>#</th>
@@ -40,7 +41,29 @@
             {/volist}
         </tbody>
     </table>
-
+    
+    <table class="mdui-table mdui-textfield">
+        <caption>站点拓展(Expand)管理</caption>
+        <tbody>
+            <tr>
+                <td>站点编辑器</td>
+                <td>
+                    <label class="mdui-radio">
+                        <input type="radio" name="editor"/>
+                        <i class="mdui-radio-icon"></i>
+                        WangEditor
+                    </label>
+  
+                    <label class="mdui-radio">
+                        <input type="radio" name="editor" checked/>
+                        <i class="mdui-radio-icon"></i>
+                        Editor.md
+                    </label>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
     <div class="mdui-dialog mdui-typo" id="addLink">
         <div class="mdui-dialog-content">
             <div class="mdui-dialog-title">添加Link</div>

@@ -36,7 +36,7 @@
         {volist name="links" id="vo"}
         <div class="mdui-chip">
             <img class="mdui-chip-icon" src="{$vo.picurl|default='__IMG__/link.jpg'}" />
-            <a class="mdui-chip-title" href="$vo.url">{$vo.title}</a>
+            <a class="mdui-chip-title" href="{$vo.url}" target="_blank">{$vo.title}</a>
         </div>
         {/volist}
     </div>

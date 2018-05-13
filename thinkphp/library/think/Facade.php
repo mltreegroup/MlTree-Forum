@@ -57,7 +57,8 @@ class Facade
      */
     protected static function createFacade($class = '', $args = [], $newInstance = false)
     {
-        $class       = $class ?: static::class;
+        $class = $class ?: static::class;
+
         $facadeClass = static::getFacadeClass();
 
         if ($facadeClass) {
@@ -88,6 +89,10 @@ class Facade
      */
     public static function instance(...$args)
     {
+        if (__CLASS__ != static::class) {
+            return self::__callStatic('instance', $args);
+        }
+
         return self::createFacade('', $args);
     }
 

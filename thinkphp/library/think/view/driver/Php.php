@@ -19,6 +19,8 @@ class Php
 {
     // 模板引擎参数
     protected $config = [
+        // 默认模板渲染规则 1 解析为小写+下划线 2 全部转换小写
+        'auto_rule'   => 1,
         // 视图基础目录（集中式）
         'view_base'   => '',
         // 模板起始路径
@@ -28,6 +30,9 @@ class Php
         // 模板文件名分隔符
         'view_depr'   => DIRECTORY_SEPARATOR,
     ];
+
+    protected $template;
+    protected $content;
 
     public function __construct($config = [])
     {
@@ -69,18 +74,14 @@ class Php
             throw new TemplateNotFoundException('template not exists:' . $template, $template);
         }
 
+        $this->template = $template;
+
         // 记录视图信息
         Container::get('app')
             ->log('[ VIEW ] ' . $template . ' [ ' . var_export(array_keys($data), true) . ' ]');
 
-        if (isset($data['template'])) {
-            $__template__ = $template;
-            extract($data, EXTR_OVERWRITE);
-            include $__template__;
-        } else {
-            extract($data, EXTR_OVERWRITE);
-            include $template;
-        }
+        extract($data, EXTR_OVERWRITE);
+        include $this->template;
     }
 
     /**
@@ -92,14 +93,10 @@ class Php
      */
     public function display($content, $data = [])
     {
-        if (isset($data['content'])) {
-            $__content__ = $content;
-            extract($data, EXTR_OVERWRITE);
-            eval('?>' . $__content__);
-        } else {
-            extract($data, EXTR_OVERWRITE);
-            eval('?>' . $content);
-        }
+        $this->content = $content;
+
+        extract($data, EXTR_OVERWRITE);
+        eval('?>' . $this->content);
     }
 
     /**
@@ -139,7 +136,7 @@ class Php
             if ($controller) {
                 if ('' == $template) {
                     // 如果模板文件名为空 按照默认规则定位
-                    $template = str_replace('.', DIRECTORY_SEPARATOR, $controller) . $depr . $request->action();
+                    $template = str_replace('.', DIRECTORY_SEPARATOR, $controller) . $depr . $this->getActionTemplate($request);
                 } elseif (false === strpos($template, $depr)) {
                     $template = str_replace('.', DIRECTORY_SEPARATOR, $controller) . $depr . $template;
                 }
@@ -149,6 +146,14 @@ class Php
         }
 
         return $path . ltrim($template, '/') . '.' . ltrim($this->config['view_suffix'], '.');
+    }
+
+    protected function getActionTemplate($request)
+    {
+        $rule = [$request->action(true), Loader::parseName($request->action(true)), $request->action()];
+        $type = $this->config['auto_rule'];
+
+        return isset($rule[$type]) ? $rule[$type] : $rule[0];
     }
 
     /**

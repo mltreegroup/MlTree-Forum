@@ -137,6 +137,7 @@ function regEditor(type = 'def', option = {}) {
 
             $$('#reply').on('click', function () {
                 $$('#replyPanel').toggleClass('mdui-hidden');
+              	$$('#editor').toggleClass('mdui-hidden');
                 var device = layui.device(),
                     k = '824px';
                 if (device.weixin || device.android || device.ios) {
@@ -177,6 +178,7 @@ function regEditor(type = 'def', option = {}) {
                                     mdui.snackbar({
                                         message: '阿偶？出错了。<br/>' + res.message,
                                         position: 'top',
+                                      	onClose:function(){}
                                     })
                                 }
                             }

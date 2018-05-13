@@ -70,7 +70,7 @@ if (!function_exists('app')) {
      * @param string    $name 类名或标识 默认获取当前应用实例
      * @param array     $args 参数
      * @param bool      $newInstance    是否每次创建新的实例
-     * @return object
+     * @return mixed|\think\App
      */
     function app($name = 'think\App', $args = [], $newInstance = false)
     {
@@ -370,7 +370,7 @@ if (!function_exists('input')) {
      * @param string    $filter 过滤方法
      * @return mixed
      */
-    function input($key = '', $default = null, $filter = null)
+    function input($key = '', $default = null, $filter = '')
     {
         if (0 === strpos($key, '?')) {
             $key = substr($key, 1);
@@ -653,7 +653,7 @@ if (!function_exists('view')) {
      * @param string    $template 模板文件
      * @param array     $vars 模板变量
      * @param integer   $code 状态码
-     * @param callable  $filer 内容过滤
+     * @param callable  $filter 内容过滤
      * @return \think\response\View
      */
     function view($template = '', $vars = [], $code = 200, $filter = null)

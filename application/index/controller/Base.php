@@ -1,6 +1,7 @@
 <?php
 namespace app\index\controller;
 
+use app\index\model\Option;
 use think\Controller;
 use think\Db;
 use auth\auth;
@@ -14,6 +15,7 @@ class Base extends Controller
     protected function initialize()
     {
         $data = Db::name('links')->order('sold')->select();
+        $this->assign('option',Option::getValues('base'));
         $this->assign('links',$data);
     }
 

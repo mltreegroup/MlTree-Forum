@@ -62,3 +62,10 @@ function password_encode($password)
     $hash = password_hash($password, PASSWORD_BCRYPT);
     return $hash;
 }
+
+//计算执行耗费时间
+function get_runtime(){
+    $ntime=microtime(true);
+    $total=$ntime-$GLOBALS['_beginTime'];
+    return round($total,4);
+}

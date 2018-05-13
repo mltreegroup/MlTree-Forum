@@ -39,7 +39,7 @@ class Set extends Base
     public function baseReg()
     {
         $reg = Option::getValues('reg');
-        $base = Option::getValue('siteStatus');
+        $base = Option::getValues('base');
         if(Request::method() == 'POST')
         {
             if(empty(input('post.siteStatus')))
@@ -54,6 +54,13 @@ class Set extends Base
                 $data['regStatus'] = 0;
             }else {
                 $data['regStatus'] = 1;
+            }
+
+            if(empty(input('post.full')))
+            {
+                $data['full'] = 0;
+            }else {
+                $data['full'] = 1;
             }
 
             if(empty(input('post.regMail')))
@@ -71,7 +78,7 @@ class Set extends Base
 
         return view('baseReg',[
             'reg' => $reg,
-            'siteStatus' => $base,
+            'base' => $base,
             'userGroup' => Group::all(),
         ]);
     }
@@ -162,6 +169,7 @@ class Set extends Base
     public function forumsetting()
     {
         $link = Db::name('links')->order('sold')->select();
+        $fourm = Option::getValues('forum');
 
         if (!empty(input('post.'))) {
             if(empty(input('post.Id')))
@@ -180,6 +188,7 @@ class Set extends Base
         }
         return view('forumsetting',[
             'links' => $link,
+            'forum' => $fourm,
         ]);
     }
 

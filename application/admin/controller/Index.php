@@ -5,15 +5,7 @@ use app\admin\controller\Base;
 use think\facade\App;
 
 class Index extends Base
-{
-    protected function initialize()
-    {
-        if (!empty(session('uid'))) {
-            $user = model('user');
-            $this->assign('userData',$user->getInfo(session('uid')));
-        }
-    }
-    
+{   
     public function index()
     {
             $info = array(

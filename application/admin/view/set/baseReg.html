@@ -8,11 +8,9 @@
                     <td>允许访问</td>
                     <td>
                         <label class="mdui-switch">
-                            {if $siteStatus == 1}
-                            <input name="siteStatus" type="checkbox" checked/>
-                            {else}
-                            <input name="siteStatus" type="checkbox" />
-                            {/if}
+                            {if $base.siteStatus == 1}
+                            <input name="siteStatus" type="checkbox" checked/> {else}
+                            <input name="siteStatus" type="checkbox" /> {/if}
                             <i class="mdui-switch-icon"></i>
                         </label>
                     </td>
@@ -32,6 +30,20 @@
                     </td>
                     <td>
                         是否允许新用户注册
+                    </td>
+                </tr>
+                <tr>
+                    <td>手机版默认全屏</td>
+                    <td>
+                        <label class="mdui-switch">
+                            {if $base.full == 1}
+                            <input name="full" type="checkbox" checked/> {else}
+                            <input name="full" type="checkbox" /> {/if}
+                            <i class="mdui-switch-icon"></i>
+                        </label>
+                    </td>
+                    <td>
+                        QQ浏览器等手机浏览器访问时自动进入全屏
                     </td>
                 </tr>
                 <tr>

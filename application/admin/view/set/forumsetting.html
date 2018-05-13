@@ -8,9 +8,9 @@
             <i class="mdui-icon material-icons">add</i>
         </button>
     </div>
-
     <table class="mdui-table mdui-textfield">
         <caption>友情链接(Links)管理</caption>
+        
         <thead>
             <tr>
                 <th>#</th>
@@ -49,13 +49,13 @@
                 <td>站点编辑器</td>
                 <td>
                     <label class="mdui-radio">
-                        <input type="radio" name="editor"/>
+                        <input type="radio" name="editor" {eq name="forum.editor" value="1"}checked{/eq}/>
                         <i class="mdui-radio-icon"></i>
                         WangEditor
                     </label>
   
                     <label class="mdui-radio">
-                        <input type="radio" name="editor" checked/>
+                        <input type="radio" name="editor" {eq name="forum.editor" value="2"}checked{/eq}/>
                         <i class="mdui-radio-icon"></i>
                         Editor.md
                     </label>

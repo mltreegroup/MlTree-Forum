@@ -38,11 +38,10 @@ class User extends Base
             {
                 return view('index',[
                 'option' => $this->siteOption('用户信息'),
-                'userData' => userModel::get(session('uid')),
+                'userData' => userModel::get($uid),
                 'userTopic' => $userTopicList,
                 ]);
             }
-            $userInfo = $user->getInfo($uid);
 
             return view('index_public',[
             'option' => $this->siteOption('用户信息'),
@@ -138,10 +137,11 @@ class User extends Base
             {
                 return json(['code'=>'-1','message'=>'两次密码不一致！']);
             }
+            
             $result = $this->validate(input('post.'),'app\index\validate\User');
 
             if($result !== true){
-                return json(['code'=>'-1',$result]);
+                return json(['code'=>'-1','message'=>$result]);
             }
             $userSalt = createStr(6);
             $userData = [

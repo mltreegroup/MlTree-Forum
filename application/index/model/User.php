@@ -3,7 +3,7 @@ namespace app\index\model;
 
 use think\Model;
 use think\Db;
-
+use app\index\model\Option;
 
 class User extends Model 
 {
@@ -37,6 +37,23 @@ class User extends Model
 		 	return false;
 		}
 		return true;
+    }
+
+    static function register($regInfomation)
+    {
+        if (Option::getValue('regStatus') == '1') {
+            return [false,'当前站点关闭注册'];
+        }
+        if(!empty(Db::name('user')->where('email',$email)->find()))
+        {
+            return [false,'该邮箱已被注册'];
+        }
+        $validate = new \app\index\validate\User;
+        if(!$validate->check($regInfomation))
+        {
+            return [false,$validate->getError()];
+        }
+        
     }
     
 }

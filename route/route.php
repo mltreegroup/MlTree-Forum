@@ -9,12 +9,9 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-
 Route::get('topic/:tid', 'index/topic/index');
 
-Route::get('user', 'index/user/index');
-Route::get('index', 'index/index/index');
-
+Route::rule('/', 'index');
 return [
 
 ];

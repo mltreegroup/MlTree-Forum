@@ -3,7 +3,7 @@ MlTree-Forum是一款轻论坛程序，由ThinkPHP提供后端框架，MDUI为�
 
 设计的理念遵循Material Design。因此非常适合手机端。
 
-[演示站点&官方站](https://forum.mltree.top
+[演示站点&官方站](https://forum.mltree.top)
 
 手机版扫描体验:![图片](https://dn-coding-net-production-static.qbox.me/42e6792e-ee6f-4a16-9491-4a4fac5e48cd.png)
 

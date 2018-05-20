@@ -8,30 +8,55 @@
 // | Author: Kingsr <kingsrml@vip.qq.com>
 // +----------------------------------------------------------------------
 
-//判断是否为手机版，是则自动进入全屏模式
-var device = layui.device();
-if (device.weixin || device.android || device.ios) {
-    enterFullScreen();
-}
+var $$ = mdui.JQ;
+var time = 60;
 
-function enterFullScreen() {//进入全屏
-    var de = document.documentElement;
-    if (de.requestFullscreen) {
-        de.requestFullscreen();
-    } else if (de.mozRequestFullScreen) {
-        de.mozRequestFullScreen();
-    } else if (de.webkitRequestFullScreen) {
-        de.webkitRequestFullScreen();
+$$('#getCode').on('click', function () {
+
+    if ($$('#email').val() == '' || $$('#username').val() == '') {
+        mdui.snackbar({
+            message: '邮箱或用户名不得为空',
+            position: 'top'
+        });
+    } else {
+        $$.ajax({
+            method: 'POST',
+            url: '/api/api/getRegCode.html',
+            data: {
+                email: $$('#email').val(),
+                username: $$('#username').val()
+            },
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar({
+                        message: res.message,
+                        position: 'top'
+                    });
+                    time_o();
+                } else {
+                    mdui.snackbar({
+                        message: res.message,
+                        position: 'top'
+                    });
+                }
+            }
+        });
     }
-}
 
-function exitFullScreen() {//退出全屏
-    var de = document;
-    if (de.exitFullscreen) {
-        de.exitFullscreen();
-    } else if (de.mozCancelFullScreen) {
-        de.mozCancelFullScreen();
-    } else if (de.webkitCancelFullScreen) {
-        de.webkitCancelFullScreen();
+
+})
+
+function time_o() {
+    if (time == 0) {
+        $$('#getCode').toggleClass('disabled');
+        $$('#getCode').val('获取验证码');
+        time = 60;
+    } else {
+        $$('#getCode').val('还有 ' + time + ' 再次获取');
+        time--;
+        setTimeout(() => {
+            time_0
+        }, 100);
     }
 }

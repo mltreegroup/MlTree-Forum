@@ -15,6 +15,10 @@ class Base extends Controller
     protected function initialize()
     {
         $data = Db::name('links')->order('sold')->select();
+        if(!empty(session('uid')))
+        {
+            $this->assign('userData', Db::name('user')->where('uid',session('uid'))->find());
+        }
         $this->assign('option',Option::getValues('base'));
         $this->assign('links',$data);
     }

@@ -1,27 +1,24 @@
-{extend name="../template@default/forum_public"}
-{block name="content"}
+{extend name="../template@default/forum_public"} {block name="content"}
 
 <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-offset-sm-3 mdui-m-y-1">
-    <form action="" method="post" class="layui-form">
-        <div class="mdui-card">
-            <div class="mdui-card-media">
-                <img src="__IMG__/card.png" alt="">
-                <div class="mdui-card-media-covered mdui-card-media-covered">
-                    <div class="mdui-card-primary">
-                        <div class="mdui-card-primary-title">注册</div>
-                        <div class="mdui-card-primary-subtitle">Regist</div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="mdui-card-content">
+    <div class="mdui-card mdui-m-t-1">
+        <div class="mdui-card-media">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">注册</div>
+                <div class="mdui-card-primary-subtitle">Regist</div>
+            </div>
+        </div>
+
+        <div class="mdui-card-content">
+            <form action="" method="post">
                 <div class="mdui-textfield mdui-textfield-floating-label">
                     <label class="mdui-textfield-label">邮箱</label>
-                    <input name="email" class="mdui-textfield-input" type="email" />
+                    <input id="email" name="email" class="mdui-textfield-input" type="email" />
                 </div>
                 <div class="mdui-textfield mdui-textfield-floating-label">
                     <label class="mdui-textfield-label">用户名</label>
-                    <input name="username" class="mdui-textfield-input" type="text" />
+                    <input id="username" name="username" class="mdui-textfield-input" type="text" />
                 </div>
                 <div class="mdui-textfield mdui-textfield-floating-label">
                     <label class="mdui-textfield-label">密码</label>
@@ -31,6 +28,13 @@
                     <label class="mdui-textfield-label">确认密码</label>
                     <input name="repassword" class="mdui-textfield-input" type="password" />
                 </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">邮箱验证码</label>
+                    <input name="code" class="mdui-textfield-input" type="text" />
+                    <button type="button" class="mdui-btn mdui-m-t-1 mdui-color-theme mdui-ripple" id="getCode">获取验证码</button>
+                </div>
+
                 <div class="mdui-textfield mdui-textfield-floating-label">
                     <label class="mdui-textfield-label">验证码</label>
                     <input name="captcha" class="mdui-textfield-input" type="text" required/>
@@ -43,43 +47,41 @@
                     <a href="" class="mdui-btn mdui-float-right mdui-m-y-1 mdui-ripple">忘记密码？</a>
                     <a href="{:url('login')}" class="mdui-btn mdui-float-right mdui-m-y-1 mdui-ripple">用户登录</a>
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
+    </div>
 
 </div>
 
-{/block}
-{block name="js"}
+{/block} {block name="js"}
 <script>
-    layui.use(['form'],function(){
+    layui.use(['form'], function () {
         var form = layui.form;
         var $$ = mdui.JQ;
 
-        form.on('submit(register)',function(data){
-            
+        form.on('submit(register)', function (data) {
+
             $$.ajax({
-                method:'post',
+                method: 'post',
                 url: '{:url("reg")}',
                 data: data.field,
                 dataType: 'json',
-                success: function(data){
-                    if(data.code == 0){
+                success: function (data) {
+                    if (data.code == 0) {
                         layer.msg(data.message, {
                             icon: 1,
                             end: function () {
                                 window.location.href = data.url;
                             }
                         });
-                    }else{
-                        layer.msg(data.message, {icon:5});
+                    } else {
+                        layer.msg(data.message, { icon: 5 });
                     }
-                    
+
                 },
             })
 
             return false;
         })
     });
-</script>
-{/block}
+</script> {/block}

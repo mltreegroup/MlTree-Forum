@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
 Route::get('topic/:tid', 'index/topic/index');
-
+Route::any('create', 'index/topic/create');
 Route::rule('/', 'index');
 return [
 

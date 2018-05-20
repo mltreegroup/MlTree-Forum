@@ -13,14 +13,6 @@ use Auth\Auth;
 
 class Topic extends Base
 {
-    protected function initialize()
-    {
-        if(!empty(session('uid')))
-        {
-            $this->assign('userData',user::get(session('uid')));
-        }
-    }
-
     public function index($tid = 0)
     {
         $user = new User;
@@ -135,7 +127,7 @@ class Topic extends Base
                     'subject' => input('post.title'),
                     'content' => input('post.content','','htmlspecialchars'),
                 ];
-                $topic->save($data,['tid'=>$tid]);
+                $topic->update($data,['tid'=>$tid]);
 
                 //设置附件信息
                 $re = Atta::setCreate($tid,input('post.files'));

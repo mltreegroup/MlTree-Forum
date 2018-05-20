@@ -6,6 +6,7 @@ use app\index\model\Option;
 use app\index\model\Comment;
 use app\index\model\Topic;
 use app\index\model\User;
+use app\index\model\Mail;
 use think\Db;
 use Auth\Auth;
 
@@ -114,6 +115,38 @@ class Api extends Base
         }
         return json(['code'=>'0','data'=>$topicData,'pages'=>$pages]);
         
+    }
+
+    public function getRegCode()
+    {
+        if (!empty(input('post.'))) {
+            $email = input('post.email');
+            $username = input('post.username');
+            if(session('resMail') > time())
+            {
+                $time = (session('resMail')-time())*1000;
+                return json(['code'=>'-1','message'=>'还有'.$time.'后可以再次获取','time'=>time()]);
+            }
+            $semail = new Mail;
+            $code = createStr(6);
+            $arry = [
+                                '{siteTitle}' => Option::getValue('siteTitle'),
+                                '{code}' => $code,
+                            ];
+            $title = Option::getValue('reg_mail_title');
+            $content = Option::getValue('reg_mail_content');
+            $title = strtr($title,$arry);
+            $content = strtr($content,$arry);
+            $res = $semail->send($email,$username,$title,$content);
+            
+            if ($res !== true) {
+                return json(['code'=>'-1','message'=>$semail->errorMsg,'time'=>time(),$email]);
+            }else{
+                session('regMail',time()+60*1000);
+                session('regCode',$code);
+                return json(['code'=>'0','message'=>'发送成功！','time'=>time()]);
+            }
+        }
     }
 
 }

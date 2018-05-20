@@ -14,5 +14,6 @@ class User extends Validate
 
     protected $scene = [
         'login' => ['email','passwrd','captcha'],
+        'valiEmail' => ['email'],
     ];
 }

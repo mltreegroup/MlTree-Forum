@@ -5,3 +5,4 @@ public/uploads/
 public/avatar/
 public/.well-known/
 .vscode/ftp-sync.json
+/runtime

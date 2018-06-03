@@ -18,6 +18,9 @@
                 {$topicData.content|raw}
             </div>
         </div>
+        <div class="mf-panel-footer">
+            <div id="start"></div>
+        </div>
     </div>
 
     <div class="mf-panel mdui-shadow-5 mdui-hoverable" id="comment">
@@ -142,5 +145,14 @@
             }
         });
     });
+
+  layui.use('rate', function(){
+    var rate = layui.rate;
+   
+    //渲染
+    var ins1 = rate.render({
+      elem: '#start'  //绑定元素
+    });
+  });
 
 </script>{/block}

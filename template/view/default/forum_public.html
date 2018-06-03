@@ -4,7 +4,7 @@
     {if !empty(session('uid'))} {include file="/../template@default/topbar_user"} {else /} {include file="/../template@default/topbar"}
     {/if}
     <div class="mdui-container">
-        <div class="mdui-row mdui-center">
+        <div class="mdui-row">
             {block name="content"}{/block}
 
         </div>
@@ -18,23 +18,23 @@
             <i class="mdui-icon mdui-fab-opened material-icons" >arrow_upward</i>
         </button>
         <div class="mdui-fab-dial">
-            <a href="{:url('index/topic/create')}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-pink">
+            <a href="{:url('index/topic/create')}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-pink" title="发帖">
                 <i class="mdui-icon material-icons">create</i>
             </a>
-            {if $Request.controller === 'Topic' && $Request.action === 'index'} {if authCheck('top')}
-            <a href="{:url('index/topic/set',['type'=>'top','tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-red">
+            {if $Request.controller === 'Topic' && $Request.action === 'index'} {if authCheck('top') || authCheck('admin')}
+            <a href="{:url('index/topic/set',['type'=>'top','tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-red" title="置顶">
                 <i class="mdui-icon material-icons">vertical_align_top</i>
             </a>
-            {/if} {if authCheck('essence')}
-            <a href="{:url('index/topic/set',['type'=>'essence','tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-purple">
+            {/if} {if authCheck('essence') || authCheck('admin')}
+            <a href="{:url('index/topic/set',['type'=>'essence','tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-purple" title="精华">
                 <i class="mdui-icon material-icons">star</i>
             </a>
-            {/if} {if authCheck('delete')}
-            <a href="{:url('index/topic/set',['type'=>'delete','tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-blue">
+            {/if} {if authCheck('delete') || authCheck('admin')}
+            <a href="{:url('index/topic/set',['type'=>'delete','tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-blue" title="删除">
                 <i class="mdui-icon material-icons">delete</i>
             </a>
-            {/if} {if authCheck('delete')}
-            <a href="{:url('index/topic/update',['tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-orange">
+            {/if} {if authCheck('delete') || authCheck('admin')}
+            <a href="{:url('index/topic/update',['tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-orange" title="修改">
                 <i class="mdui-icon material-icons">update</i>
             </a>
             {/if} {/if}

@@ -9,9 +9,11 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-Route::get('topic/:tid', 'index/topic/index');
-Route::any('create', 'index/topic/create');
 Route::rule('/', 'index');
+Route::rule('topic/:tid', 'index/topic/index');
+Route::rule('create', 'index/topic/create');
+Route::rule('user/[:uid]', 'index/user/index');
+
 return [
 
 ];

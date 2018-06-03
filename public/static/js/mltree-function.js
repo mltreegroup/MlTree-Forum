@@ -33,6 +33,7 @@ $$('#getCode').on('click', function () {
                         message: res.message,
                         position: 'top'
                     });
+                    $$('#getCode').prop('disabled', true);
                     time_o();
                 } else {
                     mdui.snackbar({
@@ -49,14 +50,12 @@ $$('#getCode').on('click', function () {
 
 function time_o() {
     if (time == 0) {
-        $$('#getCode').toggleClass('disabled');
-        $$('#getCode').val('获取验证码');
+        $$('#getCode').prop('disabled', false);
+        $$('#getCode').text('获取验证码');
         time = 60;
     } else {
-        $$('#getCode').val('还有 ' + time + ' 再次获取');
+        $$('#getCode').text('还有 ' + time + ' 再次获取');
         time--;
-        setTimeout(() => {
-            time_0
-        }, 100);
+        setTimeout(time_o, 1000);
     }
 }

@@ -4,8 +4,7 @@ namespace app\index\model;
 use think\Model;
 use think\Db;
 use \app\index\model\Option;
-use \PHPMailer\PHPMailer;
-use \PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class Mail extends Model{
 

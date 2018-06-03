@@ -10,10 +10,11 @@
     </div>
     <table class="mdui-table mdui-textfield">
         <caption>友情链接(Links)管理</caption>
-        
+
         <thead>
             <tr>
                 <th>#</th>
+                <th>排序</th>
                 <th>链接名称</th>
                 <th>URL</th>
                 <th>链接图片</th>
@@ -22,7 +23,8 @@
         </thead>
         <tbody>
             {volist name="links" id="vo"}
-            <tr>
+            <tr id="{$vo.Id}">
+                <td>{$vo.Id}</td>
                 <td>{$vo.sold}</td>
                 <td>{$vo.title}</td>
                 <td>
@@ -33,40 +35,18 @@
                 </td>
                 <td>
                     <div class="layui-btn-group">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="editorForum()">编辑</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="del()">删除</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="editorForum('#{$vo.Id}')">编辑</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="del('{$vo.Id}')">删除</button>
                     </div>
                 </td>
             </tr>
             {/volist}
         </tbody>
     </table>
-    
-    <table class="mdui-table mdui-textfield">
-        <caption>站点拓展(Expand)管理</caption>
-        <tbody>
-            <tr>
-                <td>站点编辑器</td>
-                <td>
-                    <label class="mdui-radio">
-                        <input type="radio" name="editor" {eq name="forum.editor" value="1"}checked{/eq}/>
-                        <i class="mdui-radio-icon"></i>
-                        WangEditor
-                    </label>
-  
-                    <label class="mdui-radio">
-                        <input type="radio" name="editor" {eq name="forum.editor" value="2"}checked{/eq}/>
-                        <i class="mdui-radio-icon"></i>
-                        Editor.md
-                    </label>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    
+
     <div class="mdui-dialog mdui-typo" id="addLink">
         <div class="mdui-dialog-content">
-            <div class="mdui-dialog-title">添加Link</div>
+            <div class="mdui-dialog-title mdui-typo-title">添加Link</div>
             <form id="addForm" class="layui-form layui-form-pane mdui-m-y-1">
                 <div class="layui-form-item">
                     <label class="layui-form-label">Link名称</label>
@@ -89,13 +69,49 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">排序</label>
                     <div class="layui-input-block">
-                        <input type="text" name="solt" placeholder="请输入排序默认0" autocomplete="off" class="layui-input">
+                        <input type="text" name="sold" placeholder="请输入排序默认0" autocomplete="off" class="layui-input">
                     </div>
                 </div>
             </form>
         </div>
         <div class="mdui-dialog-actions">
-            <button class="mdui-btn mdui-ripple" id="submit">添加</button>
+            <button class="mdui-btn mdui-ripple" id="submitadd">添加</button>
+        </div>
+    </div>
+
+    <div class="mdui-dialog mdui-typo" id="editLink">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title mdui-typo-title">修改Link</div>
+            <form id="editForm" class="layui-form layui-form-pane mdui-m-y-1">
+                <input type="hidden" name="Id">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">Link名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" required lay-verify="required" placeholder="请输入Link名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">Link地址</label>
+                    <div class="layui-input-block">
+                        <input type="url" name="url" required lay-verify="required" placeholder="请输入LinkURL" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">图片地址</label>
+                    <div class="layui-input-block">
+                        <input type="url" name="picurl" placeholder="请输入Link图片地址" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="sold" placeholder="请输入排序默认0" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="submitedit">保存</button>
         </div>
     </div>
 
@@ -104,13 +120,14 @@
 {/block} {block name="js"}
 <script>
     var $$ = mdui.JQ,
-        data = '';;
+        data = '',
+        inst = new mdui.Dialog('#editLink');//注册对话框
 
     $$('#forum').addClass('mdui-collapse-item-open');
     $$('#forumSetting').addClass('mdui-list-item-active');
 
-    $$('#submit').on('click', function () {
-        data = $$('form').serialize();
+    $$('#submitadd').on('click', function () {
+        data = $$('#addForm').serialize();
 
         $$.ajax({
             method: 'post',
@@ -121,7 +138,10 @@
                 if (res.code == 0) {
                     mdui.snackbar(res.message, {
                         timeout: 2000,
-                        position: 'top'
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
                     })
                 } else {
                     mdui.snackbar(res.message, {
@@ -135,4 +155,73 @@
 
         return false;
     })
+    $$('#submitedit').on('click', function () {
+        data = $$('#editForm').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+
+    function editorForum(id) {
+        var data = $$(id).find('td');
+
+        $$('#editForm [name="Id"]').val(data[0].innerText);
+        $$('#editForm [name="title"]').val(data[2].innerText);
+        $$('#editForm [name="url"]').val(data[3].innerText);
+        $$('#editForm [name="picurl"]').val(data[4].innerText);
+        $$('#editForm [name="sold"]').val(data[1].innerText);
+
+        inst.open();
+    }
+
+    function del(lid) {
+        $$.ajax({
+            method: 'post',
+            url: '{:url("admin/api/del")}',
+            data: {
+                type: 'link',
+                id: lid,
+            },
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top',
+                    })
+                }
+            }
+        });
+    }
 </script> {/block}

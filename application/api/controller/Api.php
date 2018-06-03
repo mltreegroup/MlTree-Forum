@@ -17,11 +17,11 @@ class Api extends Base
         return ;
     }
 
-    public function Search($keyword = '',$type = 'topic')
+    public function Search($keyword = '', $type = 'topic')
     {
         switch ($type) {
             case 'topic':
-                $data = Db::name('topic')->where('subject,content','like','%'.$keyword.'%')->select();
+                $data = Db::name('topic')->where('subject,content', 'like', '%'.$keyword.'%')->select();
                 foreach ($data as $key => $value) {
                     $user = \app\index\model\User::get($value['uid']);
                     $value['username'] = $user->username;
@@ -35,7 +35,7 @@ class Api extends Base
         }
     }
 
-    public function del($type = 'topic',$id=0,$uid=0)
+    public function del($type = 'topic', $id=0, $uid=0)
     {
         if (empty($uid)) {
             return json(['code'=>'1000','message'=>'尚未登录','time'=>time()]);
@@ -43,16 +43,14 @@ class Api extends Base
         switch ($type) {
             case 'topic':
                 $auth = new Auth;
-                if($auth->check('delete',$uid) || $auth->check('admin',$uid))
-                {
+                if ($auth->check('delete', $uid) || $auth->check('admin', $uid)) {
                     $res = Db::transaction(function () {
                         Db::name('topic')->find($id);
                         Db::name('topic')->delete($id);
                     });
-                    if($res)
-                    {
+                    if ($res) {
                         return json(['code'=>'3003','message'=>'删除成功','time'=>time()]);
-                    }else{
+                    } else {
                         return json(['code'=>'3004','message'=>'删除失败','time'=>time()]);
                     }
                 }
@@ -64,43 +62,42 @@ class Api extends Base
         }
     }
 
-    public function commentList($tid,$page=1)
+    public function commentList($tid, $page=1)
     {
         $max = Option::getValue('commentNum');
-        $comment = Comment::page('comment')->where('tid',$tid)->page($page,$max)->select();
+        $comment = Comment::page('comment')->where('tid', $tid)->page($page, $max)->select();
 
         foreach ($comment as $key => $value) {
-            $data = Db::name('user')->where('uid',$value['uid'])->find();
+            $data = Db::name('user')->where('uid', $value['uid'])->find();
             $value['username'] = $data['username'];
             $value['avatar'] = $data['avatar'];
             $value['time_format'] = time_format($value['create_time']);
         }
 
-        $count = Comment::page('comment')->where('tid',$tid)->count('cid');
+        $count = Comment::page('comment')->where('tid', $tid)->count('cid');
         $pages = ceil($count / $max);
         return json(['code'=>'3001','data'=>$comment,'pages'=>$pages]);
-        
     }
 
     public function commentConent($cid)
     {
         $comment = Comment::get($cid);
-        $comment->userData = Db::name('user')->where('uid',$comment->uid)->field('username')->find();
+        $comment->userData = Db::name('user')->where('uid', $comment->uid)->field('username')->find();
         return json(['code'=>'3001','message'=>$comment,'time'=>time()]);
     }
 
-    public function topiclist($page=2,$t=1)
+    public function topiclist($page=2, $t=1)
     {
         $max = Option::getValue('forumNum');
         switch ($t) {
             case 2:
-                $topicData = topic::page('topic')->where('essence',1)->page($page,$max)->order('create_Time DESC')->select();
-                $count = topic::page('topic')->where('essence',1)->count('tid');
+                $topicData = topic::page('topic')->where('essence', 1)->page($page, $max)->order('create_Time DESC')->select();
+                $count = topic::page('topic')->where('essence', 1)->count('tid');
                 $pages = ceil($count / $max);
                 break;
             
             default:
-                $topicData = topic::page($page,$max)->order('create_Time DESC')->select();
+                $topicData = topic::page($page, $max)->order('create_Time DESC')->select();
                 $count = topic::count('tid');
                 $pages = ceil($count / $max);
                 break;
@@ -110,11 +107,10 @@ class Api extends Base
         foreach ($topicData as $key => $value) {
             $value['content'] = strip_tags($value['content']);
             $value['time_format'] = time_format($value['create_time']);
-            $value['userData'] = $user->where('uid',$value['uid'])->field('username,avatar')->find();
+            $value['userData'] = $user->where('uid', $value['uid'])->field('username,avatar')->find();
             $value['Badge'] = outBadge($value);
         }
         return json(['code'=>'0','data'=>$topicData,'pages'=>$pages]);
-        
     }
 
     public function getRegCode()
@@ -122,31 +118,38 @@ class Api extends Base
         if (!empty(input('post.'))) {
             $email = input('post.email');
             $username = input('post.username');
-            if(session('resMail') > time())
-            {
-                $time = (session('resMail')-time())*1000;
-                return json(['code'=>'-1','message'=>'还有'.$time.'后可以再次获取','time'=>time()]);
+
+            $res = user::where('email', $email)->find();
+            if (!empty($res)) {
+                return json(['code'=>'-1','message'=>'该邮箱已注册']);
             }
+
+            $time = session('regMail');
+            if ($time > time()) {
+                $time = $time-time();
+                return json(['code'=>'-1','message'=>'还有'.$time.'后可以再次获取','time'=>time(),'regTime'=>session('regMail')]);
+            }
+
             $semail = new Mail;
             $code = createStr(6);
             $arry = [
                                 '{siteTitle}' => Option::getValue('siteTitle'),
+                                '{userName}' => $username,
                                 '{code}' => $code,
                             ];
             $title = Option::getValue('reg_mail_title');
             $content = Option::getValue('reg_mail_content');
-            $title = strtr($title,$arry);
-            $content = strtr($content,$arry);
-            $res = $semail->send($email,$username,$title,$content);
+            $title = strtr($title, $arry);
+            $content = strtr($content, $arry);
+            $res = $semail->send($email, $username, $title, $content);
             
             if ($res !== true) {
                 return json(['code'=>'-1','message'=>$semail->errorMsg,'time'=>time(),$email]);
-            }else{
-                session('regMail',time()+60*1000);
-                session('regCode',$code);
-                return json(['code'=>'0','message'=>'发送成功！','time'=>time()]);
+            } else {
+                session('regMail', time()+60);
+                session('regCode', $code);
+                return json(['code'=>'0','message'=>'发送成功！','time'=>time(),'regTime'=>session('regMail')]);
             }
         }
     }
-
 }

@@ -49,7 +49,7 @@
         uploadImg: "{:url('index/expand/picUpload')}",
         uploadFile: '{:url("index/expand/upload")}',
         uid: "{:session('uid')}",
-        createUrl: '{:url("index/topic/create")}',
+        createUrl: '{:url("index/topic/update",["tid"=>$topicData.tid])}',
     }
     regEditor('def', option)
 </script> {/block}

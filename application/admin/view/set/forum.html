@@ -16,6 +16,7 @@
                 <th>Fid</th>
                 <th>板块名称</th>
                 <th>板块描述</th>
+                <th>权限用户祖</th>
                 <th>板块管理</th>
             </tr>
         </thead>
@@ -26,6 +27,7 @@
                 <td>{$vo.fid}</td>
                 <td>{$vo.name}</td>
                 <td>{$vo.introduce}</td>
+                <td>{$vo.cgroup}</td>
                 <td>
                     <div class="layui-btn-group">
                         <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="editorForum('#{$vo.fid}')">编辑</button>
@@ -53,6 +55,13 @@
                         <textarea name="introduce" placeholder="请输入板块描述" class="layui-textarea"></textarea>
                     </div>
                 </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">权限用户组</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="cgroup" required lay-verify="required" placeholder="请输入权限用户祖" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
+                </div>
             </form>
         </div>
         <div class="mdui-dialog-actions">
@@ -76,6 +85,13 @@
                     <div class="layui-input-block">
                         <textarea name="introduce" placeholder="请输入板块描述" class="layui-textarea"></textarea>
                     </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">权限用户组</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="cgroup" required lay-verify="required" placeholder="请输入权限用户祖" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
                 </div>
             </form>
         </div>
@@ -163,6 +179,7 @@
         $$('#editorForum [name="fid"]').val(data[1].innerText);
         $$('#editorForum [name="name"]').val(data[2].innerText);
         $$('#editorForum textarea').val(data[3].innerText);
+        $$('#editorForum [name="cgroup"]').val(data[4].innerText);
 
         inst.open();
 
@@ -171,7 +188,7 @@
     function del(fid) {
         mdui.dialog({
             title: '你确定吗？',
-            content: '此操作将删除此版块分区，同时将版块下的所有Topic移动到Fid=1的板块下',
+            content: '此操作将删除此版块分区，同时将版块下的所有Topic移动到 Fid=1 的板块下',
             buttons: [
                 {
                     text: '取消'

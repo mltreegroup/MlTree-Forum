@@ -26,6 +26,7 @@ class Api extends Base
                 }
             } elseif (input('post.type') == 'forum') {
                 $res = Db::transaction(function () {
+                    Db::name('topic')->where('fid',input('post.id'))->setField('fid','1');
                     Db::name('forum')->find(input('post.id'));
                     Db::name('forum')->delete(input('post.id'));
                 });

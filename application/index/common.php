@@ -6,7 +6,7 @@ function outBadge($data)
 {
     $value = '';
     if ($data['tops'] == 1) {
-        $value = ' <span class="mf-badge mf-badge-danger mf-radius mdui-m-r-1">置顶</span>';
+        $value = '<span class="mf-badge mf-badge-danger mf-radius mdui-m-r-1">置顶</span>';
     }
     if ($data['essence'] == 1) {
         $value = $value.'<span class="mf-badge mf-badge-warning mf-radius mdui-m-r-1">精华</span>';

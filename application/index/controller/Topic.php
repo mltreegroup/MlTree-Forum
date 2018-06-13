@@ -24,7 +24,6 @@ class Topic extends Base
         if (empty($topic)) {
             return $this->error('暂未找到此内容！', 'index/index/index');
         }
-        dump(createQr('test'));
         $topic->views += 1;
         $topic->isAutoWriteTimestamp(false)->save();
         $topic->update_time = date('Y-m-d H:i:s',$topic->update_time);

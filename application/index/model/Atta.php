@@ -12,7 +12,7 @@ class Atta extends Model
         {
             $list = \json_decode($files,true);
             foreach ($list as $key => $value) {
-                Db::name('atta')->where('fileName',$value)->update(['tid'=>$tid]);
+                Db::name('atta')->where('fileName',$value)->insert(['tid'=>$tid]);
             }
             return true;
         }else {

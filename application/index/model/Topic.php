@@ -14,17 +14,6 @@ class Topic extends Model
         $data['comment_time'] = $comm;
         return $data;
     }
-    public function getFidAttr($val,$data)
-    {
-        $res = Db::name('forum')->where('fid',$val)->field('name')->find();
-        $data['forumName'] = $res;
-        return $data;
-    }
-    public function getViewsAttr($val,$data)
-    {
-        $this::update(['tid'=>$data['tid'],'views'=>$val+1]);
-        return $val;
-    }
     public function getContentAttr($val)
     {
         return htmlspecialchars_decode($val);
@@ -33,6 +22,10 @@ class Topic extends Model
     {
         $val = strip_tags($val);
         return $val;
+    }
+    public function getUpdateTime($val)
+    {
+        return date('Y-m-d H:i:s',$val);
     }
     public function setUseripAttr($val)
     {

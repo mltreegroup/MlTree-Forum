@@ -12,6 +12,11 @@
     {eq name="option.full" value="1"}
      {include file='template/fullscreen.html' /}
     {/eq}
+    <!-- 设置Theme -->
+    <meta name="setPrimary" content="{$theme.themePrimary}">
+    <meta name="setAccent" content="{$theme.themeAccent}">
+    <meta name="setLayout" content="{$theme.themeLayout}">
+
     <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
     <link rel="stylesheet" href="__CSS__/mdui.min.css">
     <link rel="stylesheet" href="__CSS__/common.css">

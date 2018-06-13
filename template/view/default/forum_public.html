@@ -1,6 +1,7 @@
 {include file="/../template@default/header" title="$option.siteTitle" Keywords="$option.siteKeywords" Des="$option.siteDes"}
 
 <body class="mdui-theme-primary-pink mdui-theme-accent-pink mdui-appbar-with-toolbar">
+    <script src="__JS__/theme.js"></script>
     {if !empty(session('uid'))} {include file="/../template@default/topbar_user"} {else /} {include file="/../template@default/topbar"}
     {/if}
     <div class="mdui-container">
@@ -30,7 +31,7 @@
                 <i class="mdui-icon material-icons">star</i>
             </a>
             {/if} {if authCheck('delete') || authCheck('admin')}
-            <a href="{:url('index/topic/set',['type'=>'delete','tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-blue" title="删除">
+            <a href="JavaScript:;" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-blue" title="删除" onclick="delTopic('{$topicData.tid}')">
                 <i class="mdui-icon material-icons">delete</i>
             </a>
             {/if} {if authCheck('delete') || authCheck('admin')}

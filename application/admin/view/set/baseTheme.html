@@ -1,0 +1,71 @@
+{extend name="public/admin_public"} {block name="content"}
+<div class="mdui-m-a-1 mdui-typo">
+    <form action="">
+        <h1 class="mdui-m-l-3">模板设置
+            <small>Theme</small>
+        </h1>
+        <div class="mdui-m-l-3">
+            <p class="mdui-typo-title">主题色</p>
+            <div class="mdui-row-sm-2 mdui-row-md-3" id="layout-list"></div>
+        </div>
+        <div class="mdui-m-l-3">
+            <p class="mdui-typo-title">主色</p>
+            <div class="mdui-row-sm-2 mdui-row-md-3" id="primary-list"></div>
+        </div>
+        <div class="mdui-m-l-3">
+            <p class="mdui-typo-title">强调色</p>
+            <div class="mdui-row-sm-2 mdui-row-md-3" id="accent-list"></div>
+        </div>
+        <div class="mdui-m-l-3">
+            <p class="mdui-typo-title">允许用户自定义主题色</p>
+            <label class="mdui-switch">
+                {if $theme.discolour == 'true'}
+                <input name="discolour" value="true" type="checkbox" checked/>
+                {else}
+                <input name="discolour" value="true" type="checkbox" />
+                {/if}
+                <i class="mdui-switch-icon"></i>
+            </label>
+        </div>
+    </form>
+    <div class="mdui-m-l-3">
+        <button class="mdui-btn mdui-ripple mdui-color-theme" onclick="theme.reset()">初始化</button>
+        <button id="submit" class="mdui-btn mdui-ripple mdui-color-theme-accent" type="submit">保存配色</button>
+    </div>
+</div>
+
+{/block} {block name="js"}
+<script>
+    var $$ = mdui.JQ;
+
+    $$('#sys').addClass('mdui-collapse-item-open');
+    $$('#baseTheme').addClass('mdui-list-item-active');
+
+    $$('#submit').on('click', function () {
+        var data = $$('form').serialize();
+    console.log(data);
+    
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top',
+                    })
+                } else {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+</script> {/block}

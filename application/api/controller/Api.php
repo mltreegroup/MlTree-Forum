@@ -9,6 +9,10 @@ use app\index\model\User;
 use app\index\model\Mail;
 use think\Db;
 use Auth\Auth;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\LabelAlignment;
+use Endroid\QrCode\QrCode;
+
 
 class Api extends Base
 {
@@ -86,18 +90,26 @@ class Api extends Base
         return json(['code'=>'3001','message'=>$comment,'time'=>time()]);
     }
 
-    public function topiclist($page=2, $t=1)
+    public function topiclist($page=1, $t=1, $fid=0)
     {
         $max = Option::getValue('forumNum');
         switch ($t) {
             case 2:
-                $topicData = topic::page('topic')->where('essence', 1)->page($page, $max)->order('create_Time DESC')->select();
+                if ($fid == 0) {
+                    $topicData = topic::page('topic')->where('essence', 1)->page($page, $max)->order('create_Time DESC')->select();
+                } else {
+                    $topicData = topic::page('topic')->where('essence', 1)->where('fid', $fid)->page($page, $max)->order('create_Time DESC')->select();
+                }
                 $count = topic::page('topic')->where('essence', 1)->count('tid');
                 $pages = ceil($count / $max);
                 break;
             
             default:
-                $topicData = topic::page($page, $max)->order('create_Time DESC')->select();
+                if ($fid == 0) {
+                    $topicData = topic::page($page, $max)->order('create_Time DESC')->select();
+                } else {
+                    $topicData = topic::page($page, $max)->where('fid', $fid)->order('create_Time DESC')->select();
+                }
                 $count = topic::count('tid');
                 $pages = ceil($count / $max);
                 break;
@@ -108,6 +120,7 @@ class Api extends Base
             $value['content'] = strip_tags($value['content']);
             $value['time_format'] = time_format($value['create_time']);
             $value['userData'] = $user->where('uid', $value['uid'])->field('username,avatar')->find();
+            $value['forumName'] = Db::name('forum')->where('fid', $value['fid'])->field('name')->find()['name'];
             $value['Badge'] = outBadge($value);
         }
         return json(['code'=>'0','data'=>$topicData,'pages'=>$pages]);
@@ -152,4 +165,51 @@ class Api extends Base
             }
         }
     }
+
+    public function getValue()
+    {
+        if (request()->isPost()) {
+            $data = input('post.');
+            switch ($data['type']) {
+                case 'topic':
+                    $topicData = topic::get($data['Id']);
+                    if (empty($topicData)) {
+                        return json(['code'=>'-1','message'=>'Topic不存在','time'=>time()]);
+                    }
+                    return json(['code'=>'0','message'=>'Success!','data'=>$topicData,'time'=>time()]);
+
+                    break;
+                case 'comment':
+                    $comment = comment::get($data['Id']);
+                    if (empty($comment)) {
+                        return json(['code'=>'-1','message'=>'Comment不存在','time'=>time()]);
+                    }
+                    return json(['code'=>'0','message'=>'Success!','data'=>$comment,'time'=>time()]);
+
+                    break;
+
+                default:
+                    
+                    break;
+            }
+        }
+    }
+
+    // public function createQr($content=null, $logo=false, $filePath=null)
+    // {
+    //     if (!empty($content)) {
+    //         $qr = new QrCode($content);
+    //         if ($logo == true) {
+    //             $qr->setLogoPath();
+    //             $qr->setLogoWidth(90);
+    //         }
+    //         $qr->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH);
+    //         if (!empty($filePath)) {
+    //             $qr->writeFile($filePath.'/'.md5($content).'.png');
+    //         }
+    //         contentType($qr->getContentType());
+    //         return $qr->writeString();
+
+    //     }
+    // }
 }

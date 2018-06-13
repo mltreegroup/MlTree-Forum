@@ -1,82 +1,123 @@
 {extend name="public/admin_public"} {block name="content"}
 <div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
-    <form>
-        <h1 class="mdui-m-l-3">Topic 管理</h1>
-        <table class="mdui-table mdui-textfield">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>标题</th>
-                    <th>内容</th>
-                    <th>浏览数</th>
-                    <th>评论数</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                {volist name="topicData" id="vo"}
-                <tr>
-                    <td>{$vo.tid}</td>
-                    <td>{$vo.subject}</td>
-                    <td>{$vo.content|raw|strip_tags}</td>
-                    <td>{$vo.views}</td>
-                    <td>{$vo.comment}</td>
-                    <td>
-                        <div class="mdui-btn-group">
-                            <a href="">
-                                <button type="button" class="mdui-btn">
-                                    <i class="mdui-icon material-icons">create</i>
-                                    编辑
-                                </button>
-                            </a>
-                            <a href="">
-                                <button type="button" class="mdui-btn">
-                                    <i class="mdui-icon material-icons">delete</i>
-                                    删除
-                                </button>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                {/volist}
-            </tbody>
-        </table>
+    <h1 class="mdui-m-l-3">Topic 管理</h1>
+    <div class="mdui-textfield mdui-textfield-expandable mdui-m-l-3" style="max-width: 30%">
+        <button class="mdui-textfield-icon mdui-btn mdui-btn-icon">
+            <i class="mdui-icon material-icons">search</i>
+        </button>
+        <form action="" method="post">
+            <input class="mdui-textfield-input" type="text" placeholder="Search" />
+        </form>
+        <button class="mdui-textfield-close mdui-btn mdui-btn-icon">
+            <i class="mdui-icon material-icons">close</i>
+        </button>
+    </div>
+    <table class="mdui-table mdui-textfield">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>标题</th>
+                <th>内容</th>
+                <th class="mdui-table-col-numeric">浏览数</th>
+                <th class="mdui-table-col-numeric">评论数</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {volist name="topicData" id="vo"}
+            <tr id="{$vo.tid}">
+                <td>{$vo.tid}</td>
+                <td>{$vo.subject}</td>
+                <td class="mdui-text-truncate" style="max-height: 10%;max-width: 600px;">{$vo.content|raw|strip_tags}</td>
+                <td class="mdui-table-col-numeric">{$vo.views}</td>
+                <td class="mdui-table-col-numeric">{$vo.comment}</td>
+                <td>
+                    <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="moveTopic('{$vo.tid}')">移动</button>
+                        <a class="layui-btn layui-btn-primary layui-btn-sm" href="{:url('index/topic/update',['tid'=>$vo.tid])}">编辑</a>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="del('{vo.tid}')">删除</button>
+                    </div>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
 
-    </form>
-</div>
+    <div class="mdui-dialog mdui-typo" id="editorTopic">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title">编辑板块</div>
+            <form id="editForm" class="layui-form layui-form-pane mdui-m-y-1">
+                <div class="layui-form-item">
+                    <input type="hidden" name="fid" id="editfid">
+                    <label class="layui-form-label">板块名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" required lay-verify="required" placeholder="请输入板块名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">板块描述</label>
+                    <div class="layui-input-block">
+                        <textarea name="introduce" placeholder="请输入板块描述" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">权限用户组</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="cgroup" required lay-verify="required" placeholder="请输入权限用户祖" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
+                </div>
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="edit">保存</button>
+        </div>
+    </div>
 
-{/block} {block name="js"}
-<script>
-    var $$ = mdui.JQ,
-        data = '';;
+    {/block} {block name="js"}
+    <script>
+        var $$ = mdui.JQ,
+            data = '',
+            ins = new mdui.Dialog('#editorTopic');
 
-    $$('#forum').addClass('mdui-collapse-item-open');
-    $$('#setTopic').addClass('mdui-list-item-active');
+        $$('#forum').addClass('mdui-collapse-item-open');
+        $$('#setTopic').addClass('mdui-list-item-active');
 
-    $$('#submit').on('click', function () {
-        data = $$('form').serialize();
+        $$('#submit').on('click', function () {
+            data = $$('form').serialize();
 
-        $$.ajax({
-            method: 'post',
-            url: '',
-            data: data,
-            dataType: 'json',
-            success: function (res) {
-                if (res.code == 0) {
-                    mdui.snackbar(res.message, {
-                        timeout: 2000,
-                        position: 'top'
-                    })
-                } else {
-                    mdui.snackbar(res.message, {
-                        timeout: 2000,
-                        position: 'top'
-                    })
+            $$.ajax({
+                method: 'post',
+                url: '',
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code == 0) {
+                        mdui.snackbar(res.message, {
+                            timeout: 2000,
+                            position: 'top'
+                        })
+                    } else {
+                        mdui.snackbar(res.message, {
+                            timeout: 2000,
+                            position: 'top'
+                        })
+                    }
+
                 }
+            })
 
-            }
+            return false;
         })
 
-        return false;
-    })
-</script> {/block}
+        function editorTopic(id) {
+            var data = $$(id).find('td');
+
+            $$('#editorTopic [name="fid"]').val(data[1].innerText);
+            $$('#editorTopic [name="name"]').val(data[2].innerText);
+            $$('#editorTopic textarea').val(data[3].innerText);
+            $$('#editorTopic [name="cgroup"]').val(data[4].innerText);
+
+
+        }
+    </script> {/block}

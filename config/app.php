@@ -17,7 +17,7 @@ return [
     // 应用调试模式
     'app_debug'              => true,
     // 应用Trace
-    'app_trace'              => true,
+    'app_trace'              => false,
     // 应用模式状态
     'app_status'             => '',
     // 是否支持多模块
@@ -73,7 +73,7 @@ return [
     // URL伪静态后缀
     'url_html_suffix'        => 'html',
     // URL普通方式参数 用于自动生成
-    'url_common_param'       => false,
+    'url_common_param'       => true,
     // URL参数方式 0 按名称成对解析 1 按顺序解析
     'url_param_type'         => 0,
     // 路由使用完整匹配
@@ -117,4 +117,12 @@ return [
 
     'TMPL_CACHE_ON' => false,
 
+
+    'qqconnect'              => [
+        'appid' => '101418911',
+        'appkey' => '11a554af4d4b6c0baa229575fedd28ab',
+        'callback' => 'https://forum.kingsr.cc/callback.html',
+        'scope' => 'get_user_info,add_share,list_album,add_album,upload_pic,add_topic,add_one_blog,add_weibo,check_page_fans,add_t,add_pic_t,del_t,get_repost_list,get_info,get_other_info,get_fanslist,get_idolist,add_idol,del_idol,get_tenpay_addr',
+        'errorReport' => true
+    ]
 ];

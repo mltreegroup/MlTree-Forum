@@ -27,7 +27,7 @@
             {$topicData.content|raw}
         </div>
         <div class="mdui-m-y-1"></div>
-        <input id="content" type="hidden" name="content" value="" required>
+        <input id="content" type="hidden" name="content" value="{$topicData.content}" required>
         <input id="files" type="hidden" name="files" value=""> {:token()}
         <button id="create" class="mdui-btn mdui-color-theme mdui-float-right">修改主题</button>
     </form>
@@ -50,6 +50,8 @@
         uploadFile: '{:url("index/expand/upload")}',
         uid: "{:session('uid')}",
         createUrl: '{:url("index/topic/update",["tid"=>$topicData.tid])}',
+        sign: '{$topicData.sign}',
     }
     regEditor('def', option)
+    var fileList = new Array();
 </script> {/block}

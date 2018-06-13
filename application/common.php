@@ -10,22 +10,25 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
-function createStr($length){
+use think\Db;
+use Auth\Auth;
+
+function createStr($length)
+{
     $str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';//62个字符
     $strlen = 62;
-    while($length > $strlen){
+    while ($length > $strlen) {
         $str .= $str;
         $strlen += 62;
     }
     $str = str_shuffle($str);
-    return substr($str,0,$length);
+    return substr($str, 0, $length);
 }
 
 function time_format($time)//输出人性化时间
 {
-    if(gettype($time) === 'integer')
-    {
-        $time = date("Y-m-d H:i:s",$time);
+    if (gettype($time) === 'integer') {
+        $time = date("Y-m-d H:i:s", $time);
     }
     $publish_timestamp=strtotime($time);
     $now=date("Y-m-d H:i:s");
@@ -64,8 +67,41 @@ function password_encode($password)
 }
 
 //计算执行耗费时间
-function get_runtime(){
+function get_runtime()
+{
     $ntime=microtime(true);
     $total=$ntime-$GLOBALS['_beginTime'];
-    return round($total,4);
+    return round($total, 4);
+}
+
+function outTopbar()
+{
+    $data = Db::name('forum')->select();
+    $html = '';
+    foreach ($data as $key => $value) {
+        $html .= '<a href="'.url('index/forum/index', ['fid'=>$value['fid']]).'" class="mdui-hidden-xs" title="'.$value['name'].'">'.$value['name'].'</a>';
+    }
+    return $html;
+}
+
+function outBadge($data)
+{
+    $value = '';
+    if ($data['tops'] == 1) {
+        $value = '<span class="mf-badge mf-badge-danger">置顶</span>';
+    }
+    if ($data['essence'] == 1) {
+        $value = $value.'<span class="mf-badge mf-badge-warning">精华</span>';
+    }
+
+    return $value;
+}
+
+function authCheck($name, $uid = 0, $relation = 'or')
+{
+    $auth = new Auth();
+    if ($uid == 0) {
+        $uid = session('uid');
+    }
+    return $auth->check($name, $uid, $relation);
 }

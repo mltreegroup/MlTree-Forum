@@ -14,7 +14,6 @@
 .mf-panel {
   margin-top: 0px;
   margin-bottom: 20px;
-  background-color: #fff;
   /* border: 1px solid  #E0E0E0; */
   border-radius: 4px;
   overflow: hidden;
@@ -36,15 +35,10 @@
 .mf-panel-title {
   margin: 0;
   font-size: 100%;
-  color: inherit;
-}
-.mf-panel-title > a {
-  color: inherit;
 }
 /* Panel footer */
 .mf-panel-footer {
   padding: 0.75rem 1rem;
-  background-color: #f0f0f0;
   border-top: 1px solid #ccc;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -56,8 +50,9 @@
 .mf-badge {
   display: inline-block;
   min-width: 10px;
+  margin: 0.1rem;
   padding: 0.25em 0.625em;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: bold;
   color: #fff;
   line-height: 1;
@@ -100,8 +95,55 @@ a.mf-badge:focus {
 .mf-badge-danger {
   background-color: #E54D42;
 }
-.mf-comment-bd header{
-	font-size: 12px;
-	font-weight: bold;
-	border-bottom: 1px solid #BDBDBD;
+.attaList{
+  margin: 5px 5px;
+  padding: 0;
+  border: 1px solid #BDBDBD;
+}
+.attaList header{
+  margin-left: 10px;
+  margin-bottom: 0px;
+  padding: 0;
+  font-size: 20px;
+  font-weight: 300;
+}
+.attaList ul{
+  margin-top: 0px;
+  padding-left: 1em;
+}
+.attaList a{
+  margin: 0;
+}
+.mf-comment{
+  padding: 30px;
+  border-left: 1px solid rgba(0,0,0,.12);
+  border-right: 1px solid rgba(0,0,0,.12);
+  border-bottom: 1px solid rgba(0,0,0,.12);
+}
+.mf-comment-info{
+  max-height:40px;
+  display: inline-block;
+}
+.mf-comment-info .avatar{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-size: 40px 40px;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  float: left;
+}
+.mf-comment-line{
+  margin-left: 2%;
+}
+.mf-comment-time{
+  font-size: 13px;
+  color:rgba(0,0,0,.54);
+  margin-left: 2%
+}
+.mf-comment-content{
+  width: 100%;
+  height: 100%;
+  padding-top:20px;
+  padding-bottom: 2%
 }

@@ -1,0 +1,39 @@
+{extend name="../template@default/forum_public"} {block name="content"}
+<div class="mdui-col-xs-12">
+    <form action="{:url('search')}" method="GET">
+        <div class="mdui-textfield mdui-textfield-floating-label">
+            <i class="mdui-icon material-icons">search</i>
+            <label class="mdui-textfield-label">Search</label>
+            <input class="mdui-textfield-input" type="search" name="keyword" />
+        </div>
+    </form>
+    <div class="layui-card">
+        <div class="layui-card-body">
+             结果：找到“{$keyword}”相关内容 {$count} 个
+        </div>
+    </div>
+</div>
+<div class="mdui-col-xs-12">
+    <ul class="mdui-list">
+        {volist name="data" id="vo"}
+        <li class="mdui-list-item mdui-ripple">
+            <div class="mdui-list-item-content">
+                <a class="mdui-list-item-title" href="{:url('index/topic/index',['tid'=>$vo.tid])}">{$vo.subject} {:outBadge($vo)}</a>
+                <div class="mdui-list-item-text mdui-list-item-one-line">{$vo.content|raw}</div>
+                <div class="mdui-list-item-text">
+                    <a href="{:url('index/user/index',['uid'=>$vo.uid])}">{$vo.userData.username}</a>
+                    <span title="{$vo.create_time}"> {$vo.time_format}</span>
+                    <span class="mdui-float-right">
+                        <i class="mdui-icon material-icons">looks</i>{$vo.views}</span>
+                    <span class="mdui-float-right">
+                        <i class="mdui-icon material-icons">comment</i>{$vo.comment}</span>
+                </div>
+            </div>
+        </li>
+        <li class="mdui-divider-inset mdui-m-y-0"></li>
+        {/volist}
+
+    </ul>
+</div>
+
+{/block}{block name="js"} {/block}

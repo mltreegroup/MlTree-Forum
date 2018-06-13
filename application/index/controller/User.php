@@ -5,6 +5,7 @@ use app\index\controller\Base;
 use app\index\model\User as userModel;
 use app\index\model\Option;
 use think\Db;
+use connect\qqconnect\QC;
 
 class User extends Base
 {
@@ -85,7 +86,7 @@ class User extends Base
                     session('username', $user->username);
                     Db::name('user')->where('uid', $user->uid)->setInc('logins');
                     //增加登录次数值
-                    return json(['code'=>'0','message'=>'登录成功！欢迎回来……','url'=>url('index/user/index')]);
+                    return json(['code'=>'0','message'=>'登录成功！欢迎回来……','url'=>'/user.html']);
                 } else {
                     return ['code'=>'-1','message'=>'用户名或密码错误！'];
                 }
@@ -102,17 +103,13 @@ class User extends Base
             return redirect('index');
         }
         if (!empty(input('post.'))) {
-            $data = input('post.','','strip_tags,htmlspecialchars');
-
+            $data = input('post.', '', 'strip_tags,htmlspecialchars');
             $res = userModel::register($data);
-
-            if($res[0])
-            {
-                return json(['code'=>0,'message'=>'注册成功！正在前往登录界面……','time'=>time()]);
-            }else{
+            if ($res[0]) {
+                return json(['code'=>0,'message'=>'注册成功！正在前往登录界面……','url'=>url('index/user/login'),'time'=>time()]);
+            } else {
                 return json(['code'=>'-1','message'=>$res[1],'time'=>time()]);
             }
-             
         }
         
         return view('reg', [
@@ -129,5 +126,59 @@ class User extends Base
             return $this->error('当前无需退出呢！');
         }
     }
-    
+
+    public function qqLogin()
+    {
+        $qc = new QC();
+        $res = $qc->qq_login();
+        return redirect($res[0]);
+    }
+
+    public function callback($code, $state)
+    {
+        $qc = new QC();
+        $qc->qq_callback();    // access_token
+        $qc->get_openid();     // openid
+        $userInfo = userModel::where('qqconnectId', session('openid'))->find();
+        if (!empty($userInfo)) {
+            session('uid', $userInfo->uid);
+            session('gid', $userInfo->gid);
+            session('username', $userInfo->username);
+            $userInfo->setInc('logins');
+            $userInfo->save();
+            $this->assign('userData', $userInfo);
+            return $this->success('欢迎回来,'.$userInfo->username, url('index/user/index'));
+        } else {
+            if (Option::getValue('allowQQreg') == 1) {
+                return view('qqconnect', [
+                    'option' => $this->siteOption('注册'),
+                ]);
+            } else {
+                return $this->error('尚未注册，请注册后绑定QQ再使用QQ登录！', 'index/user/reg');
+            }
+        }
+    }
+
+    public function qqconnect($type = '1')
+    {
+        if ($type == '1') {
+            if (!empty(input('post.'))) {
+                $data = input('post.', '', 'strip_tags,htmlspecialchars');
+                $info = userModel::where('email', $data['email'])->find();
+                if (empty($info)) {
+                    return json(['code'=>'-1','message'=>'用户不存在或错误','time'=>time()]);
+                } else {
+                    $info->qqconnectId = session('openid');
+                    $info->setInc('logins');
+                    $info->save();
+                    session('uid', $info->uid);
+                    session('gid', $info->gid);
+                    session('username', $info->username);
+                    return json(['code'=>0,'message'=>'绑定成功，正在跳转……','url'=>url('index\user\index'),'time'=>time()]);
+                }
+            }
+        }else{
+            
+        }
+    }
 }

@@ -19,6 +19,15 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>闭站提示</td>
+                    <td>
+                        <textarea name="closeContent" id="closeContent" cols="30" rows="3" class="mdui-textfield-input">{$base.closeContent|raw}</textarea>
+                    </td>
+                    <td>
+                        设置论坛是否可以访问，关闭后仅『超级管理员』权限可以访问
+                    </td>
+                </tr>
+                <tr>
                     <td>允许注册</td>
                     <td>
                         <label class="mdui-switch">
@@ -30,6 +39,20 @@
                     </td>
                     <td>
                         是否允许新用户注册
+                    </td>
+                </tr>
+                <tr>
+                    <td>允许QQ注册</td>
+                    <td>
+                        <label class="mdui-switch">
+                            {if $reg.allowQQreg == 1}
+                            <input name="allowQQreg" type="checkbox" checked/> {else}
+                            <input name="allowQQreg" type="checkbox" /> {/if}
+                            <i class="mdui-switch-icon"></i>
+                        </label>
+                    </td>
+                    <td>
+                        是否允许新用户直接使用QQ注册
                     </td>
                 </tr>
                 <tr>
@@ -62,7 +85,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>邮件激活</td>
+                    <td>验证邮件验证码</td>
                     <td>
                         <label class="mdui-checkbox">
                             {if $reg.regMail == 1}
@@ -72,7 +95,7 @@
                         </label>
                     </td>
                     <td>
-                        启用后，新用户注册需要点击邮件中的激活链接才能完成。请确认邮件发送设置是否正确，否则激活邮件无法送达
+                        启用后，新用户注册需要凭借邮件中的验证码才能注册。
                     </td>
                 </tr>
                 <tr>

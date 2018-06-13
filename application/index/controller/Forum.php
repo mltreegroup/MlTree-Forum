@@ -9,17 +9,12 @@ use app\index\model\Option;
 
 class Forum extends Base
 {
-    public function forumlist()
+    public function index($fid = 1)
     {
-        $topicData = topic::limit(Option::getValue('forumNum'))->order('create_Time DESC')->toJson();
-        return $topicData;
-    }
+        $data = Db::name('topic')->where('fid',$fid)->count();
+        $this->assign('fid', $fid);
+        $this->assign('option', $this->siteOption());
 
-    public function getEssen()
-    {
-        $topicData = topic::where('essence',1)->limit(Option::getValue('forumNum'))->order('create_Time DESC')->toJson();
-        return $topicData;
+        return view();
     }
-
-    
 }

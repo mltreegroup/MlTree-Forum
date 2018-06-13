@@ -15,6 +15,7 @@ class Base extends Controller
         $user = Db::name('user')->where('uid',session('uid'))->find();
         $this->assign('userData',$user);
         $this->assign('option',Option::getValues());
+        $this->assign('theme', Option::getValues('theme'));
         $auth = new auth();
         if (empty($uid)) {
             return $this->error('无权限！',url('index/index/index'));

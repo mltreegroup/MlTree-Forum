@@ -5465,7 +5465,7 @@ body.mdui-locked {
 }
 .mdui-typo blockquote {
   padding-left: 1em;
-  margin: 1em 3em 1em 2em;
+  margin: 1em 3em 1em 0em;
   font-weight: 400;
   border-left: 4px solid rgba(0, 0, 0, .12);
 }
@@ -10448,7 +10448,6 @@ select.mdui-select[multiple] option:last-child {
   font-size: 16px;
   font-weight: 400;
   line-height: 20px;
-
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;

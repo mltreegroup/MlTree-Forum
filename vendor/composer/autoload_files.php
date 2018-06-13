@@ -6,5 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    '320cde22f66dd4f5d3fd621d3e88b98f' => $vendorDir . '/symfony/polyfill-ctype/bootstrap.php',
+    '626dcc41390ebdaa619faa02d99943b0' => $vendorDir . '/khanamiryan/qrcode-detector-decoder/lib/common/customFunctions.php',
     '1cfd2761b63b0a29ed23657ea394cb2d' => $vendorDir . '/topthink/think-captcha/src/helper.php',
 );

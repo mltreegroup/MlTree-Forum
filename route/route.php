@@ -9,10 +9,13 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-Route::rule('/', 'index');
-Route::rule('topic/:tid', 'index/topic/index');
-Route::rule('create', 'index/topic/create');
-Route::rule('user/[:uid]', 'index/user/index');
+Route::any('/', 'index');
+Route::any('topic/:tid', 'index/topic/index');
+Route::any('forum/[:fid]', 'index/forum/index');
+Route::any('user/[:uid]', 'index/user/index');
+Route::any('error', 'index/index/_error');
+Route::any('golink/:url', 'index/expand/golink');
+Route::any('callback/[:code]/[:state]', 'index/user/callback');
 
 return [
 

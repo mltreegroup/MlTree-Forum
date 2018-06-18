@@ -5,8 +5,8 @@
     <div class="mdui-card mdui-m-t-1">
         <div class="mdui-card-media">
             <div class="mdui-card-primary">
-                <div class="mdui-card-primary-title">注册</div>
-                <div class="mdui-card-primary-subtitle">Register</div>
+                <div class="mdui-card-primary-title">重置密码</div>
+                <div class="mdui-card-primary-subtitle">Reset Password</div>
             </div>
         </div>
 
@@ -16,23 +16,21 @@
                     <label class="mdui-textfield-label">邮箱</label>
                     <input id="email" name="email" class="mdui-textfield-input" type="email" />
                 </div>
-                <div class="mdui-textfield mdui-textfield-floating-label">
-                    <label class="mdui-textfield-label">用户名</label>
-                    <input id="username" name="username" class="mdui-textfield-input" type="text"/>
-                </div>
-                <div class="mdui-textfield mdui-textfield-floating-label">
-                    <label class="mdui-textfield-label">密码</label>
-                    <input name="password" class="mdui-textfield-input" type="password" />
-                </div>
-                <div class="mdui-textfield mdui-textfield-floating-label">
-                    <label class="mdui-textfield-label">确认密码</label>
-                    <input name="repassword" class="mdui-textfield-input" type="password" />
-                </div>
 
                 <div class="mdui-textfield mdui-textfield-floating-label">
                     <label class="mdui-textfield-label">邮箱验证码</label>
                     <input name="code" class="mdui-textfield-input" type="text" />
-                    <button type="button" class="mdui-btn mdui-m-t-1 mdui-color-theme mdui-ripple" id="getCode">获取验证码</button>
+                    <button type="button" class="mdui-btn mdui-m-t-1 mdui-color-theme mdui-ripple" id="getResetCode">获取验证码</button>
+                </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">重置密码</label>
+                    <input name="password" class="mdui-textfield-input" type="password" />
+                </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">确认重置密码</label>
+                    <input name="repassword" class="mdui-textfield-input" type="password" />
                 </div>
 
                 <div class="mdui-textfield mdui-textfield-floating-label">
@@ -43,8 +41,8 @@
                 </div>
 
                 <div class="mdui-textfield mdui-textfield-floating-label">
-                    <button class="mdui-btn mdui-btn-block mdui-color-theme mdui-ripple" lay-submit type="submit" lay-filter="register">注册</button>
-                    <a href="{:url('Reset')}" class="mdui-btn mdui-float-right mdui-m-y-1 mdui-ripple">忘记密码？</a>
+                    <button class="mdui-btn mdui-btn-block mdui-color-theme mdui-ripple" lay-submit type="submit" lay-filter="reset">确认修改</button>
+                    <a href="" class="mdui-btn mdui-float-right mdui-m-y-1 mdui-ripple">忘记密码？</a>
                     <a href="{:url('login')}" class="mdui-btn mdui-float-right mdui-m-y-1 mdui-ripple">用户登录</a>
                 </div>
             </form>
@@ -59,11 +57,11 @@
         var form = layui.form;
         var $$ = mdui.JQ;
 
-        form.on('submit(register)', function (data) {
+        form.on('submit(reset)', function (data) {
 
             $$.ajax({
                 method: 'post',
-                url: '{:url("reg")}',
+                url: '{:url("Reset")}',
                 data: data.field,
                 dataType: 'json',
                 success: function (data) {

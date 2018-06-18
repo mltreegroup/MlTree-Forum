@@ -51,9 +51,6 @@ class User extends Base
             return \redirect('index\user\login');
         }
         if (!empty(input('post.'))) {
-            if (empty(session('salt'))) {
-                return ['code'=>'-1','message'=>'非法操作！'];
-            }
             if (input('post.type') == 'pass') {
                 $user = userModel::get(session('uid'));
                 if (password_verify(input('post.password'), $user->password)) {
@@ -127,11 +124,31 @@ class User extends Base
         }
     }
 
+    public function Reset()
+    {
+        if (!empty(session('uid'))) {
+            return redirect('index');
+        }
+
+        if (request()->isPost()) {
+            $data = input('post.', '', 'strip_tags,htmlspecialchars');
+            $res = userModel::Reset($data);
+            if ($res[0]) {
+                return json(['code'=>0,'message'=>'密码重置完成，请使用新密码登录。','url'=>url('index/user/login'),'time'=>time()]);
+            } else {
+                return json(['code'=>'-1','message'=>$res[1],'time'=>time()]);
+            }
+        }
+        return view('reset',[
+            'option' => $this->siteOption('重置密码'),
+        ]);
+    }
+
     public function qqLogin()
     {
         $qc = new QC();
         $res = $qc->qq_login();
-        return redirect($res[0]);
+        return redirect($res);
     }
 
     public function callback($code, $state)
@@ -177,8 +194,7 @@ class User extends Base
                     return json(['code'=>0,'message'=>'绑定成功，正在跳转……','url'=>url('index\user\index'),'time'=>time()]);
                 }
             }
-        }else{
-            
+        } else {
         }
     }
 }

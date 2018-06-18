@@ -1,8 +1,6 @@
-.idea
+/.idea
+/.vscode
+/vendor
 *.log
-.vscode/*
-public/uploads/
-public/avatar/
-public/.well-known/
-.vscode/ftp-sync.json
-/runtime
+thinkphp
+.env

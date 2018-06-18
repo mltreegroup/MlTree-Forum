@@ -1,0 +1,73 @@
+{extend name="frame/forum_public"} {block name="content"}
+<div class="mdui-col-xs-12">
+    <form action="" method="post" class="layui-form">
+        <div class="mdui-card">
+
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">search</i>
+                <label class="mdui-textfield-label">搜索相关帖子</label>
+                <input class="mdui-textfield-input">
+            </div>
+            
+        </div>
+    </form>
+
+    <div class="mdui-row mdui-table-fluid">
+        <table class="mdui-table">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>帖子标题</td>
+                    <td>发帖人</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>测试标题</td>
+                    <td>十载北林</td>
+                    <td>
+                        <button>查看</button>
+                        <button>编辑</button>
+                        <button>删除</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{/block} {block name="js"}
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form;
+        var $$ = mdui.JQ;
+
+        form.on('submit(login)', function (data) {
+
+            $$.ajax({
+                method: 'post',
+                url: '{:url("login")}',
+                data: data.field,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg(data.message, {
+                            icon: 1,
+                            end: function () {
+                                window.location.href = data.url;
+                            }
+                        });
+                    } else {
+                        layer.msg(data.message, { icon: 5 });
+                    }
+
+                },
+            })
+
+            return false;
+        })
+    });
+</script> {/block}

@@ -1,20 +1,9 @@
 {extend name="../template@default/forum_public"} {block name="content"}
 <!-- 置顶的内容 -->
-<div class="mdui-col-xs-12 mdui-m-y-1">
-    <div class="mdui-card">
-        <div class="mdui-card-media">
-            <img src="__IMG__/card.png" alt="" height="100">
-            <div class="mdui-card-media-covered mdui-card-media-covered-top">
-                <div class="mdui-card-primary">
-                    <div class="mdui-card-primary-title">置顶</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mdui-card-content">
-
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-m-y-1">
             <ul class="mdui-list">
-                {volist name="tops" id="vo"}
+                <li class="mdui-subheader">置顶</li>
+                <div class="mdui-shadow-1">{volist name="tops" id="vo"}
                 <li class="mdui-list-item mdui-ripple">
                     <div class="mdui-list-item-avatar">
                         <img src="{$vo.userData.avatar}" alt="{$vo.userData.username}" title="{$vo.userData.username}">
@@ -33,42 +22,33 @@
                     </div>
                 </li>
                 <li class="mdui-divider-inset mdui-m-y-0"></li>
-                {/volist}
-
+                {/volist}</div>
+                <li class="mdui-subheader">所有帖子</li>
             </ul>
+            <div class="mdui-shadow-1">
+            <div class="mdui-tab mdui-tab-centered" mdui-tab>
+                <a href="#topic-all" class="mdui-ripple">综合</a>
+                <a href="#topic-essence" class="mdui-ripple">精华</a>
+            </div>
 
-        </div>
-    </div>
-</div>
+            <div id="topic-all">
+                <ul class="mdui-list" id="topic-cps">
 
-<!-- 论坛最新内容列表页 -->
-<div class="mdui-col-xs-12 mdui-col-sm-8">
+                </ul>
+            </div>
 
-    <!-- 最新内容 -->
+            <div id="topic-essence">
+                <ul class="mdui-list" id="topic-ess">
 
-    <div class="mdui-tab" mdui-tab>
-        <a href="#topic-all" class="mdui-ripple">综合</a>
-        <a href="#topic-essence" class="mdui-ripple">精华</a>
-    </div>
-
-    <div id="topic-all">
-        <ul class="mdui-list" id="topic-cps">
-
-        </ul>
-    </div>
-
-    <div id="topic-essence">
-        <ul class="mdui-list" id="topic-ess">
-
-        </ul>
-    </div>
-
+                </ul>
+            </div>
+            </div>
 </div>
 {include file="/../template@default/right_tool"} {/block}{block name="js"}
 <script src="__JS__/mltree-flow.js"></script>
 <script>
     //调用flow加载
     var flow = new mfFlow('index');
-    flow.flow();    
+    flow.flow();
 </script>
 {/block}

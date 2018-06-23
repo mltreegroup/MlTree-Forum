@@ -13,7 +13,6 @@ use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\LabelAlignment;
 use Endroid\QrCode\QrCode;
 
-
 class Api extends Base
 {
     public function index()
@@ -41,22 +40,21 @@ class Api extends Base
 
     public function del($type = 'topic', $id=0, $uid=0)
     {
-        if (empty($uid)) {
+        if (empty($uid) && empty(session('uid'))) {
             return json(['code'=>'1000','message'=>'尚未登录','time'=>time()]);
+        } elseif ($uid == 0) {
+            $uid = session('uid');
         }
         switch ($type) {
             case 'topic':
                 $auth = new Auth;
                 if ($auth->check('delete', $uid) || $auth->check('admin', $uid)) {
-                    $res = Db::transaction(function () {
-                        Db::name('topic')->find($id);
-                        Db::name('topic')->delete($id);
+                    Db::transaction(function () {
+                        Db::name('topic')->find((int)input('id'));
+                        Db::name('topic')->delete((int)input('id'));
                     });
-                    if ($res) {
-                        return json(['code'=>'3003','message'=>'删除成功','time'=>time()]);
-                    } else {
-                        return json(['code'=>'3004','message'=>'删除失败','time'=>time()]);
-                    }
+                } else {
+                    return json(['code'=>'3004','message'=>'无权限','time'=>time()]);
                 }
                 break;
             
@@ -166,6 +164,45 @@ class Api extends Base
         }
     }
 
+    public function getResetCode()
+    {
+        if (request()->isPost()) {
+            $email = input('post.email');
+
+            $res = user::where('email', $email)->find();
+            if (empty($res)) {
+                return json(['code'=>'-1','message'=>'邮箱不存在！']);
+            }
+
+            $time = session('resetMail');
+            if ($time > time()) {
+                $time = $time-time();
+                return json(['code'=>'-1','message'=>'还有'.$time.'后可以再次获取','time'=>time(),'resetTime'=>session('resetMail')]);
+            }
+
+            $semail = new Mail;
+            $code = createStr(6);
+            $arry = [
+                                '{siteTitle}' => Option::getValue('siteTitle'),
+                                '{userName}' => $res->username,
+                                '{code}' => $code,
+                            ];
+            $title = Option::getValue('reset_mail_title');
+            $content = Option::getValue('reset_mail_content');
+            $title = strtr($title, $arry);
+            $content = strtr($content, $arry);
+            $res = $semail->send($email, $res->username, $title, $content);
+            
+            if ($res !== true) {
+                return json(['code'=>'-1','message'=>$semail->errorMsg,'time'=>time(),$email]);
+            } else {
+                session('resetMail', time()+60);
+                session('resetCode', $code);
+                return json(['code'=>'0','message'=>'发送成功！','time'=>time(),'resetTime'=>session('resetMail')]);
+            }
+        }
+    }
+
     public function getValue()
     {
         if (request()->isPost()) {
@@ -194,22 +231,4 @@ class Api extends Base
             }
         }
     }
-
-    // public function createQr($content=null, $logo=false, $filePath=null)
-    // {
-    //     if (!empty($content)) {
-    //         $qr = new QrCode($content);
-    //         if ($logo == true) {
-    //             $qr->setLogoPath();
-    //             $qr->setLogoWidth(90);
-    //         }
-    //         $qr->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH);
-    //         if (!empty($filePath)) {
-    //             $qr->writeFile($filePath.'/'.md5($content).'.png');
-    //         }
-    //         contentType($qr->getContentType());
-    //         return $qr->writeString();
-
-    //     }
-    // }
 }

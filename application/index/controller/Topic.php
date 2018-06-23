@@ -76,10 +76,6 @@ class Topic extends Base
                 
                 $topic->save($data);
                 $tid = $topic->tid;
-
-                //设置附件信息
-                // $re = Atta::setCreate($tid, input('post.files'));
-                //set user topics
                 $user->topics = $user->topics + 1;
                 $user->save();
 

@@ -23,22 +23,34 @@
             <div class="mdui-textfield mdui-textfield-floating-label">
                 <i class="mdui-icon material-icons">search</i>
                 <label class="mdui-textfield-label">Search</label>
-                <input class="mdui-textfield-input" type="search" name="keyword"/>
+                <input class="mdui-textfield-input" type="search" name="keyword" />
             </div>
         </form>
     </div>
 
     <!-- 友情链接 -->
     <div class="mdui-m-b-1 ml-friend-panel">
-        <header>
-            <h5>友情链接</h5>
+        <header class="mf-panel-hd">
+            <span class="mdui-typo-title">友情链接</span>
         </header>
-        {volist name="links" id="vo"}
-        <div class="mdui-chip">
-            <img class="mdui-chip-icon" src="{$vo.picurl|default='__IMG__/link.jpg'}" />
-            <a class="mdui-chip-title" href="{$vo.url}" target="_blank">{$vo.title}</a>
+        <div class="mf-panel-bd">
+            {volist name="links" id="vo"}
+            <div class="mdui-chip">
+                <img class="mdui-chip-icon" src="{$vo.picurl|default='__IMG__/link.jpg'}" />
+                <a class="mdui-chip-title" href="{$vo.url}" target="_blank">{$vo.title}</a>
+            </div>
+            {/volist}
         </div>
-        {/volist}
+    </div>
+
+    <div class="mdui-m-b-1 ml-friend-panel">
+        <header class="mf-panel-hd">
+            <span class="mdui-typo-title">捐助我</span>
+        </header>
+        <div class="mf-panel-bd">
+            <img src="https://dn-coding-net-production-static.qbox.me/56d0ba7d-4881-4719-bc57-9cb50973e47c.jpg" alt="支付宝">
+            <img src="https://dn-coding-net-production-static.qbox.me/70c51181-537a-4974-ba29-4b67119ebfc3.png" alt="微信">
+        </div>
     </div>
 
 </div>

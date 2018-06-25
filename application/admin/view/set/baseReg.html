@@ -8,9 +8,7 @@
                     <td>允许访问</td>
                     <td>
                         <label class="mdui-switch">
-                            {if $base.siteStatus == 1}
-                            <input name="siteStatus" type="checkbox" checked/> {else}
-                            <input name="siteStatus" type="checkbox" /> {/if}
+                            <input name="siteStatus" value="1" type="checkbox" {eq name="base.siteStatus" value="1"}checked{/eq}/>
                             <i class="mdui-switch-icon"></i>
                         </label>
                     </td>
@@ -31,9 +29,7 @@
                     <td>允许注册</td>
                     <td>
                         <label class="mdui-switch">
-                            {if $reg.regStatus == 1}
-                            <input name="regStatus" type="checkbox" checked/> {else}
-                            <input name="regStatus" type="checkbox" /> {/if}
+                            <input name="regStatus" type="checkbox" value="1" {eq name="reg.regStatus" value="1"}checked{/eq}/>
                             <i class="mdui-switch-icon"></i>
                         </label>
                     </td>
@@ -45,9 +41,7 @@
                     <td>允许QQ注册</td>
                     <td>
                         <label class="mdui-switch">
-                            {if $reg.allowQQreg == 1}
-                            <input name="allowQQreg" type="checkbox" checked/> {else}
-                            <input name="allowQQreg" type="checkbox" /> {/if}
+                            <input name="allowQQreg" type="checkbox" value="1" {eq name="reg.allowQQreg" value="1"}checked{/eq}/>
                             <i class="mdui-switch-icon"></i>
                         </label>
                     </td>
@@ -59,9 +53,7 @@
                     <td>手机版默认全屏</td>
                     <td>
                         <label class="mdui-switch">
-                            {if $base.full == 1}
-                            <input name="full" type="checkbox" checked/> {else}
-                            <input name="full" type="checkbox" /> {/if}
+                            <input name="full" type="checkbox" value="1" {eq name="base.full" value="1"}checked{/eq}/>
                             <i class="mdui-switch-icon"></i>
                         </label>
                     </td>
@@ -88,9 +80,7 @@
                     <td>验证邮件验证码</td>
                     <td>
                         <label class="mdui-checkbox">
-                            {if $reg.regMail == 1}
-                            <input name="regMail" type="checkbox" checked/> {else}
-                            <input name="regMail" type="checkbox" /> {/if}
+                            <input name="regMail" type="checkbox" value="1" {eq name="reg.regMail" value="1"}checked{/eq}/>
                             <i class="mdui-checkbox-icon"></i>
                         </label>
                     </td>

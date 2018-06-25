@@ -1,48 +1,5 @@
 [
     {
-        "name": "lincanbin/material-design-avatars",
-        "version": "1.4",
-        "version_normalized": "1.4.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/lincanbin/Material-Design-Avatars.git",
-            "reference": "8e582843d9b34ad697b040cfcb013bb5a9e6288e"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/lincanbin/Material-Design-Avatars/8e582843d9b34ad697b040cfcb013bb5a9e6288e.zip",
-            "reference": "8e582843d9b34ad697b040cfcb013bb5a9e6288e",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2017-11-04T08:21:34+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Md\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache License Version 2.0"
-        ],
-        "authors": [
-            {
-                "name": "lincanbin",
-                "email": "lincanbin@hotmail.com"
-            }
-        ],
-        "description": "Create material deisgn avatars for users just like Gmail or Messager in Android.",
-        "keywords": [
-            "avatar",
-            "material design",
-            "templating"
-        ]
-    },
-    {
         "name": "phpmailer/phpmailer",
         "version": "v6.0.5",
         "version_normalized": "6.0.5.0",
@@ -112,17 +69,17 @@
     },
     {
         "name": "topthink/framework",
-        "version": "v5.1.16",
-        "version_normalized": "5.1.16.0",
+        "version": "v5.1.17",
+        "version_normalized": "5.1.17.0",
         "source": {
             "type": "git",
             "url": "https://github.com/top-think/framework.git",
-            "reference": "e0a8bdc52957a8f9774353fbfa0b9fd6ee206188"
+            "reference": "b851761979a219c92285fee691030aca50bcb5bc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/top-think/framework/e0a8bdc52957a8f9774353fbfa0b9fd6ee206188.zip",
-            "reference": "e0a8bdc52957a8f9774353fbfa0b9fd6ee206188",
+            "url": "https://files.phpcomposer.com/files/top-think/framework/b851761979a219c92285fee691030aca50bcb5bc.zip",
+            "reference": "b851761979a219c92285fee691030aca50bcb5bc",
             "shasum": ""
         },
         "require": {
@@ -138,7 +95,7 @@
             "sebastian/phpcpd": "2.*",
             "squizlabs/php_codesniffer": "2.*"
         },
-        "time": "2018-06-08T04:10:59+00:00",
+        "time": "2018-06-17T14:11:40+00:00",
         "type": "think-framework",
         "installation-source": "dist",
         "notification-url": "https://packagist.org/downloads/",
@@ -203,6 +160,48 @@
             }
         ],
         "description": "captcha package for thinkphp5"
+    },
+    {
+        "name": "topthink/think-image",
+        "version": "v1.0.7",
+        "version_normalized": "1.0.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/top-think/think-image.git",
+            "reference": "8586cf47f117481c6d415b20f7dedf62e79d5512"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/top-think/think-image/8586cf47f117481c6d415b20f7dedf62e79d5512.zip",
+            "reference": "8586cf47f117481c6d415b20f7dedf62e79d5512",
+            "shasum": ""
+        },
+        "require": {
+            "ext-gd": "*"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "4.8.*",
+            "topthink/framework": "^5.0"
+        },
+        "time": "2016-09-29T06:05:43+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "think\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "yunwuxin",
+                "email": "448901948@qq.com"
+            }
+        ],
+        "description": "The ThinkPHP5 Image Package"
     },
     {
         "name": "topthink/think-installer",

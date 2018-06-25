@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit83069068e093ade679f920b1c5422ae3
+class ComposerStaticInit42482ef7d6a06f67f1e097290e7a8e0e
 {
     public static $files = array (
         '1cfd2761b63b0a29ed23657ea394cb2d' => __DIR__ . '/..' . '/topthink/think-captcha/src/helper.php',
@@ -15,6 +15,7 @@ class ComposerStaticInit83069068e093ade679f920b1c5422ae3
         array (
             'think\\composer\\' => 15,
             'think\\captcha\\' => 14,
+            'think\\' => 6,
         ),
         'a' => 
         array (
@@ -23,10 +24,6 @@ class ComposerStaticInit83069068e093ade679f920b1c5422ae3
         'P' => 
         array (
             'PHPMailer\\PHPMailer\\' => 20,
-        ),
-        'M' => 
-        array (
-            'Md\\' => 3,
         ),
     );
 
@@ -39,6 +36,10 @@ class ComposerStaticInit83069068e093ade679f920b1c5422ae3
         array (
             0 => __DIR__ . '/..' . '/topthink/think-captcha/src',
         ),
+        'think\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/topthink/think-image/src',
+        ),
         'app\\' => 
         array (
             0 => __DIR__ . '/../..' . '/application',
@@ -47,17 +48,13 @@ class ComposerStaticInit83069068e093ade679f920b1c5422ae3
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
-        'Md\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/lincanbin/material-design-avatars/src',
-        ),
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit83069068e093ade679f920b1c5422ae3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit83069068e093ade679f920b1c5422ae3::$prefixDirsPsr4;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit42482ef7d6a06f67f1e097290e7a8e0e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit42482ef7d6a06f67f1e097290e7a8e0e::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }

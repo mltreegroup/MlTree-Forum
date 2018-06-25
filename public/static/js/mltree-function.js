@@ -10,7 +10,7 @@
 
 var $$ = mdui.JQ;
 var time = 60;
-var re_cid = 0; 
+var re_cid = 0;
 
 $$('#getCode').on('click', function () {
 
@@ -63,7 +63,7 @@ function time_reg() {
 
 $$('#getResetCode').on('click', function () {
 
-    if ($$('#email').val() == ''){
+    if ($$('#email').val() == '') {
         mdui.snackbar({
             message: '邮箱不得为空',
             position: 'top'
@@ -157,6 +157,7 @@ function recomment(_id) {
     $$('#reply').trigger('click');
     re_cid = data.cid;
     var html = '<p>回复 <a href="/user/' + data.uid + '.html"> @' + data.username + ' </a>：<a href="#reply-content-' + data.cid + '" >#' + data.cid + '</a></p>';
+    $$('#recid').val(data.cid);
     if (editor.txt.text() == null || editor.txt.text() == '') {
         editor.txt.html(html);
     } else {

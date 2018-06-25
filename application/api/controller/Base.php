@@ -24,7 +24,7 @@ class Base extends Controller
 
     public function siteOption($titleSign = null)
     {
-        $siteData = \app\index\model\Option::getValues(['base']);
+        $siteData = Option::getValues(['base']);
         if (!empty($titleSign)) {
             $siteData['siteTitle'] = $titleSign.' - '.$siteData['siteTitle'];
         }

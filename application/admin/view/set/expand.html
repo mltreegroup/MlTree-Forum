@@ -1,0 +1,77 @@
+{extend name="public/admin_public"} {block name="content"}
+<div class="mdui-m-a-1 mdui-typo">
+
+    <h1 class="mdui-m-l-3">拓展管理
+        <small>Message</small>
+    </h1>
+
+    <div class="mdui-col-xs-12 mdui-col-sm-3">
+
+        <form action="">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">account_circle</i>
+                <label class="mdui-textfield-label">用户ID</label>
+                <input class="mdui-textfield-input" name="uid" type="text" />
+                <div class="mdui-textfield-helper">多个用户用英文逗号 (,) 隔开</div>
+            </div>
+
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">title</i>
+                <label class="mdui-textfield-label">Title</label>
+                <input class="mdui-textfield-input" name="title" type="text" />
+            </div>
+
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">textsms</i>
+                <label class="mdui-textfield-label">Message</label>
+                <textarea class="mdui-textfield-input" name="content"></textarea>
+            </div>
+
+        </form>
+        <button class="mdui-btn mdui-ripple mdui-btn-block mdui-color-theme-accent" id="send">
+            <i class="mdui-icon material-icons">send</i>发送</button>
+    </div>
+</div>
+
+{/block} {block name="js"}
+
+<script>
+    mdui.mutation()
+    layui.use('form', function () {
+        var form = layui.form;
+    });
+    var $$ = mdui.JQ,
+        data = '';
+
+    $$('#user').addClass('mdui-collapse-item-open');
+    $$('#setExpand').addClass('mdui-list-item-active');
+
+    $$('#send').on('click', function () {
+        data = $$('form').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                } else {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+
+
+</script> {/block}

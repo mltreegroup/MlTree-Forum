@@ -1,0 +1,50 @@
+{extend name="../template@default/forum_public"} {block name="content"}
+
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
+    <div class="mdui-card">
+        <div class="mdui-card-media">
+            <img src="__IMG__/card.png" height="200px" />
+        </div>
+        <div class="mdui-card-primary">
+            <div class="">
+                <img src="{$userData.avatar}" alt="{$userData.username}" class="mdui-img-circle mdui-float-left" width="60">
+            </div>
+            <div class="mdui-card-primary-title">{$userData.username}</div>
+            <div class="mdui-card-primary-subtitle">{$userData.motto|default="这家伙很懒，什么也没留下"}</div>
+        </div>
+        <div class="mdui-card-actions">
+            <button class="mdui-btn mdui-ripple mdui-color-theme" id="readAll">全部设为已读</button>
+            <button class="mdui-btn mdui-ripple mdui-color-theme-accent" id="delAll">删除已读</button>
+        </div>
+    </div>
+
+    {volist name="messageData" id="vo" empty="没有更多了"}
+    <div class="mdui-card" style="border-bottom: 1px solid #E0E0E0">
+        <div class="mdui-card-header">
+            <img class="mdui-card-header-avatar" src="{$vo.avatar}" />
+            <div class="mdui-card-header-title">{$vo.userName}</div>
+            <div class="mdui-card-header-subtitle">{$vo.time|time_format}</div>
+        </div>
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title mdui-text-color-theme">{$vo.title|raw}</div>
+        </div>
+        <div class="mdui-card-content mdui-typo">{$vo.content|raw}</div>
+    </div>
+    {/volist}
+
+
+
+</div>
+
+{/block} {block name="js"}
+<script>
+    var mssg = new MfMessage(msgoption);
+    $$('#readAll').on('click', function () {
+        mssg.readMessage('all');
+    })
+    $$('#delAll').on('click', function () {
+        mssg.delMessage('read', '{:session("uid")}', function (res) {
+            location.reload();
+        });
+    })
+</script> {/block}

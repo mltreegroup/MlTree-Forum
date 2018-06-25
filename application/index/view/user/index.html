@@ -54,7 +54,11 @@
                 
             </div>
             <div id="password">
+<<<<<<< HEAD
                 <form action="" class="layui-form" method="post">
+=======
+                <form action="" method="post" class="layui-form">
+>>>>>>> a07408544299d25b939f980fc3c1ddac351bc969
                     <div class="mdui-textfield mdui-textfield-floating-label">
                         <i class="mdui-icon material-icons">https</i>
                         <label class="mdui-textfield-label">旧密码</label>
@@ -70,7 +74,12 @@
                     <div class="mdui-textfield mdui-textfield-floating-label">
                         <i class="mdui-icon material-icons">https</i>
                         <label class="mdui-textfield-label">确认新密码</label>
+<<<<<<< HEAD
                         <input name="repassword" class="mdui-textfield-input" type="password" required/> {:token()}
+=======
+                        <input name="repassword" class="mdui-textfield-input" type="password" required/>
+                        {:token()}
+>>>>>>> a07408544299d25b939f980fc3c1ddac351bc969
                         <div class="mdui-textfield-error">与新密码不符</div>
                     </div>
                     <div class="mdui-textfield mdui-textfield-floating-label">
@@ -117,7 +126,7 @@
                             message: res.message,
                             position: 'top',
                             onClosed: function () {
-                                window.location.href = res.url;
+                               window.location.href = res.url;
                             },
                         })
                     } else {

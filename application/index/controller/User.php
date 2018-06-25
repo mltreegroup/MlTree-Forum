@@ -181,7 +181,7 @@ class User extends Base
             $code = createStr(32);
             cookie('userKey', $code);
             session('userKey', $code);
-            
+
             $userInfo->setInc('logins');
             $userInfo->save();
             $this->assign('userData', $userInfo);

@@ -179,8 +179,13 @@ class User extends Model
         'groupId' => $this->userObj->gid,
         'username' => $this->userObj->username,
         'email' => $this->userObj->email,
-        'groupData' => $this->getGroupData($this->userObj->uid),
+        'groupData' => $this->getGroupData($this->userObj->gid),
         'qqconnectStatus' => $qqconnect,
+        'topics' => $this->userObj->topics,
+        'essence' => $this->userObj->essence,
+        'comments' => $this->userObj->comments,
+        'create_date' => $this->userObj->create_date,
+        'login_date' => $this->userObj->login_date,
         ];
     }
 

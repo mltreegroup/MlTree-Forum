@@ -106,7 +106,6 @@ var msg = new MfMessage(msgoption);
 $('#mf-msg').webuiPopover({
     placement: 'bottom',
     title: '消息列表',
-    width: '400',
     type: 'async',
     trigger: 'hover',
     url: msgoption.url,

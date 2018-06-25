@@ -1,4 +1,4 @@
-/*连个注释都木有……*/
+
 .ml-friend-panel{
     padding: 8px;
     border: 1px solid #E0E0E0;
@@ -146,30 +146,4 @@ a.mf-badge:focus {
   height: 100%;
   padding-top:20px;
   padding-bottom: 2%
-}
-/*自定义页脚样式*/
-.mlt-footer {
-      /*页脚整体外观*/
-      line-height: 40px;
-      background: #f2f2f2;
-      border-top: 1px solid #e4e4e4;
-      font-size: 10pt;
-      color: #222;
-}
-.mlt-footer p, .mlt-footer .link {
-      /*页脚链接和文字*/
-      margin-left: 30px;
-      color: #666;
-      display: inline-block;
-      line-height: 40px;
-      font-family: sans-serif;
-      font-size: 10pt;
-      margin-right: 30px;
-      text-decoration: none;
-}
-.mlt-footer>a:visited {
-      color: #609;
-}
-.detect-hidden-p li:last-of-type{
-  display: none;/*隐藏最后一个主题的分割线*/
 }

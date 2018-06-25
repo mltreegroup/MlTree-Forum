@@ -40,7 +40,7 @@
                 </ul>
             </div>
             <div id="password">
-                <form action="{:url('set')}" method="post" class="layui-form">
+                <form action="" method="post" class="layui-form">
                     <div class="mdui-textfield mdui-textfield-floating-label">
                         <i class="mdui-icon material-icons">https</i>
                         <label class="mdui-textfield-label">旧密码</label>
@@ -57,17 +57,17 @@
                         <i class="mdui-icon material-icons">https</i>
                         <label class="mdui-textfield-label">确认新密码</label>
                         <input name="repassword" class="mdui-textfield-input" type="password" required/>
+                        {:token()}
                         <div class="mdui-textfield-error">与新密码不符</div>
                     </div>
                     <div class="mdui-textfield mdui-textfield-floating-label">
-                        <input type="hidden" name="type" value="pass">
                         <button lay-submit lay-filter="pass" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">确认修改</button>
                     </div>
                 </form>
                 <hr/>
                 <div class="mdui-typo">
                     <h4>QQ互联状态:</h4>
-                    <code>已绑定</code>
+                    <code>{$userData.qqconnectStatus}</code>
                     <blockquote>登录时选择QQ登录即可绑定</blockquote>
                 </div>
             </div>
@@ -97,16 +97,16 @@
         form.on('submit(pass)', function (data) {
             $$.ajax({
                 method: 'post',
-                url: '{:url("set")}',
+                url: '{:url("ResetPas")}',
                 data: data.field,
                 dataType: 'json',
                 success: function (res) {
-                    if (res.code == 1) {
+                    if (res.code == 0) {
                         mdui.snackbar({
                             message: res.message,
                             position: 'top',
                             onClosed: function () {
-                                window.location.href = res.url;
+                               window.location.href = res.url;
                             },
                         })
                     } else {

@@ -6,13 +6,13 @@ use think\Validate;
 class Topic extends Validate
 {
     protected $rule = [
-        'title'  => 'require|max:60',
+        'subject'  => 'require|max:60|token',
         'fid'   => 'require',
-        'content' => 'require|token',
+        'content' => 'require',
         'captcha|验证码'=>'require|captcha',
     ];
 
     protected $scene = [
-        'create' => ['title','fid','content'],
+        'create' => ['subject','fid','content'],
     ];
 }

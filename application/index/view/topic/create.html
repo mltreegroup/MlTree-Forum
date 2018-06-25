@@ -17,17 +17,18 @@
 
         <div class="mdui-textfield mdui-m-b-1">
             <label class="mdui-textfield-label">标题</label>
-            <input name="title" class="mdui-textfield-input" type="text" placeholder="title" max="60" required/>
+            <input name="subject" class="mdui-textfield-input" type="text" placeholder="title" max="60" required/>
         </div>
 
         <div id="editor">
         </div>
         <div class="mdui-m-y-1"></div>
-        <input id="content" type="hidden" name="content" value="" required>
-        <input id="files" type="hidden" name="files" value=""> {:token()}
-        <button id="create" class="mdui-btn mdui-color-theme mdui-float-right">发布主题</button>
+        <input id="content" type="hidden" name="content" value="" required> {:token()}
+        <input type="hidden" name="sign" value="{$attaSign}">
     </form>
+    
     <div>
+        <button id="create" class="mdui-btn mdui-color-theme mdui-float-right">发布主题</button>
         <button class="mdui-btn layui-btn mdui-color-orange" id="file">
             <i class="mdui-icon material-icons">file_upload</i>上传附件</button>
         <div id="fileList" class="mdui-hidden-xs">
@@ -45,7 +46,6 @@
         uploadFile: '{:url("index/expand/upload")}',
         uid: "{:session('uid')}",
         createUrl: '{:url("index/topic/create")}',
-        sign: '{$attaSign}',
     }
     regEditor('def', option)
 </script> {/block}

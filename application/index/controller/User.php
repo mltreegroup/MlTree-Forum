@@ -140,8 +140,8 @@ class User extends Base
             return \redirect('index/user/login');
         }
         if (request()->isPost()) {
-            userModel::where('uid',session('uid'))->update(['motto'=>input('post.motto')]);
-            return json(\outResult(0,'修改个人信息成功'));
+            userModel::where('uid', session('uid'))->update(['motto'=>input('post.motto')]);
+            return json(\outResult(0, '修改个人信息成功'));
         }
     }
 
@@ -154,8 +154,8 @@ class User extends Base
         $msgObj = new Message;
         $msg = $msgObj->getMessageList(session('uid'));
         $msgObj->readMessage('all');
-        $this->assign('messageData',$msg['data']);
-        return view('message',[
+        $this->assign('messageData', $msg['data']);
+        return view('message', [
             'option' => $this->siteOption('消息盒子'),
         ]);
     }
@@ -174,16 +174,18 @@ class User extends Base
         $qc->get_openid();     // openid
         $userInfo = userModel::where('qqconnectId', session('openid'))->find();
         if (!empty($userInfo)) {
+
             session('uid', $userInfo->uid);
             session('gid', $userInfo->gid);
             session('username', $userInfo->username);
             $code = createStr(32);
-            cookie('userKey',$code);
-            session('userKey',$code);
+            cookie('userKey', $code);
+            session('userKey', $code);
+            
             $userInfo->setInc('logins');
             $userInfo->save();
             $this->assign('userData', $userInfo);
-            return $this->success('欢迎回来,'.$userInfo->username, url('index/user/index'));
+            return \redirect('index/user/index');
         } else {
             if (Option::getValue('allowQQreg') == 1) {
                 return view('qqconnect', [
@@ -216,5 +218,4 @@ class User extends Base
         } else {
         }
     }
-
 }

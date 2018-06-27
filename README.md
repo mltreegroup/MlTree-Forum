@@ -26,7 +26,7 @@ API支持：程序正在向API化，前后端分离的方向迈进。提供了�
 
 官网有详细的安装教程。点击下方链接到达。
 
-[安装说明](https://forum.mltree.top/topic/3.html)
+[安装说明](https://forum.mltree.top/topic/2.html)
 
 #### 使用说明
 
@@ -54,7 +54,7 @@ Telegrate：https://t.me/joinchat/Hewif0uvElN9X2VF3FUaqw
 
 #### 注意事项
 
-- 如果你不会完成QQ互联的必要操作，请查看这里：[QQ互联设置教程](https://forum.mltree.top/topic/12.html)
+- 如果你不会完成QQ互联的必要操作，请查看这里：[QQ互联设置教程](https://forum.mltree.top/topic/8.html)
 - 如果QQ互联操作中出现错误，请查看这里的注意末尾的后续错误解决：[ThinkPHP5.1.xx开启QQ互联的方法](https://blog.kingsr.cc/2018/06/15/thinkphpv5-1-xx-%e5%bc%80%e5%90%afqq%e4%ba%92%e8%81%94%e7%9a%84%e6%96%b9%e6%b3%95/)
 - 如果还有什么问题可以到官方论坛发帖求助
 

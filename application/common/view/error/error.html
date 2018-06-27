@@ -1,0 +1,23 @@
+{include file="/../template@default/header" title="$title"}
+
+<body class="mdui-theme-primary-blue mdui-theme-accent-blue mdui-appbar-with-toolbar">
+    <script src="__JS__/theme.js"></script> {if !empty(session('uid'))} {include file="/../template@default/topbar_user"} {else /} {include file="/../template@default/topbar"}
+    {/if}
+
+    <div class="mdui-container">
+        <div class="mdui-row mdui-text-center">
+            <div class="system-message mf-panel mdui-m-y-3 mdui-typo mdui-card">
+                <header class="mf-panel-hd">
+                    <p class="mdui-typo-title">{$error.title}</p>
+                </header>
+                <div class="content mf-panel-bd">
+                    <p>
+                        {$error.content}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

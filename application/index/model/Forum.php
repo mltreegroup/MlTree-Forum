@@ -6,6 +6,7 @@ use think\Db;
 
 class Forum extends Model
 {
-    
+    protected $pk = 'fid';
+    protected $autoWriteTimestamp = true;
 }
 ?>

@@ -3,14 +3,14 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 2016-2018 https://mltree.top All rights reserved.
 // +----------------------------------------------------------------------
-// | GPL v3 ( https://choosealicense.com/licenses/gpl-3.0/ )
+// | Apache License v2 ( https://www.apache.org/licenses/LICENSE-2.0.html )
 // +----------------------------------------------------------------------
 // | Author: Kingsr <kingsrml@vip.qq.com>
 // +----------------------------------------------------------------------
 
 var $$ = mdui.JQ;
 var time = 60;
-var re_cid = 0; 
+var re_cid = 0;
 
 $$('#getCode').on('click', function () {
 
@@ -35,7 +35,7 @@ $$('#getCode').on('click', function () {
                         position: 'top'
                     });
                     $$('#getCode').prop('disabled', true);
-                    time_o();
+                    time_reg();
                 } else {
                     mdui.snackbar({
                         message: res.message,
@@ -49,7 +49,7 @@ $$('#getCode').on('click', function () {
 
 })
 
-function time_o() {
+function time_reg() {
     if (time == 0) {
         $$('#getCode').prop('disabled', false);
         $$('#getCode').text('获取验证码');
@@ -57,7 +57,55 @@ function time_o() {
     } else {
         $$('#getCode').text('还有 ' + time + ' 再次获取');
         time--;
-        setTimeout(time_o, 1000);
+        setTimeout(time_reg, 1000);
+    }
+}
+
+$$('#getResetCode').on('click', function () {
+
+    if ($$('#email').val() == '') {
+        mdui.snackbar({
+            message: '邮箱不得为空',
+            position: 'top'
+        });
+    } else {
+        $$.ajax({
+            method: 'POST',
+            url: '/api/api/getResetCode.html',
+            data: {
+                email: $$('#email').val(),
+            },
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar({
+                        message: res.message,
+                        position: 'top'
+                    });
+                    $$('#getResetCode').prop('disabled', true);
+                    time_reset();
+                } else {
+                    mdui.snackbar({
+                        message: res.message,
+                        position: 'top'
+                    });
+                }
+            }
+        });
+    }
+
+
+})
+
+function time_reset() {
+    if (time == 0) {
+        $$('#getResetCode').prop('disabled', false);
+        $$('#getResetCode').text('获取验证码');
+        time = 60;
+    } else {
+        $$('#getResetCode').text('还有 ' + time + ' 再次获取');
+        time--;
+        setTimeout(time_reset, 1000);
     }
 }
 
@@ -109,6 +157,7 @@ function recomment(_id) {
     $$('#reply').trigger('click');
     re_cid = data.cid;
     var html = '<p>回复 <a href="/user/' + data.uid + '.html"> @' + data.username + ' </a>：<a href="#reply-content-' + data.cid + '" >#' + data.cid + '</a></p>';
+    $$('#recid').val(data.cid);
     if (editor.txt.text() == null || editor.txt.text() == '') {
         editor.txt.html(html);
     } else {

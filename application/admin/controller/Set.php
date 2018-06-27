@@ -3,10 +3,13 @@ namespace app\admin\controller;
 
 use think\Db;
 use think\facade\Request;
-use app\admin\controller\Base;
-use app\admin\model\Option;
-use app\admin\model\Group;
-use app\admin\model\Mail;
+use app\index\controller\Base;
+use app\index\model\Option;
+use app\index\model\Group;
+use app\index\model\Mail;
+use app\index\model\Forum;
+use app\index\model\Topic;
+use app\common\model\Message;
 
 class Set extends Base
 {
@@ -32,36 +35,11 @@ class Set extends Base
         $reg = Option::getValues('reg');
         $base = Option::getValues('base');
         if (Request::method() == 'POST') {
-            if (empty(input('post.siteStatus'))) {
-                $data['siteStatus'] = 0;
-            } else {
-                $data['siteStatus'] = 1;
-            }
-
-            if (empty(input('post.regStatus'))) {
-                $data['regStatus'] = 0;
-            } else {
-                $data['regStatus'] = 1;
-            }
-
-            if (empty(input('post.full'))) {
-                $data['full'] = 0;
-            } else {
-                $data['full'] = 1;
-            }
-
-            if (empty(input('post.regMail'))) {
-                $data['regMail'] = 0;
-            } else {
-                $data['regMail'] = 1;
-            }
-
-            if (empty(input('post.allowQQreg'))) {
-                $data['allowQQreg'] = 0;
-            } else {
-                $data['allowQQreg'] = 1;
-            }
-
+            input('post.siteStatus') == '1' ? $data['siteStatus'] = 1 : $data['siteStatus'] = 0;
+            input('post.regStatus') == '1' ? $data['regStatus'] = 1 : $data['regStatus'] = 0;
+            input('post.full') == '1' ? $data['full'] = 1 : $data['full'] = 0;
+            input('post.regMail') == '1' ? $data['regMail'] = 1 : $data['regMail'] = 0;
+            input('post.allowQQreg') == '1' ? $data['allowQQreg'] = 1 : $data['allowQQreg'] = 0;
 
             $data['defaulegroup'] = input('post.defaulegroup');
             $data['closeContent'] = input('post.closeContent');
@@ -108,11 +86,9 @@ class Set extends Base
         '日间模式'=> 'light',
         '夜间模式'=> 'black',
         ];
-        if(request()->isPost())
-        {
-            $data = input('post.','','htmlentities');
-            if(!input('?post.discolour'))
-            {
+        if (request()->isPost()) {
+            $data = input('post.', '', 'htmlentities');
+            if (!input('?post.discolour')) {
                 $data['discolour'] = 'false';
             }
             Option::setValues($data);
@@ -163,7 +139,7 @@ class Set extends Base
 
         if (!empty(input('post.'))) {
             if (empty(input('post.fid'))) {
-                Db::name('forum')->strict(false)->insert(input('post.'));
+                Forum::create(input('post.'));
                 return json(['code'=>0,'message'=>'添加板块成功']);
             } else {
                 $res = Db::name('forum')->where('fid', input('post.fid'))->find();
@@ -182,13 +158,34 @@ class Set extends Base
 
     public function topic()
     {
-        $topic = Db::name('topic')->select();
+        $topic = Db::name('topic')->limit(10)->select();
+        $forum = Db::name('forum')->field('fid,name,cgroup')->select();
         foreach ($topic as $key => $value) {
             $value['content'] = htmlspecialchars_decode(strip_tags($value['content']));
             $topic[$key] = $value;
         }
+
+        if (request()->isPost()) {
+            if (input('post.type') == 'search') {
+                $topic = new Topic;
+                $res = $topic->Search(input('keyword'));
+                return view('topic', [
+                    'topicData' => $res,
+                    'forumData' => $forum,
+                ]);
+            }
+            $topic = new Topic;
+            $res = $topic->setTopic(input('post.type'), input('post.tid'), input('post.fid'));
+            if ($res[0]) {
+                return json(\outResult(0, '移动成功'));
+            } else {
+                return json(\outResult(-1, $res[1]));
+            }
+        }
+
         return view('topic', [
             'topicData' => $topic,
+            'forumData' => $forum,
         ]);
     }
 
@@ -218,10 +215,39 @@ class Set extends Base
 
     public function user()
     {
-        $data = Db::name('user')->select();
+        $data = Db::name('user')->limit(10)->select();
+        $group = Db::name('group')->field('gid,groupName')->select();
 
+        if (request()->isPost()) {
+            if (!empty(input('post.uid'))) {
+                input('?post.status') ? $status = '1' : $status = '0';
+                $data = [
+                    'username' => input('post.username'),
+                    'gid' => input('post.gid'),
+                    'email' => input('post.email'),
+                    'status' => $status,
+                ];
+                if (!empty(input('post.password'))) {
+                    $data['password'] = password_encode(input('passowrd'));
+                }
+                Db::name('user')->where('uid', input('post.uid'))->update($data);
+                return json(outResult(0, '修改成功'));
+            } elseif (input('?post.type') && input('?post.type')=='search') {
+                $res =  Db::name('user')->where('uid|username|email', 'like', '%'.input('post.keyword').'%');
+                return view('user', [
+                    'userData' => $data,
+                    'groupList' => $group,
+                ]);
+            } else {
+                $data = input('post.');
+                $data['password'] = \password_encode($data['password']);
+                Db::name('user')->strict(false)->insert($data);
+                return json(\outResult(0, '添加成功'));
+            }
+        }
         return view('user', [
             'userData' => $data,
+            'groupList' => $group,
         ]);
     }
 
@@ -229,6 +255,27 @@ class Set extends Base
     {
         $data = Db::name('group')->select();
 
+        if (request()->isPost()) {
+            $data = input('post.');
+            $authList = Db::name('auth_rule')->select();
+            if (empty($data['rules'])) {
+                $data['rules'] = '';
+                foreach ($authList as $key => $value) {
+                    if ($key != count($authList)) {
+                        $data['rules'] .= $value['id'].',';
+                    } else {
+                        $data['rules'] .= $value['id'];
+                    }
+                }
+            }
+            if (!isset($data['ID'])) {
+                Db::name('group')->strict(false)->insert($data);
+                return json(\outResult(0, '添加成功'));
+            } else {
+                Db::name('group')->where('gid', $data['Id'])->strict(false)->update($data);
+                return json(\outResult(0, '修改成功'));
+            }
+        }
         return view('userGroup', [
             'groupData' => $data,
         ]);
@@ -238,8 +285,43 @@ class Set extends Base
     {
         $data = Db::name('auth_rule')->select();
 
+        if (request()->isPost()) {
+            if (input('?post.type')) {
+                if (input('post.type') == 'set') {
+                    input('post.value') == 'true' ? $data = [input('post.sign', '', 'strtolower')=>'1'] : $data = [input('post.sign', '', 'strtolower')=>'0'];
+                    $name = input('post.name', '', 'strtolower');
+                    $res = Db::name('auth_rule')->where('name', $name)->update($data);
+                    return json(outResult(0, 'Success'));
+                }
+            }
+            
+            $res1 = Db::name('auth_rule')
+            ->where('title', input('post.title'))
+            ->find();
+            if (!empty($res) || !empty($res1)) {
+                return json(outResult(-1, '权限重复'));
+            }
+            Db::name('auth_rule')->strict(false)->insert(input('post.'));
+            return json(\outResult(0, '添加成功'));
+        }
         return view('Auth', [
             'Auth' => $data,
         ]);
+    }
+
+    public function Expand()
+    {
+        if (request()->isPost()) {
+            $uid = explode(',', input('post.uid'));
+            if (count($uid) == 1) {
+                $msg = new Message;
+                $res = $msg->addMessage($uid[0], session('uid'), input('post.title'), input('post.content'));
+                return json(\outResult(0, '发送成功'));
+            }
+            $msg = new Message;
+            $msg->addAllMessage($uid, session('uid'), input('post.title'), input('post.content'));
+            return json(\outResult(0, '发送成功'));
+        }
+        return view();
     }
 }

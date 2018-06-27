@@ -10,33 +10,31 @@ use app\index\model\Group;
 use app\index\model\Comment;
 use app\index\model\Option;
 use Auth\Auth;
+use app\common\model\Message;
 
 class Topic extends Base
 {
-    public function index($tid = 0)
+    public function index($tid)
     {
-        $user = new User;
         if ($tid == 0) {
-            return \redirect('index\index\index');
+            return \redirect('index/index/idnex');
         }
-        //获取帖子信息
         $topic = topicModel::get($tid);
         if (empty($topic)) {
             return $this->error('暂未找到此内容！', 'index/index/index');
         }
         $topic->views += 1;
         $topic->isAutoWriteTimestamp(false)->save();
-        $topic->update_time = date('Y-m-d H:i:s',$topic->update_time);
-        $topicUser = $user::get($topic->uid);
+        $topic->update_time = date('Y-m-d H:i:s', $topic->update_time);
+        $topicUser = user::get($topic->uid);
         $comment = $topic->comments;
-        //获取附件信息
-        $atta = Db::name('atta')->where('sign', $topic->sign)->select();
+        $atta = Atta::where('sign', $topic->sign)->select();
+        count($atta) == 0 ? $atta = null : $atta;//解决ThinkPHP模型奇怪的array()不为空的问题
         foreach ($comment as $key => $value) {
             $data = Db::name('user')->where('uid', $value['uid'])->find();
             $value['username'] = $data['username'];
             $value['avatar'] = $data['avatar'];
         }
-
         return view('index', [
             'option' => $this->siteOption($topic->subject),
             'topicData' => $topic,
@@ -45,49 +43,27 @@ class Topic extends Base
             'attaList' => $atta,
         ]);
     }
-    
+
     public function create()
     {
-        if (empty(session('uid'))) {
+        if (!User::isLogin()) {
             return redirect('index\user\login');
         }
-
-        $user = model('user');//引入user模型后面调用
-        $user = User::get(session('uid'));
-
-
-        if (!empty(input('post.'))) {
-            if (!$user->allowCreate($user->uid,input('post.fid'))) {
-                return ['code'=>'-1','message'=>'无权限'];
-            }
-            $res = $this->validate(input('post.'), 'app\index\validate\Topic.create');
-            if ($res !== true) {
-                return ['code'=>'-1','message'=>$res];
+        if (request()->isPost()) {
+            $topic = new TopicModel;
+            $res = $topic->found(session('uid'), input('post.', '', 'htmlspecialchars'));
+            if ($res[0]) {
+                return json([
+                'code'=>'1',
+                'message'=>'发布成功，正在跳转……',
+                'url'=>url('index/topic/index', ['tid'=>$res[1]]),
+                ]);
             } else {
-                $topic = new topicModel;
-                $data = [
-                    'subject' => input('post.title','','htmlspecialchars'),
-                    'content' => input('post.content', '', 'htmlspecialchars'),
-                    'sign' => input('post.sign','','htmlspecialchars'),
-                    'fid' => (int)input('post.fid', '', 'htmlspecialchars'),
-                    'uid' => session('uid'),
-                    'userip' => '',//在model中自动写入
-                ];
-                
-                $topic->save($data);
-                $tid = $topic->tid;
-
-                //设置附件信息
-                // $re = Atta::setCreate($tid, input('post.files'));
-                //set user topics
-                $user->topics = $user->topics + 1;
-                $user->save();
-
-                return json(['code'=>'1','message'=>'发布成功，正在跳转……','url'=>url('index/topic/index', ['tid'=>$tid])]);
+                return json(\outResult(-1, $res[1]));
             }
         }
 
-        $forumData = \think\Db::name('forum')->field('fid,name,cgroup')->select();
+        $forumData = Db::name('forum')->field('fid,name,cgroup')->select();
         
         return view('create', [
             'option' => $this->siteOption('发帖'),
@@ -103,11 +79,9 @@ class Topic extends Base
         }
         if ($uid == 0 || $tid == 0) {
             return redirect('index\index\index');
-        } elseif (empty(session('uid'))) {
+        } elseif (!User::isLogin()) {
             return $this->error('请先登录。', 'index/user/login');
         }
-
-
 
         //查询帖子信息
         $topic = topicModel::get($tid);
@@ -125,7 +99,7 @@ class Topic extends Base
                 } else {
                     $topic = new topicModel;
                     $data = [
-                    'subject' => input('post.title', '', 'htmlspecialchars'),
+                    'subject' => input('post.subject', '', 'htmlspecialchars'),
                     'content' => input('post.content', '', 'htmlspecialchars'),
                 ];
                     $topic->update($data, ['tid'=>$tid]);
@@ -144,11 +118,11 @@ class Topic extends Base
 
     public function comment($tid = 0)
     {
-        if (empty(session('uid'))) {
-            return ['code'=>0,'message'=>'未登录','url'=>url('index/user/login')];
+        if (!User::isLogin()) {
+            return json(['code'=>0,'message'=>'未登录','url'=>url('index/user/login')]);
         }
         if ($tid == 0) {
-            return;
+            return json(\outResult(-1, '非法操作'));
         }
 
         $uid = session('uid');
@@ -158,65 +132,60 @@ class Topic extends Base
                 'uid' => $uid,
                 'content' => input('post.content'),
             ];
+            !empty(input('post.recid')) ? $data['reCid'] = input('post.recid') : $data;
 
             $topic = topicModel::get($tid);
-            $topic->comments()->save($data);
-            $topic->comment = $topic->comment + 1;
+            if ($topic->closed == 1) {
+                return ['code'=>-1,'message'=>'Topic已被关闭，禁止回复'];
+            }
+            $res = $topic->comments()->save($data);
+            $topic->comment += 1;
             $topic->save();
 
             //修改用户信息
             $user = user::get($uid);
-            $user->comments = $user->comments + 1;
+            $user->comments += 1;
             $user->save();
 
+            //发送通知
+            $msg = new Message;
+            if (input('post.recid') != 0) {
+                $msg->addReplyMsg($res->cid);
+            }
+            $msg->addCommentMsg($res->cid);
+            
             return ['code'=>1,'message'=>'回复成功！'];
         }
     }
 
     public function set($type, $tid)
     {
-        $auth = new Auth;
-        $uid = session('uid');
-        if ($type === 'top') {//置顶操作
-            if ($auth->check('top', $uid) || $auth->check('admin', $uid)) {
-                $topic = topicModel::get($tid);
-                $topic->tops = 1;
-                $topic->save();
-                return $this->success('置顶成功');
-            } else {
-                return $this->error('无权限');
+        $topic = topicModel::get($tid);
+        if ($type == 'top') {
+            if (!empty($topic)) {
+                $topic->tops == 1 ? $topic->tops = 0 : $topic->tops = 1 ;
+                $topic->isAutoWriteTimestamp(false)->save();
+                if ($topic->tops == 1) {
+                    $msg = new Message;
+                    $msg->addTopMsg($tid);
+                }
+                return $this->success('设置为置顶成功');
             }
-
-            if ($auth->check('essence', $uid) || $auth->check('admin', $uid)) {
-                $topic = topicModel::get($tid);
-                $topic->essence = 1;
-                $topic->save();
-
-                //增加精华帖子数
-                $topic = topicModel::get($tid);
-                $user = user::get($topic->uid);
-                $user->essence = $user->essence + 1;
-                $user->save();
-
-                return $this->success('设置精华成功');
-            } else {
-                return $this->error('无权限');
+        } elseif ($type == 'essence') {
+            if (!empty($topic)) {
+                $topic->essence == 1 ? $topic->essence = 0 : $topic->essence = 1 ;
+                $topic->isAutoWriteTimestamp(false)->save();
+                if ($topic->essence == 1) {
+                    $msg = new Message;
+                    $msg->addEssenceMsg($tid);
+                }
+                return $this->success('设置为精华成功');
             }
-
-            if ($auth->check('delete', $uid) || $auth->check('admin', $uid)) {
-                $topic = topicModel::get($tid);
-
-                //删除用户帖子数
-                $user = user::get($topic->uid);
-                $user->topics = $user->topics - 1;
-                $user->save();
-
-                //执行删除动作
-                $topic->delete();
-
-                return $this->success('删除成功');
-            } else {
-                return $this->error('无权限');
+        } elseif ($type == 'close') {
+            if (!empty($topic)) {
+                $topic->closed == 1 ? $topic->closed = 0 : $topic->closed = 1 ;
+                $topic->isAutoWriteTimestamp(false)->save();
+                return $this->success('设置为关闭成功');
             }
         }
     }

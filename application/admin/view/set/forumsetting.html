@@ -1,16 +1,15 @@
 {extend name="public/admin_public"} {block name="content"}
 <div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
 
-    <h1 class="mdui-m-l-3">Forum 拓展管理</h1>
+    <h1 class="mdui-m-l-3">Forum 拓展管理<small>友情链接Links</small></h1>
 
     <div class="mdui-btn-group mdui-m-l-3">
         <button type="button" class="mdui-btn" mdui-dialog="{target: '#addLink'}">
             <i class="mdui-icon material-icons">add</i>
         </button>
     </div>
+    
     <table class="mdui-table mdui-textfield">
-        <caption>友情链接(Links)管理</caption>
-
         <thead>
             <tr>
                 <th>#</th>
@@ -155,6 +154,7 @@
 
         return false;
     })
+    
     $$('#submitedit').on('click', function () {
         data = $$('#editForm').serialize();
 

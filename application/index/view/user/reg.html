@@ -6,7 +6,7 @@
         <div class="mdui-card-media">
             <div class="mdui-card-primary">
                 <div class="mdui-card-primary-title">注册</div>
-                <div class="mdui-card-primary-subtitle">Regist</div>
+                <div class="mdui-card-primary-subtitle">Register</div>
             </div>
         </div>
 
@@ -31,8 +31,8 @@
 
                 <div class="mdui-textfield mdui-textfield-floating-label">
                     <label class="mdui-textfield-label">邮箱验证码</label>
-                    <input name="code" class="mdui-textfield-input" type="text" />
-                    <button type="button" class="mdui-btn mdui-m-t-1 mdui-color-theme mdui-ripple" id="getCode">获取验证码</button>
+                    <input style="max-width: 80%;" name="code" class="mdui-textfield-input mdui-float-left" type="text" />
+                    <button type="button" class="mdui-btn mdui-m-t-1 mdui-color-theme mdui-ripple mdui-float-right" id="getCode">获取验证码</button>
                 </div>
 
                 <div class="mdui-textfield mdui-textfield-floating-label">
@@ -43,8 +43,8 @@
                 </div>
 
                 <div class="mdui-textfield mdui-textfield-floating-label">
-                    <botton class="mdui-btn mdui-btn-block mdui-color-theme mdui-ripple" lay-submit type="submit" lay-filter="register">注册</botton>
-                    <a href="" class="mdui-btn mdui-float-right mdui-m-y-1 mdui-ripple">忘记密码？</a>
+                    <button class="mdui-btn mdui-btn-block mdui-color-theme mdui-ripple" lay-submit type="submit" lay-filter="register">注册</button>
+                    <a href="{:url('forgetPas')}" class="mdui-btn mdui-float-right mdui-m-y-1 mdui-ripple">忘记密码？</a>
                     <a href="{:url('login')}" class="mdui-btn mdui-float-right mdui-m-y-1 mdui-ripple">用户登录</a>
                 </div>
             </form>

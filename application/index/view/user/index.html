@@ -15,11 +15,12 @@
 
         <div class="mdui-card-content">
             <div class="mdui-tab" mdui-tab>
-                <a href="#theme" class="mdui-ripple">主题</a>
+                <a href="#topic" class="mdui-ripple">主题</a>
+                <a href="#information" class="mdui-ripple">资料</a>
                 <a href="#password" class="mdui-ripple">密码</a>
                 <a href="#avatar" class="mdui-ripple">头像</a>
             </div>
-            <div id="theme">
+            <div id="topic">
                 <ul class="mdui-list">
                     {volist name="userTopic" id="vo"}
                     <li class="mdui-list-item mdui-ripple">
@@ -39,8 +40,21 @@
                     {/volist}
                 </ul>
             </div>
+            <div id="information">
+                <form action="" method="post" class="layui-form">
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <i class="mdui-icon material-icons">info</i>
+                        <label class="mdui-textfield-label">签名</label>
+                        <input name="motto" class="mdui-textfield-input" type="text" value="{$userData.motto}"/>
+                    </div>
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <button lay-submit lay-filter="info" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">确认修改</button>
+                    </div>
+                </form>
+                
+            </div>
             <div id="password">
-                <form action="{:url('set')}" method="post" class="layui-form">
+                <form action="" class="layui-form" method="post">
                     <div class="mdui-textfield mdui-textfield-floating-label">
                         <i class="mdui-icon material-icons">https</i>
                         <label class="mdui-textfield-label">旧密码</label>
@@ -56,18 +70,18 @@
                     <div class="mdui-textfield mdui-textfield-floating-label">
                         <i class="mdui-icon material-icons">https</i>
                         <label class="mdui-textfield-label">确认新密码</label>
-                        <input name="repassword" class="mdui-textfield-input" type="password" required/>
+                        <input name="repassword" class="mdui-textfield-input" type="password" required/> {:token()}
                         <div class="mdui-textfield-error">与新密码不符</div>
                     </div>
                     <div class="mdui-textfield mdui-textfield-floating-label">
-                        <input type="hidden" name="type" value="pass">
                         <button lay-submit lay-filter="pass" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">确认修改</button>
                     </div>
                 </form>
+                
                 <hr/>
                 <div class="mdui-typo">
                     <h4>QQ互联状态:</h4>
-                    <code>已绑定</code>
+                    <code>{$userData.qqconnectStatus}</code>
                     <blockquote>登录时选择QQ登录即可绑定</blockquote>
                 </div>
             </div>
@@ -85,9 +99,6 @@
 </div>
 
 {/block} {block name="js"}
-
-<script src="__JS__/wangEditor.js"></script>
-
 <script>
     layui.use(['upload', 'form'], function () {
         var upload = layui.upload,
@@ -97,17 +108,37 @@
         form.on('submit(pass)', function (data) {
             $$.ajax({
                 method: 'post',
-                url: '{:url("set")}',
+                url: '{:url("ResetPas")}',
                 data: data.field,
                 dataType: 'json',
                 success: function (res) {
-                    if (res.code == 1) {
+                    if (res.code == 0) {
                         mdui.snackbar({
                             message: res.message,
                             position: 'top',
                             onClosed: function () {
-                                window.location.href = res.url;
+                               window.location.href = res.url;
                             },
+                        })
+                    } else {
+                        layer.msg(res.message, { icon: 5 });
+                    }
+                },
+            });
+            return false;
+        });
+
+        form.on('submit(info)', function (data) {
+            $$.ajax({
+                method: 'post',
+                url: '{:url("set")}',
+                data: data.field,
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code == 0) {
+                        mdui.snackbar({
+                            message: res.message,
+                            position: 'top',
                         })
                     } else {
                         layer.msg(res.message, { icon: 5 });

@@ -3,7 +3,7 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 2016-2018 https://mltree.top All rights reserved.
 // +----------------------------------------------------------------------
-// | GPL v3 ( https://choosealicense.com/licenses/gpl-3.0/ )
+// | Apache License v2 ( https://www.apache.org/licenses/LICENSE-2.0.html )
 // +----------------------------------------------------------------------
 // | Author: Kingsr <kingsrml@vip.qq.com>
 // +----------------------------------------------------------------------
@@ -82,15 +82,15 @@ function mfFlow(type, _Id) {
 
                         $.get('/api/api/commentList/tid/' + tid + '/type/comment/page/' + page, function (res) {
                             layui.each(res.data, function (index, item) {
-                                var html = '<div id="reply-content-' + item.cid + '" class="mdui-card mf-comment">'
-                                html += '<div class="mf-comment-info mdui-valign mdui-typo">'
-                                html += '<img src="' + item.avatar + '" alt="' + item.username + '" class="avatar">'
-                                html += '<span class="mf-comment-line">' + item.username + '</span>'
-                                html += '<span class="mf-comment-time" title="' + item.create_time + '">' + item.time_format + '</span></div>'
-                                html += '<div class="mf-comment-content">'
-                                html += '<div class="mf-comment-reply"></div>'
-                                html += '<div>' + item.content + '</div>'
-                                html += '<button title="Reply" onclick="recomment(' + item.cid + ')" id="reply-' + item.cid + '" data-cid="' + item.cid + '" data-username="' + item.username + '" data-uid="' + item.uid+'" class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">reply</i></button></div></div>'
+                                var html = `<div id="reply-content-${item.cid}" class="mdui-card mf-comment">
+                               <div class="mf-comment-info mdui-valign mdui-typo">
+                               <img src="${item.avatar}" alt="${item.username}" class="avatar">
+                               <span class="mf-comment-line">${item.username}<br><small class="mf-comment-motto">${item.motto}</small></span>
+                               <span class="mf-comment-time" title="${item.create_time}">${item.time_format}</span></div>
+                               <div class="mf-comment-content">
+                               <div class="mf-comment-reply"></div>
+                               <div>${item.content}</div>
+                               <button title="Reply" onclick="recomment(${item.cid})" id="reply-${item.cid}" data-cid="${item.cid}" data-username="${item.username}" data-uid="${item.uid}" class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">reply</i></button></div></div>`
                                 list.push(html);
                             })
                             next(list.join(''), page <= res.pages);

@@ -1,6 +1,6 @@
 {extend name="../template@default/forum_public"} {block name="content"}
 <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-m-y-1 mdui-typo">
-    <div class="mf-panel mdui-shadow-10">
+    <div class="mf-panel mdui-shadow-2">
         <header class="mf-panel-hd">
             <h3>{$topicData.subject}
                 <br/> {:outBadge($topicData)}
@@ -39,8 +39,7 @@
             {/if}
         </div>
         <div class="mf-panel-footer">
-            <div id="start"></div>
-            <div class="mdui-float-right mdui-valign">
+            <div class="mdui-float-right mdui-valign mdui-m-y-1">
                 <span>最后更新于：
                     <span>{$topicData.update_time}</span>
                 </span>
@@ -94,6 +93,7 @@
 
     </div>
     <input type="hidden" id="content" name="content">
+    <input type="hidden" id="recid" name="recid" value="">
 </form>
 
 {/block} {block name="js"}
@@ -112,12 +112,4 @@
     flow.flow('{$topicData.tid}');
 
     regEditor(type = 'comment', option);
-    layui.use('rate', function () {
-        var rate = layui.rate;
-
-        //渲染
-        var ins1 = rate.render({
-            elem: '#start'  //绑定元素
-        });
-    });
 </script>{/block}

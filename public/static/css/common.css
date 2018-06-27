@@ -1,4 +1,4 @@
-/*连个注释都木有……*/
+
 .ml-friend-panel{
     padding: 8px;
     border: 1px solid #E0E0E0;
@@ -135,6 +135,10 @@ a.mf-badge:focus {
 }
 .mf-comment-line{
   margin-left: 2%;
+}
+.mf-comment-motto{
+  padding-top: 1%;
+  color:#757575;
 }
 .mf-comment-time{
   font-size: 13px;

@@ -9,27 +9,21 @@ use app\index\model\User;
 use app\index\model\Mail;
 use think\Db;
 use Auth\Auth;
-use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\LabelAlignment;
-use Endroid\QrCode\QrCode;
-
+use app\common\model\Message;
 
 class Api extends Base
 {
     public function index()
     {
-        return ;
+        return 'Welcome to MlTree Forum!';
     }
 
     public function Search($keyword = '', $type = 'topic')
     {
         switch ($type) {
             case 'topic':
-                $data = Db::name('topic')->where('subject,content', 'like', '%'.$keyword.'%')->select();
-                foreach ($data as $key => $value) {
-                    $user = \app\index\model\User::get($value['uid']);
-                    $value['username'] = $user->username;
-                }
+                $topic = new Topic();
+                $data = $topic->Search($keyword);
                 return json(['code'=>'2020','data'=>$data,'time'=>time()]);
                 break;
             
@@ -41,22 +35,21 @@ class Api extends Base
 
     public function del($type = 'topic', $id=0, $uid=0)
     {
-        if (empty($uid)) {
+        if (empty($uid) && empty(session('uid'))) {
             return json(['code'=>'1000','message'=>'尚未登录','time'=>time()]);
+        } elseif ($uid == 0) {
+            $uid = session('uid');
         }
         switch ($type) {
             case 'topic':
                 $auth = new Auth;
                 if ($auth->check('delete', $uid) || $auth->check('admin', $uid)) {
-                    $res = Db::transaction(function () {
-                        Db::name('topic')->find($id);
-                        Db::name('topic')->delete($id);
+                    Db::transaction(function () {
+                        Db::name('topic')->find((int)input('id'));
+                        Db::name('topic')->delete((int)input('id'));
                     });
-                    if ($res) {
-                        return json(['code'=>'3003','message'=>'删除成功','time'=>time()]);
-                    } else {
-                        return json(['code'=>'3004','message'=>'删除失败','time'=>time()]);
-                    }
+                } else {
+                    return json(['code'=>'3004','message'=>'无权限','time'=>time()]);
                 }
                 break;
             
@@ -66,64 +59,19 @@ class Api extends Base
         }
     }
 
+    public function topicList($page=1, $type='common', $fid=0)
+    {
+        $topic = new Topic;
+        $list = $topic->TopicList($page, $type, $fid);
+        return json(['code'=>'0','data'=>$list[0],'pages'=>$list[1]]);
+    }
+
     public function commentList($tid, $page=1)
     {
-        $max = Option::getValue('commentNum');
-        $comment = Comment::page('comment')->where('tid', $tid)->page($page, $max)->select();
-
-        foreach ($comment as $key => $value) {
-            $data = Db::name('user')->where('uid', $value['uid'])->find();
-            $value['username'] = $data['username'];
-            $value['avatar'] = $data['avatar'];
-            $value['time_format'] = time_format($value['create_time']);
-        }
-
-        $count = Comment::page('comment')->where('tid', $tid)->count('cid');
-        $pages = ceil($count / $max);
-        return json(['code'=>'3001','data'=>$comment,'pages'=>$pages]);
-    }
-
-    public function commentConent($cid)
-    {
-        $comment = Comment::get($cid);
-        $comment->userData = Db::name('user')->where('uid', $comment->uid)->field('username')->find();
-        return json(['code'=>'3001','message'=>$comment,'time'=>time()]);
-    }
-
-    public function topiclist($page=1, $t=1, $fid=0)
-    {
-        $max = Option::getValue('forumNum');
-        switch ($t) {
-            case 2:
-                if ($fid == 0) {
-                    $topicData = topic::page('topic')->where('essence', 1)->page($page, $max)->order('create_Time DESC')->select();
-                } else {
-                    $topicData = topic::page('topic')->where('essence', 1)->where('fid', $fid)->page($page, $max)->order('create_Time DESC')->select();
-                }
-                $count = topic::page('topic')->where('essence', 1)->count('tid');
-                $pages = ceil($count / $max);
-                break;
-            
-            default:
-                if ($fid == 0) {
-                    $topicData = topic::page($page, $max)->order('create_Time DESC')->select();
-                } else {
-                    $topicData = topic::page($page, $max)->where('fid', $fid)->order('create_Time DESC')->select();
-                }
-                $count = topic::count('tid');
-                $pages = ceil($count / $max);
-                break;
-        }
-        //数据处理（content等去除标签)
-        $user = new User;
-        foreach ($topicData as $key => $value) {
-            $value['content'] = strip_tags($value['content']);
-            $value['time_format'] = time_format($value['create_time']);
-            $value['userData'] = $user->where('uid', $value['uid'])->field('username,avatar')->find();
-            $value['forumName'] = Db::name('forum')->where('fid', $value['fid'])->field('name')->find()['name'];
-            $value['Badge'] = outBadge($value);
-        }
-        return json(['code'=>'0','data'=>$topicData,'pages'=>$pages]);
+        $tid = 0 ? $tid = 1 : $tid;
+        $comment = new Comment();
+        $list = $comment->ListPage($tid, $page);
+        return json(['code'=>'3001','data'=>$list[0],'pages'=>$list[1]]);
     }
 
     public function getRegCode()
@@ -137,10 +85,10 @@ class Api extends Base
                 return json(['code'=>'-1','message'=>'该邮箱已注册']);
             }
 
-            $time = session('regMail');
+            $time = session('reg.Time');
             if ($time > time()) {
                 $time = $time-time();
-                return json(['code'=>'-1','message'=>'还有'.$time.'后可以再次获取','time'=>time(),'regTime'=>session('regMail')]);
+                return json(['code'=>'-1','message'=>'还有'.$time.'后可以再次获取','time'=>time(),'regTime'=>session('reg.Time')]);
             }
 
             $semail = new Mail;
@@ -159,9 +107,48 @@ class Api extends Base
             if ($res !== true) {
                 return json(['code'=>'-1','message'=>$semail->errorMsg,'time'=>time(),$email]);
             } else {
-                session('regMail', time()+60);
-                session('regCode', $code);
-                return json(['code'=>'0','message'=>'发送成功！','time'=>time(),'regTime'=>session('regMail')]);
+                session('reg.Time', time()+60);
+                session('reg.Code', $code);
+                return json(['code'=>'0','message'=>'发送成功！','time'=>time(),'regTime'=>session('reg.Time')]);
+            }
+        }
+    }
+
+    public function getResetCode()
+    {
+        if (request()->isPost()) {
+            $email = input('post.email');
+
+            $res = user::where('email', $email)->find();
+            if (empty($res)) {
+                return json(['code'=>'-1','message'=>'邮箱不存在！']);
+            }
+
+            $time = session('forget.Time');
+            if ($time > time()) {
+                $time = $time-time();
+                return json(['code'=>'-1','message'=>'还有'.$time.'后可以再次获取','time'=>time(),'forgetTime'=>session('forget.Time')]);
+            }
+
+            $semail = new Mail;
+            $code = createStr(6);
+            $arry = [
+                                '{siteTitle}' => Option::getValue('siteTitle'),
+                                '{userName}' => $res->username,
+                                '{code}' => $code,
+                            ];
+            $title = Option::getValue('forget_mail_title');
+            $content = Option::getValue('forget_mail_content');
+            $title = strtr($title, $arry);
+            $content = strtr($content, $arry);
+            $res = $semail->send($email, $res->username, $title, $content);
+            
+            if ($res !== true) {
+                return json(['code'=>'-1','message'=>$semail->errorMsg,'time'=>time(),$email]);
+            } else {
+                session('forget.Time', time()+60);
+                session('forget.Code', $code);
+                return json(['code'=>'0','message'=>'发送成功！','time'=>time(),'forgetTime'=>session('forget.Time')]);
             }
         }
     }
@@ -195,21 +182,64 @@ class Api extends Base
         }
     }
 
-    // public function createQr($content=null, $logo=false, $filePath=null)
-    // {
-    //     if (!empty($content)) {
-    //         $qr = new QrCode($content);
-    //         if ($logo == true) {
-    //             $qr->setLogoPath();
-    //             $qr->setLogoWidth(90);
-    //         }
-    //         $qr->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH);
-    //         if (!empty($filePath)) {
-    //             $qr->writeFile($filePath.'/'.md5($content).'.png');
-    //         }
-    //         contentType($qr->getContentType());
-    //         return $qr->writeString();
+    public function MessageList($uid)
+    {
+        $msg = new Message;
+        $res = $msg->getMessageList($uid);
+        return json($res);
+    }
 
-    //     }
-    // }
+    public function getMessage($mid)
+    {
+        $msg = new Message;
+        $res = $msg->getMessage($mid);
+        if (!$res[0]) {
+            return json(\outResult(-1, $res[1]));
+        }
+        return json(\outResult(0, $res[1]));
+    }
+
+    public function addMessage()
+    {
+        if (request()->isPost()) {
+            $data = input('post.', '', 'htmlentities');
+            $msg = new Message;
+            $res = $msg->addMessage($data['toUid'], $data['uid'], $data['title'], $data['content']);
+            if (!$res[0]) {
+                return json(\outResult(-1, $res[1]));
+            }
+            return json(\outResult(0, $res[1]));
+        }
+    }
+
+    public function readMessage()
+    {
+        if (request()->isPost()) {
+            $data = input('post.', '', 'htmlentities');
+            $msg = new Message;
+            $res = $msg->readMessage($data['mid']);
+            if (!$res[0]) {
+                return json(\outResult(-1, $res[1]));
+            }
+            return json(\outResult(0, 'Success'));
+        }
+    }
+
+    public function delMessage()
+    {
+        if (request()->isPost()) {
+            $data = input('post.', '', 'htmlentities');
+            $msg = new Message;
+            
+            if ($data['mid'] == 'all' || $data['mid'] == 'read') {
+                $res = $msg->delMessage($data['mid'], $data['uid']);
+            } else {
+                $res = $msg->delMessage($data['mid']);
+            }
+            if (!$res[0]) {
+                return json(\outResult(-1, $res[1]));
+            }
+            return json(\outResult(0, 'Success'));
+        }
+    }
 }

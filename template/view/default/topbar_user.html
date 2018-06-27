@@ -11,6 +11,9 @@
         <a href="{:url('index/topic/create')}" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up">
             <i class="mdui-icon material-icons">create</i>
         </a>
+        <a href="javascript:;" id="mf-msg" class="mdui-btn mdui-btn-icon">
+            <i class="layui-icon layui-icon-notice mdui-icon"></i>{gt name="$msg.unread" value="0"}<span id="msg-hot" class="layui-badge-dot" style="margin:0 0 8px 24px"></span>{/gt}
+        </a>
         <a href="javascript:;" mdui-dialog="{target: '#color-panel'}" class="mdui-btn mdui-btn-icon color-input" style="display: {$theme.discolour=='true' ? 'inline-block' : 'none'}">
             <i class="mdui-icon material-icons">color_lens</i>
         </a>

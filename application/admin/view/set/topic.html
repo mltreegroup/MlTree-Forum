@@ -6,7 +6,8 @@
             <i class="mdui-icon material-icons">search</i>
         </button>
         <form action="" method="post">
-            <input class="mdui-textfield-input" type="text" placeholder="Search" />
+            <input class="mdui-textfield-input" type="text" name="keyword" placeholder="Search" />
+            <input type="hidden" name="type" value="search">
         </form>
         <button class="mdui-textfield-close mdui-btn mdui-btn-icon">
             <i class="mdui-icon material-icons">close</i>
@@ -17,6 +18,7 @@
             <tr>
                 <th>#</th>
                 <th>标题</th>
+                <th>所属板块</th>
                 <th>内容</th>
                 <th class="mdui-table-col-numeric">浏览数</th>
                 <th class="mdui-table-col-numeric">评论数</th>
@@ -28,14 +30,15 @@
             <tr id="{$vo.tid}">
                 <td>{$vo.tid}</td>
                 <td>{$vo.subject}</td>
+                <td>{$forumData[$vo['fid']-1]['name']}</td>
                 <td class="mdui-text-truncate" style="max-height: 10%;max-width: 600px;">{$vo.content|raw|strip_tags}</td>
                 <td class="mdui-table-col-numeric">{$vo.views}</td>
                 <td class="mdui-table-col-numeric">{$vo.comment}</td>
                 <td>
                     <div class="layui-btn-group">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="moveTopic('{$vo.tid}')">移动</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="moveTopic('#{$vo.tid}')">移动</button>
                         <a class="layui-btn layui-btn-primary layui-btn-sm" href="{:url('index/topic/update',['tid'=>$vo.tid])}">编辑</a>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="del('{vo.tid}')">删除</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="del('{$vo.tid}')">删除</button>
                     </div>
                 </td>
             </tr>
@@ -43,81 +46,111 @@
         </tbody>
     </table>
 
-    <div class="mdui-dialog mdui-typo" id="editorTopic">
+    <div class="mdui-dialog mdui-typo" id="moveTopic">
         <div class="mdui-dialog-content">
-            <div class="mdui-dialog-title">编辑板块</div>
-            <form id="editForm" class="layui-form layui-form-pane mdui-m-y-1">
+            <div class="mdui-dialog-title">移动主题 - </div>
+            <form id="moveForm" class="layui-form layui-form-pane mdui-m-y-1">
                 <div class="layui-form-item">
-                    <input type="hidden" name="fid" id="editfid">
-                    <label class="layui-form-label">板块名称</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="name" required lay-verify="required" placeholder="请输入板块名称" autocomplete="off" class="layui-input">
-                    </div>
+                    <select name="fid" class="mdui-select" mdui-select>
+                        {volist name="forumData" id="vo"}
+                        <option value="{$vo.fid}">{$vo.name}</option>
+                        {/volist}
+                    </select>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">板块描述</label>
-                    <div class="layui-input-block">
-                        <textarea name="introduce" placeholder="请输入板块描述" class="layui-textarea"></textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">权限用户组</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="cgroup" required lay-verify="required" placeholder="请输入权限用户祖" autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
-                </div>
+                <input type="hidden" name="tid">
+                <input type="hidden" name="type" value="move">
             </form>
         </div>
         <div class="mdui-dialog-actions">
-            <button class="mdui-btn mdui-ripple" id="edit">保存</button>
+            <button class="mdui-btn mdui-ripple" id="move">修改</button>
         </div>
     </div>
+</div>
+{/block} {block name="js"}
+<script>
+    var $$ = mdui.JQ,
+        data = '',
+        ins = new mdui.Dialog('#moveTopic');
 
-    {/block} {block name="js"}
-    <script>
-        var $$ = mdui.JQ,
-            data = '',
-            ins = new mdui.Dialog('#editorTopic');
+    $$('#forum').addClass('mdui-collapse-item-open');
+    $$('#setTopic').addClass('mdui-list-item-active');
 
-        $$('#forum').addClass('mdui-collapse-item-open');
-        $$('#setTopic').addClass('mdui-list-item-active');
-
-        $$('#submit').on('click', function () {
-            data = $$('form').serialize();
-
-            $$.ajax({
-                method: 'post',
-                url: '',
-                data: data,
-                dataType: 'json',
-                success: function (res) {
-                    if (res.code == 0) {
-                        mdui.snackbar(res.message, {
-                            timeout: 2000,
-                            position: 'top'
-                        })
-                    } else {
-                        mdui.snackbar(res.message, {
-                            timeout: 2000,
-                            position: 'top'
-                        })
-                    }
-
+    $$('#move').on('click', function () {
+        data = $$('#moveForm').serialize();
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
                 }
-            })
 
-            return false;
+            }
         })
 
-        function editorTopic(id) {
-            var data = $$(id).find('td');
+        return false;
+    })
 
-            $$('#editorTopic [name="fid"]').val(data[1].innerText);
-            $$('#editorTopic [name="name"]').val(data[2].innerText);
-            $$('#editorTopic textarea').val(data[3].innerText);
-            $$('#editorTopic [name="cgroup"]').val(data[4].innerText);
+    function moveTopic(id) {
+        var data = $$(id).find('td');
 
+        $$('#moveTopic .mdui-dialog-title').text('移动主题 - ' + data[1].innerText + ' TID[' + data[0].innerText + ']');
+        $$('#moveTopic [name="tid"]').val(data[0].innerText);
+        ins.open();
+    }
 
-        }
-    </script> {/block}
+    function del(tid) {
+        mdui.dialog({
+            title: '你确定吗？',
+            content: '删除此Topic',
+            buttons: [
+                {
+                    text: '取消'
+                },
+                {
+                    text: '确认',
+                    onClick: function (inst) {
+                        $$.ajax({
+                            method: 'post',
+                            url: '{:url("admin/api/del")}',
+                            data: {
+                                type: 'topic',
+                                id: tid,
+                            },
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res.code == 0) {
+                                    mdui.snackbar(res.message, {
+                                        timeout: 2000,
+                                        position: 'top',
+                                        onClosed: function () {
+                                            location.reload();
+                                        }
+                                    })
+                                } else {
+                                    mdui.snackbar(res.message, {
+                                        timeout: 2000,
+                                        position: 'top',
+                                    })
+                                }
+                            }
+                        });
+                    }
+                }
+            ]
+        });
+    }
+</script> {/block}

@@ -93,6 +93,9 @@ function outBadge($data)
     if ($data['essence'] == 1) {
         $value = $value.'<span class="mf-badge mf-badge-warning">精华</span>';
     }
+    if ($data['closed'] == 1) {
+        $value = $value.'<span class="mf-badge">关闭</span>';
+    }
 
     return $value;
 }
@@ -104,4 +107,13 @@ function authCheck($name, $uid = 0, $relation = 'or')
         $uid = session('uid');
     }
     return $auth->check($name, $uid, $relation);
+}
+
+function outResult($code=0, $msg, $url='')
+{
+    if (empty($url)) {
+        return ['code'=>$code,'message'=>$msg,'time'=>time()];
+    } else {
+        return ['code'=>$code,'message'=>$msg,'url'=>$url,'time'=>time()];
+    }
 }

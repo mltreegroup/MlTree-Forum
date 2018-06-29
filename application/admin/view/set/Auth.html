@@ -2,41 +2,97 @@
 <div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
 
     <h1 class="mdui-m-l-3">权限管理</h1>
+
+    <div class="mdui-btn-group mdui-m-l-3">
+        <button type="button" class="mdui-btn" mdui-dialog="{target: '#addAuth'}">
+            <i class="mdui-icon material-icons">add</i>
+        </button>
+    </div>
+
     <table class="mdui-table mdui-textfield mdui-table-hoverable">
         <thead>
             <tr>
                 <th>#</th>
                 <th>权限标志</th>
                 <th>权限名称</th>
+                <th>状态</th>
+                <th>支持规则表达式</th>
                 <th>操作</th>
             </tr>
         </thead>
         <tbody>
             {volist name="Auth" id="vo"}
-            <tr>
+            <tr id="{$vo.id}">
                 <td>{$vo.id}</td>
                 <td>{$vo.name}</td>
                 <td>{$vo.title}</td>
                 <td>
-                    <div class="mdui-btn-group">
-                        <a href="">
-                            <button type="button" class="mdui-btn">
-                                <i class="mdui-icon material-icons">create</i>
-                                编辑
-                            </button>
-                        </a>
-                        <a href="">
-                            <button type="button" class="mdui-btn">
-                                <i class="mdui-icon material-icons">delete</i>
-                                删除
-                            </button>
-                        </a>
+                    <label class="mdui-switch">
+                        <input name="status" value="1" type="checkbox" {eq name="vo.status" value="1" }checked{/eq} onclick="setStatus('{$vo.name}',$$(this).prop('checked'))"
+                        />
+                        <i class="mdui-switch-icon"></i>
+                    </label>
+                </td>
+                <td>
+                    <label class="mdui-switch">
+                        <input name="type" value="1" type="checkbox" {eq name="vo.type" value="1" }checked{/eq} onclick="setType('{$vo.name}',$$(this).prop('checked'))"
+                        />
+                        <i class="mdui-switch-icon"></i>
+                    </label>
+                </td>
+                <td>
+                    <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="del('{$vo.id}')">删除</button>
                     </div>
                 </td>
             </tr>
             {/volist}
         </tbody>
     </table>
+
+    <div class="mdui-dialog mdui-typo" id="addAuth">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title">添加权限</div>
+            <form id="add" class="layui-form layui-form-pane mdui-m-y-1">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">权限名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" required lay-verify="required" placeholder="请输入权限名称" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">请确保其值唯一</div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">权限标志</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" required lay-verify="required" placeholder="请输入权限标志" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">请确保其值唯一</div>
+                </div>
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label">支持规则表达式</label>
+                    <div class="layui-input-block">
+                        <label class="mdui-switch">
+                            <input name="type" value="1" type="checkbox" checked/>
+                            <i class="mdui-switch-icon"></i>
+                        </label>
+                    </div>
+                </div>
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label">权限状态</label>
+                    <div class="layui-input-block">
+                        <label class="mdui-switch">
+                            <input name="status" value="1" type="checkbox" checked/>
+                            <i class="mdui-switch-icon"></i>
+                        </label>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="submit">添加</button>
+        </div>
+    </div>
 
 </div>
 
@@ -49,7 +105,7 @@
     $$('#setAuth').addClass('mdui-list-item-active');
 
     $$('#submit').on('click', function () {
-        data = $$('form').serialize();
+        data = $$('#add').serialize();
 
         $$.ajax({
             method: 'post',
@@ -60,7 +116,8 @@
                 if (res.code == 0) {
                     mdui.snackbar(res.message, {
                         timeout: 2000,
-                        position: 'top'
+                        position: 'top',
+
                     })
                 } else {
                     mdui.snackbar(res.message, {
@@ -74,4 +131,109 @@
 
         return false;
     })
+
+    function del(aid) {
+        mdui.dialog({
+            title: '你确定吗？',
+            content: '此操作将删除此权限，同时使用到此权限的地方将默认通过',
+            buttons: [
+                {
+                    text: '取消'
+                },
+                {
+                    text: '确认',
+                    onClick: function (inst) {
+                        $$.ajax({
+                            method: 'post',
+                            url: '{:url("admin/api/del")}',
+                            data: {
+                                type: 'auth',
+                                id: aid,
+                            },
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res.code == 0) {
+                                    mdui.snackbar(res.message, {
+                                        timeout: 2000,
+                                        position: 'top',
+                                        onClosed: function () {
+                                            location.reload();
+                                        }
+                                    })
+                                } else {
+                                    mdui.snackbar(res.message, {
+                                        timeout: 2000,
+                                        position: 'top',
+                                    })
+                                }
+                            }
+                        });
+                    }
+                }
+            ]
+        });
+
+    }
+
+    function setStatus(name, value) {
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: {
+                name: name,
+                type: 'set',
+                sign: 'status',
+                value: value,
+            },
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+    }
+
+    function setType(name, value) {
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: {
+                name: name,
+                type: 'set',
+                sign: 'type',
+                value: value,
+            },
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.message, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+    }
 </script> {/block}

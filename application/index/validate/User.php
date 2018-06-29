@@ -7,13 +7,18 @@ class User extends Validate
 {
     protected $rule = [
         'username'  => 'require|max:10',
-        'password'   => 'require|max:30|min:3',
-        'email' => 'require|email',
+        'oldpassword' => 'require|max:30|min:3',
+        'password'   => 'require|max:30|min:3|token',
+        'repassword' => 'require|max:30|min:3',
+        'email' => 'require|email|token',
         'captcha|验证码'=>'require|captcha',
     ];
 
     protected $scene = [
+        'register' => ['username','password','repassword','email','captcha'],
         'login' => ['email','passwrd','captcha'],
         'valiEmail' => ['email'],
+        'ResetPas' => ['oldpassword','password','repassword'],
+        'forgetPas' => ['email','password','repassword','captcha'],
     ];
 }

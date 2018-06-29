@@ -120,6 +120,7 @@ layui.use(['layer'], function () {
                 var data = $$('#replyPanel').serialize();
                 data.reCid = re_cid;
                 $$('#editor').toggleClass('mdui-hidden');
+                $$('#replyPanel').toggleClass('mdui-hidden');
                 editor.txt.clear()
                 layer.close(index);
                 $$.ajax({
@@ -151,13 +152,12 @@ layui.use(['layer'], function () {
 
 $$('#create').on('click', function () {
     //获取表单内容
-    var data = $$('form').serialize();
-    data.sign = option.sign;
-
+    var formdata = $$('form').serialize();
+    
     $$.ajax({
         method: 'post',
         url: option.createUrl,
-        data: data,
+        data: formdata,
         dataType: 'json',
         success: function (res) {
             if (res.code == 1) {
@@ -172,6 +172,9 @@ $$('#create').on('click', function () {
                 mdui.snackbar({
                     message: res.message,
                     position: 'top',
+                    onClosed: function () {
+                        location.reload();
+                    }
                 })
             }
         }

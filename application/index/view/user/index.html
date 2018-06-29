@@ -4,21 +4,27 @@
     <div class="mdui-card">
         <div class="mdui-card-media">
             <img src="__IMG__/card.png" height="200px" />
-        </div>
-        <div class="mdui-card-primary">
-            <div class="">
-                <img src="{$userData.avatar}" alt="{$userData.username}" class="mdui-img-circle mdui-float-left" width="60">
+            <div class="mlt-user-info">
+              <div class="mlt-avatar-box">
+                <div class="mlt-avatar-upload">
+                  <button id="avatar_new" title="上传新头像" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">photo_camera</i></button>
+                </div>
+                <img src="{$userData.avatar}" alt="{$userData.username}的头像" id="avatar_preview" />
+              </div>
+              <div class="mlt-user-username">
+                {$userData.username}
+              </div>
+              <div class="mlt-user-data">
+                <a href>{$userData.motto|default="这家伙很懒，什么也没留下"}</a>
+              </div>
             </div>
-            <div class="mdui-card-primary-title">{$userData.username}</div>
-            <div class="mdui-card-primary-subtitle">{$userData.motto|default="这家伙很懒，什么也没留下"}</div>
         </div>
 
         <div class="mdui-card-content">
             <div class="mdui-tab" mdui-tab>
                 <a href="#topic" class="mdui-ripple">主题</a>
                 <a href="#information" class="mdui-ripple">资料</a>
-                <a href="#password" class="mdui-ripple">密码</a>
-                <a href="#avatar" class="mdui-ripple">头像</a>
+                <a href="#password" class="mdui-ripple">安全</a>
             </div>
             <div id="topic">
                 <ul class="mdui-list">
@@ -48,10 +54,10 @@
                         <input name="motto" class="mdui-textfield-input" type="text" value="{$userData.motto}"/>
                     </div>
                     <div class="mdui-textfield mdui-textfield-floating-label">
-                        <button lay-submit lay-filter="info" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">确认修改</button>
+                        <button lay-submit lay-filter="info" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">发布签名</button>
                     </div>
                 </form>
-                
+
             </div>
             <div id="password">
                 <form action="" class="layui-form" method="post">
@@ -71,28 +77,19 @@
                         <i class="mdui-icon material-icons">https</i>
                         <label class="mdui-textfield-label">确认新密码</label>
                         <input name="repassword" class="mdui-textfield-input" type="password" required/> {:token()}
-                        <div class="mdui-textfield-error">与新密码不符</div>
+                        <div class="mdui-textfield-error">和新密码不同</div>
                     </div>
                     <div class="mdui-textfield mdui-textfield-floating-label">
                         <button lay-submit lay-filter="pass" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme layui-btn">确认修改</button>
                     </div>
                 </form>
-                
+
                 <hr/>
                 <div class="mdui-typo">
                     <h4>QQ互联状态:</h4>
                     <code>{$userData.qqconnectStatus}</code>
-                    <blockquote>登录时选择QQ登录即可绑定</blockquote>
+                    <blockquote>Tips: 登录时选择QQ登录即可绑定</blockquote>
                 </div>
-            </div>
-            <div id="avatar" class="mdui-text-center">
-                <div class="mdui-m-y-1">
-                    <img id="avatar_new" src="{$userData.avatar}" alt="{$userData.username}" width="80">
-                </div>
-                <div class="mdui-m-y-1">
-                    <button class="mdui-btn mdui-color-pink" id="avatar_btn">上传新头像</button>
-                </div>
-                <span>上传完成后，请清除浏览器缓存查看效果</span>
             </div>
         </div>
     </div>
@@ -149,7 +146,7 @@
         });
 
         var uploadInst = upload.render({
-            elem: '#avatar_btn'
+            elem: '#avatar_new'
             , accept: 'images'
             , field: 'avatar'
             , data: { uid: '{$userData.uid}' }
@@ -159,7 +156,7 @@
                     layer.msg('上传成功！', {
                         icon: 1,
                         end: function () {
-                            $$('#avatar_new').attr('src', res.url);
+                            $$('#avatar_preview').attr('src', res.url);
                         }
                     });
                 }

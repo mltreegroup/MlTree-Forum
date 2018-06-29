@@ -4,13 +4,21 @@
     <div class="mdui-card">
         <div class="mdui-card-media">
             <img src="__IMG__/card.png" height="200px" />
-        </div>
-        <div class="mdui-card-primary">
-            <div class="">
-                <img src="{$userInfo.avatar}" alt="{$userInfo.username}" class="mdui-img-circle mdui-float-left" width="60">
+            <div class="mlt-user-info">
+              <div class="mlt-avatar-box">
+                <img src="{$userInfo.avatar}" alt="{$userInfo.username}的头像" id="avatar_preview" />
+              </div>
+              <div class="mlt-user-username">
+                {$userInfo.username}
+              </div>
+              <div class="mlt-user-data">
+                <a href>{$userInfo.topics}主题</a>
+                <span class="mdui-m-x-1">|</span>
+                <a href>{$userInfo.comments}</a>
+                <span class="mdui-m-x-1">|</span>
+                <a href>{$userInfo.motto|default="这家伙很懒，什么也没留下"}</a>
+              </div>
             </div>
-            <div class="mdui-card-primary-title">{$userInfo.username}</div>
-            <div class="mdui-card-primary-subtitle">{$userInfo.motto|default="这家伙很懒，什么也没留下"}</div>
         </div>
 
         <div class="mdui-card-content">

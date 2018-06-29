@@ -177,3 +177,87 @@ a.mf-badge:focus {
 .detect-hidden-p li:last-of-type{
   display: none;/*隐藏最后一个主题的分割线*/
 }
+/*用户界面外观*/
+.mlt-user-info{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 24px 16px 16px;
+  color: #fff;
+}
+.mlt-user-info .mlt-avatar-box{
+  position: relative;
+  float: left;
+  margin-right: 16px;
+  height: 60px;
+}
+.mlt-user-info .mlt-avatar-box .mlt-avatar-upload{
+  display:none;
+  overflow: hidden;
+  height: 48px;
+  width: 48px;
+  position: absolute;
+  left: 50%;
+  top:50%;
+  transform: translate(-50%,-50%);
+}
+.mlt-user-info .mlt-avatar-box:hover .mlt-avatar-upload{
+  display: block;
+}
+.mlt-user-info .mlt-avatar-box img{
+  width: 56px;
+  height:56px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.mlt-user-info .mlt-user-data,.mlt-user-info .mlt-user-username{
+  margin-left: 76px;
+}
+.mlt-user-info .mlt-user-username{
+  font-size:30px;
+  display: block;
+  line-height: 36px;
+  opacity: 1;
+}
+.mlt-user-info .mlt-user-data{
+  position: relative;
+  opacity: 1;
+  line-height: 24px;
+  font-size: 14px;
+  color: hsla(0,0%,100%,.54);
+  margin-right: 188px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mlt-user-info .mlt-user-data a{
+  color: #fff;
+  text-decoration: none;
+}
+.mlt-user-info .mlt-user-data a:hover{
+  border-bottom: 1px solid hsla(0,0%,100%,.7);
+}
+.mlt-user-info .mlt-user-control{
+  position: absolute;
+  right: 152px;
+  bottom: 28px;
+}
+.mlt-user-info #avatar_new{
+  display: block;
+  width: 48px;
+  min-width:48px;
+  height: 48px;
+  background-color: rgba(0,0,0,.26)!important;
+}
+/*字体设置*/
+*:not(code):not(pre){
+  font-family: sans-serif, Arial, "微软雅黑";
+}
+code,pre{
+  font-family: "Monaco","Dejavu Sans Mono","Fira Code Pro","Source Code Pro",monospace,sans-serif,"Arial","微软雅黑";
+}

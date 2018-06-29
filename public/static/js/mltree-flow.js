@@ -22,7 +22,7 @@ function mfFlow(type, _Id) {
                     elem: '#topic-cps',
                     done: function (page, next) {
                         var list = [];
-                        $.get('/api/api/topiclist/page/' + page + '/t/1/fid/' + _Id, function (res) {
+                        $.get('/api/api/topiclist/page/' + page + '/type/common/fid/' + _Id, function (res) {
                             layui.each(res.data, function (index, item) {
                                 var html = '<li class="mdui-list-item mdui-ripple"><div class="mdui-list-item-avatar">';
                                 html += '<img src="' + item.userData.avatar + '" alt="' + item.userData.username + '" title="' + item.userData.username + '">'
@@ -48,7 +48,7 @@ function mfFlow(type, _Id) {
                     elem: '#topic-ess',
                     done: function (page, next) {
                         var list = [];
-                        $.get('/api/api/topiclist/page/' + page + '/t/2/fid/' + _Id, function (res) {
+                        $.get('/api/api/topiclist/page/' + page + '/type/essence/fid/' + _Id, function (res) {
                             layui.each(res.data, function (index, item) {
                                 var html = '<li class="mdui-list-item mdui-ripple"><div class="mdui-list-item-avatar">';
                                 html += '<img src="' + item.userData.avatar + '" alt="' + item.userData.username + '" title="' + item.userData.username + '">'

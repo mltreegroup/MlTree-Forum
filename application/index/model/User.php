@@ -56,7 +56,7 @@ class User extends Model
         }
         $validate = new userValidate();
         if (!$validate->scene('register')->check($userInforMation)) {
-            return [false,$vlidate->getError()];
+            return [false,$validate->getError()];
         }
         if (!empty(session('openid'))) {
             $userInforMation['openid'] = session('openid');

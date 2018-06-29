@@ -14,7 +14,7 @@ API支持：程序正在向API化，前后端分离的方向迈进。提供了�
 
 官方论坛：https://forum.mltree.top OR https://forum.kingsr.cc 两站均一致，只是域名不一致。数据同步。
 
-手机版本扫描体验：<img src="https://dn-coding-net-production-static.qbox.me/42e6792e-ee6f-4a16-9491-4a4fac5e48cd.png" witd="100" height="100">
+手机版本扫描体验：<img src="https://i.loli.net/2018/06/28/5b34ff00efd5d.bmp" witd="100" height="100">
 
 #### 软件架构
 
@@ -49,12 +49,12 @@ Telegrate：https://t.me/joinchat/Hewif0uvElN9X2VF3FUaqw
 
 如果你觉得这个项目还不错的话，请捐助我，最低一毛钱嘛。。上不封顶！
 
-<img src="https://dn-coding-net-production-static.qbox.me/56d0ba7d-4881-4719-bc57-9cb50973e47c.jpg" witd="300" height="400">
-<img src="https://dn-coding-net-production-static.qbox.me/70c51181-537a-4974-ba29-4b67119ebfc3.png" witd="300" height="400">
+<img src="https://i.loli.net/2018/06/28/5b34fecb37133.jpg" witd="300" height="400">
+<img src="https://i.loli.net/2018/06/28/5b34fecb62d1d.png" witd="300" height="400">
 
 #### 注意事项
 
-- 如果你不会完成QQ互联的必要操作，请查看这里：[QQ互联设置教程](https://forum.mltree.top/topic/8.html)
+- 如果你不会完成QQ互联的必要操作，请查看这里：[QQ互联设置教程](https://forum.kingsr.cc/topic/11.html)
 - 如果QQ互联操作中出现错误，请查看这里的注意末尾的后续错误解决：[ThinkPHP5.1.xx开启QQ互联的方法](https://blog.kingsr.cc/2018/06/15/thinkphpv5-1-xx-%e5%bc%80%e5%90%afqq%e4%ba%92%e8%81%94%e7%9a%84%e6%96%b9%e6%b3%95/)
 - 如果还有什么问题可以到官方论坛发帖求助
 

@@ -1,10 +1,7 @@
-{include file="/../template@default/header" title="$title"}
+{include file="/../template@default/header"}
 
 <body class="mdui-theme-primary-blue mdui-theme-accent-blue mdui-appbar-with-toolbar">
-    <script src="__JS__/theme.js"></script>
-    {if !empty(session('uid'))} {include file="/../template@default/topbar_user"} {else /} {include file="/../template@default/topbar"}
-    {/if}
-
+    <script src="__JS__/theme.js"></script> {include file="/../template@default/topbar"}
     <div class="mdui-container">
         <div class="mdui-row mdui-text-center">
             <div class="system-message mf-panel mdui-m-y-3 mdui-typo">
@@ -12,10 +9,15 @@
                     <h3>操作成功！</h3>
                 </header>
                 <div class="content mf-panel-bd">
-                    <p><?php echo(strip_tags($msg));?></p>
-                    <p>将于：<b id="wait">
-                        <?php echo($wait);?>
-                    </b>后页面自动<a id="href" href="<?php echo($url);?>">跳转</a></p>
+                    <p>
+                        <?php echo(strip_tags($msg));?>
+                    </p>
+                    <p>将于：
+                        <b id="wait">
+                            <?php echo($wait);?>
+                        </b>后页面自动
+                        <a id="href" href="<?php echo($url);?>">跳转</a>
+                    </p>
                 </div>
             </div>
         </div>

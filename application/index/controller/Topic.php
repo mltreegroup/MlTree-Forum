@@ -161,6 +161,10 @@ class Topic extends Base
     public function set($type, $tid)
     {
         $topic = topicModel::get($tid);
+        $msgObj = new Message;
+        $msg = $msgObj->getMessageList(session('uid'), 0);
+        
+        $this->assign('msg', ['unread'=>count($msg['data'])]);
         if ($type == 'top') {
             if (!empty($topic)) {
                 $topic->tops == 1 ? $topic->tops = 0 : $topic->tops = 1 ;

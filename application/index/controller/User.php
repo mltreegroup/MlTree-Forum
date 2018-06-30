@@ -14,7 +14,7 @@ class User extends Base
         if ($uid == 0 && empty(session('uid'))) {
             return $this->error('用户不存在！', 'index\index\index');
         }
-        if (!userModel::isLogin(cookie('userKey'))) {
+        if (!userModel::isLogin(cookie('userKey')) || $uid != session('uid') && $uid != 0) {
             $userTopicList = userModel::getTopicList($uid);
             $user = new userModel;
             $userInfo = $user->getInfor($uid);

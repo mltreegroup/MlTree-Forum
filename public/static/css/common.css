@@ -256,7 +256,7 @@ a.mf-badge:focus {
 }
 /*字体设置*/
 *:not(code):not(pre){
-  font-family: sans-serif, Arial, "微软雅黑";
+  font-family: "Roboto","Noto Sans",sans-serif, Arial, "微软雅黑";
 }
 code,pre{
   font-family: "Monaco","Dejavu Sans Mono","Fira Code Pro","Source Code Pro",monospace,sans-serif,"Arial","微软雅黑";

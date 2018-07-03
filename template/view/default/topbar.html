@@ -1,16 +1,12 @@
 <!-- 站点导航部分 -->
 <header class="mdui-appbar mdui-appbar-fixed">
     <div class="mdui-toolbar mdui-color-theme">
-        <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target:'#mobile-menu'}">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target:'#mobile-menu',overlay:true,swipe:true}">
             <i class="mdui-icon material-icons">menu</i>
         </a>
         <a href="{:url('index/index')}" class="mdui-typo-title">MlTree Forum</a>
-        <a href="{:url('index/index')}" class="mdui-hidden-xs" title="Home">首页</a>
         {// 输出Forum导航} {:outTopbar()}
         <div class="mdui-toolbar-spacer"></div>
-        <a href="{:url('index/topic/create')}" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up">
-            <i class="mdui-icon material-icons">create</i>
-        </a>
         <a href="javascript:;" mdui-dialog="{target: '#color-panel'}" class="mdui-btn mdui-btn-icon color-input" style="display: {$theme.discolour=='true' ? 'inline-block' : 'none'}">
             <i class="mdui-icon material-icons">color_lens</i>
         </a>
@@ -23,15 +19,14 @@
 </header>
 <!-- 论坛左侧手机版菜单 -->
 <div class="mdui-drawer mdui-drawer-close" id="mobile-menu">
-    <ul class="mdui-list" mdui-collapse="{accordion: true}">
+    <ul class="mdui-list mdui-color-white" mdui-collapse="{accordion: true}">
 
         <li class="mdui-list-item mdui-ripple">
             <i class="mdui-list-item-icon mdui-icon material-icons">home</i>
             <a href="{:url('index/index')}" title="Home">
-                <div class="mdui-list-item-content">Home</div>
+                <div class="mdui-list-item-content">首页</div>
             </a>
         </li>
-
         <li class="mdui-collapse-item mdui-ripple">
             <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
                 <i class="mdui-list-item-icon mdui-icon material-icons">people</i>

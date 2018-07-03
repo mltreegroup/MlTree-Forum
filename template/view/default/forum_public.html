@@ -1,6 +1,6 @@
 {include file="/../template@default/header" title="$option.siteTitle" Keywords="$option.siteKeywords" Des="$option.siteDes"}
 
-<body class="mdui-theme-primary-pink mdui-theme-accent-pink mdui-appbar-with-toolbar">
+<body class="mdui-appbar-with-toolbar">
     <script src="__JS__/theme.js"></script>
     {if !empty(session('uid'))} {include file="/../template@default/topbar_user"} {else /} {include file="/../template@default/topbar"}
     {/if}

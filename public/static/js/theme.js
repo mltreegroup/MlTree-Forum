@@ -1,164 +1,179 @@
-/*!
- * 一个适用于 MDUI、仿官网变色功能的 JavaScript 插件
- * https://www.mdui.org
- * 
- * 使用方法：在 body 标签内的最顶部引入即可。
+/*
+ * 基于MDL调色板的主题切换器，漂亮、易用。
+ * 由 学神之女 制作。
+ * GitHub项目: https://github.com/DFFZMXJ/mdui-colour=pad
  */
-
-/**
- * 主题类
- * 目前的用途大概是变色
- */
-var theme = {
-	/*! 可自定义以下内容 */
-	primaryList: { // 允许使用的主题色
-		'姨妈红': 'red',
-		'少女粉': 'pink',
-		'基佬紫': 'purple',
-		'胖次蓝': 'blue',
-		'早苗绿': 'green',
-		'伊藤橙': 'orange',
-		'呆毛黄': 'yellow',
-		'远坂棕': 'brown',
-		'靛': 'indigo',
-		'青': 'cyan',
-		'水鸭': 'teal',
-		'性冷淡': 'grey',
-	},
-	accentList: { // 允许使用的强调色
-		'姨妈红': 'red',
-		'少女粉': 'pink',
-		'基佬紫': 'purple',
-		'胖次蓝': 'blue',
-		'早苗绿': 'green',
-		'伊藤橙': 'orange',
-		'呆毛黄': 'yellow',
-		'远坂棕': 'brown',
-		'靛': 'indigo',
-		'青': 'cyan',
-		'水鸭': 'teal',
-		'性冷淡': 'grey',
-	},
-	layoutList: { // 允许使用的模式
-		'日间模式': 'light',
-		'夜间模式': 'black',
-	},
-	/*! 可自定义以上内容 */
-	primary: localStorage.getItem("themePrimary"),
-	accent: localStorage.getItem("themeAccent"),
-	layout: localStorage.getItem("themeLayout"),
-	/**
-	 * 开始设定
-	 */
-	startup: function () {		
-		this.setPrimary(this.primary == null ? mdui.JQ('meta[name="setPrimary"]').attr('content') : this.primary);
-		this.setAccent(this.accent == null ? mdui.JQ('meta[name="setAccent"]').attr('content') : this.accent);
-		this.setLayout(this.layout == null ? mdui.JQ('meta[name="setLayout"]').attr('content') : this.layout);
-
-		var primary = '#primary-' + mdui.JQ('meta[name="setPrimary"]').attr('content');;
-		var accent = '#accent-' + mdui.JQ('meta[name="setAccent"]').attr('content');
-		var layout = '#layout-' + mdui.JQ('meta[name="setLayout"]').attr('content');
-		
-		mdui.JQ(primary).prop('checked', 'checked');
-		mdui.JQ(accent).prop('checked', 'checked');
-		mdui.JQ(layout).prop('checked', 'checked');
-	},
-	/**
-	 * 初始化设定
-	 */
-	reset: function () {
-		this.primary = null;
-		this.accent = null;
-		this.layout = null;
-		this.startup();
-	},
-	/**
-	 * 设定主题色
-	 * @param {Object} color
-	 */
-	setPrimary: function (color) {
-		this.updateTheme(color, "primary");
-		localStorage.setItem("themePrimary", color);
-	},
-	/**
-	 * 设定强调色
-	 * @param {Object} color
-	 */
-	setAccent: function (color) {
-		this.updateTheme(color, "accent");
-		localStorage.setItem("themeAccent", color);
-	},
-	/**
-	 * 设定模式
-	 * @param {Object} layout
-	 */
-	setLayout: function (layout) {
-		var classs = mdui.JQ("body").attr("class");
-		if (layout == "light") {
-			classs = classs.replace(/mdui-theme-layout-dark/i, "");
-		} else {
-			classs = classs + " mdui-theme-layout-dark";
-		}
-		mdui.JQ("body").attr("class", classs);
-		localStorage.setItem("themeLayout", layout);
-	},
-	/**
-	 * 更新主题
-	 * @param {Object} color
-	 * @param {Object} theme
-	 */
-	updateTheme: function (color, theme) {
-		var list = mdui.JQ("body").attr("class").split(" ");
-		list = this.removeTheme(list, theme) + "mdui-theme-" + theme + "-" + color;
-		mdui.JQ("body").attr("class", list);
-	},
-	/**
-	 * 删除主题
-	 * @param {Object} list
-	 * @param {Object} theme
-	 */
-	removeTheme: function (list, theme) {
-		for (var i = 0; i < list.length; i++) {
-			if (new RegExp("mdui-theme-" + theme + "-").test(list[i])) {
-				list[i] = "";
-			}
-		}
-		var classs = "";
-		for (var i = 0; i < list.length; i++) {
-			classs = classs + list[i] + " ";
-		}
-		return classs;
-	},
-	/**
-	 * 设置html
-	 */
-	setHtml: function () {
-		for (var key in this.primaryList) {
-			if (this.primaryList[key] == this.primary) {
-				mdui.JQ('#primary-list').append('<div class="mdui-col"><label class="mdui-radio mdui-text-color-' + this.primaryList[key] + '" onclick=\'theme.setPrimary("' + this.primaryList[key] + '")\'><input id="primary-' + this.primaryList[key] + '" value="' + this.primaryList[key] + '" type="radio" checked name="themePrimary"/><i class="mdui-radio-icon"></i>' + key + '</label></div>');
-			} else {
-				mdui.JQ('#primary-list').append('<div class="mdui-col"><label class="mdui-radio mdui-text-color-' + this.primaryList[key] + '" onclick=\'theme.setPrimary("' + this.primaryList[key] + '")\'><input id="primary-' + this.primaryList[key] + '" value="' + this.primaryList[key] + '" type="radio" name="themePrimary"/><i class="mdui-radio-icon"></i>' + key + '</label></div>');
-			}
-		}
-		for (var key in this.accentList) {
-			if (this.accentList[key] == this.accent) {
-				mdui.JQ('#accent-list').append('<div class="mdui-col"><label class="mdui-radio mdui-text-color-' + this.accentList[key] + '" onclick=\'theme.setAccent("' + this.accentList[key] + '")\'><input id="accent-' + this.accentList[key] + '" value="' + this.accentList[key] + '" type="radio" checked name="themeAccent"/><i class="mdui-radio-icon"></i>' + key + '</label></div>');
-			} else {
-				mdui.JQ('#accent-list').append('<div class="mdui-col"><label class="mdui-radio mdui-text-color-' + this.accentList[key] + '" onclick=\'theme.setAccent("' + this.accentList[key] + '")\'><input id="accent-' + this.accentList[key] + '" value="' + this.accentList[key] + '" type="radio" name="themeAccent"/><i class="mdui-radio-icon"></i>' + key + '</label></div>');
-			}
-		}
-		for (var key in this.layoutList) {
-			if (this.layoutList[key] == this.layout) {
-				mdui.JQ('#layout-list').append('<div class="mdui-col"><label class="mdui-radio mdui-text-color-' + this.layoutList[key] + '" onclick=\'theme.setLayout("' + this.layoutList[key] + '")\'><input id="layout-' + this.layoutList[key] + '" value="' + this.layoutList[key] + '" type="radio" checked name="themeLayout"/><i class="mdui-radio-icon"></i>' + key + '</label></div>');
-			} else {
-				mdui.JQ('#layout-list').append('<div class="mdui-col"><label class="mdui-radio mdui-text-color-' + this.layoutList[key] + '" onclick=\'theme.setLayout("' + this.layoutList[key] + '")\'><input id="layout-' + this.layoutList[key] + '" value="' + this.layoutList[key] + '" type="radio" name="themeLayout"/><i class="mdui-radio-icon"></i>' + key + '</label></div>');
-			}
-		}
-	}
+/*这必须凌驾于JS上*/
+var $$ = mdui.JQ; //MDUI的选择器，不必引入MDUI了。
+var done = true; //颜色是否全部选择
+var theme = function() {
+  var page = {
+    primary: "blue",
+    accent: "pink"
+  };
+  var preview = {
+    primary: "blue",
+    accent: "pink"
+  };
+  //适应MlTree自身主题系统。
+  (function() {
+    page.primary = localStorage.themePrimary || $$("meta[name=\"setPrimary\"]");
+    page.accent = localStorage.themeAccent || $$("meta[name=\"setAccent\"]");
+    preview.primary = localStorage.themePrimary || $$("meta[name=\"setPrimary\"]");
+    preview.accent = localStorage.themeAccent || $$("meta[name=\"setAccent\"]");
+  })();
+  this.set = {
+    page: function(primary = false, accent = false) {
+      if (!primary || !accent) return false;
+      if (typeof primary != "string" || typeof accent != "string") return false;
+      $$("body").removeClass("mdui-theme-primary-" + page.primary);
+      $$("body").removeClass("mdui-theme-accent-" + page.accent);
+      $$("body").addClass("mdui-theme-primary-" + primary);
+      $$("body").addClass("mdui-theme-accent-" + accent);
+      page = {
+        primary: primary,
+        accent: accent
+      };
+      //适应MlTree自身主题系统
+      localStorage.themePrimary = primary;
+      localStorage.themeAccent = accent;
+      return true;
+    },
+    preview: function(primary, accent) {
+      if (!primary || !accent) return false;
+      if (typeof primary != "string" || typeof accent != "string") return false;
+      $$("[data-preview-primary]").removeClass("mdui-color-" + preview.primary);
+      $$("[data-preview-accent]").removeClass("mdui-color-" + preview.accent);
+      $$("[data-preview-primary]").addClass("mdui-color-" + primary);
+      $$("[data-preview-accent]").addClass("mdui-color-" + accent);
+      preview = {
+        primary: primary,
+        accent: accent
+      };
+    }
+  };
+  this.info = { //获取主题信息
+    page: function() {
+      return page;
+    },
+    preview: function() {
+      return preview;
+    }
+  };
+  $$("body").addClass("mdui-theme-primary-" + page.primary); //初始化
+  $$("body").addClass("mdui-theme-accent-" + page.accent);
+  $$("[data-preview-primary]").addClass("mdui-color-" + preview.primary);
+  $$("[data-preview-accent]").addClass("mdui-color-" + preview.accent);
+  return true;
 };
-
-theme.startup();
-
-window.onload = function () {
-	theme.setHtml(); // 设置 html 代码结构
+theme = new theme();
+var setting = {
+  primary: theme.info.page().primary,
+  accent: theme.info.page().accent
+};
+var unsupportedAccent = ["Grey", "Blue Grey", "Brown"]; //不受支持的强调色
+$$("g[data-color=\"" + setting.primary.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+  return $$1.toUpperCase();
+}) + "\"]").addClass("selected selected--1");
+$$("g[data-color=\"" + setting.primary.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+  return $$1.toUpperCase();
+}) + "\"]").children("g[filter]").attr("filter", "url(#drop-shadow)");
+$$("g[data-color=\"" + setting.accent.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+  return $$1.toUpperCase();
+}) + "\"]").addClass("selected selected--2");
+$$("g[data-color=\"" + setting.accent.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+  return $$1.toUpperCase();
+}) + "\"]").children("g[filter]").attr("filter", "url(#drop-shadow)");
+$$("g[data-color]").on("click", function(e) {
+  if (done) {
+    $$("g[data-color=\"" + setting.primary.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+      return $$1.toUpperCase();
+    }) + "\"]").removeClass("selected selected--1");
+    $$("g[data-color=\"" + setting.primary.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+      return $$1.toUpperCase();
+    }) + "\"]").children("g[filter]").attr("filter", "");
+    $$("g[data-color=\"" + setting.accent.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+      return $$1.toUpperCase();
+    }) + "\"]").removeClass("selected selected--2");
+    $$("g[data-color=\"" + setting.accent.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+      return $$1.toUpperCase();
+    }) + "\"]").children("g[filter]").attr("filter", "");
+    setting.primary = $$(this).attr("data-color").toLowerCase().replace(/ /g, "-");
+    console.log("您选择的主色：" + $$(this).attr("data-color"));
+    $$(this).addClass("selected selected--1");
+    $$(this).children("g[filter]").attr("filter", "url(#drop-shadow)");
+    $$("#wheel svg").addClass("hide-nonaccents");
+    done = !done;
+  } else {
+    if ($$(this).attr("data-color").toLowerCase().replace(/ /g, "-") != setting.primary && unsupportedAccent.indexOf($$(this).attr("data-color")) == -1) {
+      setting.accent = $$(this).attr("data-color").toLowerCase().replace(/ /g, "-");
+      console.log("您选择的强调色：" + $$(this).attr("data-color"));
+      $$(this).addClass("selected selected--2");
+      $$(this).children("g[filter]").attr("filter", "url(#drop-shadow)");
+      console.log("主题色：" + JSON.stringify(setting));
+      theme.set.preview(setting.primary, setting.accent);
+      $$("#wheel svg").removeClass("hide-nonaccents");
+      done = !done;
+    }
+  }
+});
+$$("#apply").on("click", function() {
+  theme.set.page(setting.primary, setting.accent);
+  mdui.snackbar("已应用");
+});
+var rTheme = function() {
+  theme.set.preview(setting.primary, setting.accent);
+  $$("[data-preview-primary]").addClass("mdui-color-" + setting.primary);
+  $$("[data-preview-accent]").addClass("mdui-color-" + setting.accent);
+  var unsupportedAccent = ["Grey", "Blue Grey", "Brown"]; //不受支持的强调色
+  $$("g[data-color=\"" + setting.primary.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+    return $$1.toUpperCase();
+  }) + "\"]").addClass("selected selected--1");
+  $$("g[data-color=\"" + setting.primary.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+    return $$1.toUpperCase();
+  }) + "\"]").children("g[filter]").attr("filter", "url(#drop-shadow)");
+  $$("g[data-color=\"" + setting.accent.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+    return $$1.toUpperCase();
+  }) + "\"]").addClass("selected selected--2");
+  $$("g[data-color=\"" + setting.accent.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+    return $$1.toUpperCase();
+  }) + "\"]").children("g[filter]").attr("filter", "url(#drop-shadow)");
+  $$("g[data-color]").on("click", function(e) {
+    if (done) {
+      $$("g[data-color=\"" + setting.primary.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+        return $$1.toUpperCase();
+      }) + "\"]").removeClass("selected selected--1");
+      $$("g[data-color=\"" + setting.primary.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+        return $$1.toUpperCase();
+      }) + "\"]").children("g[filter]").attr("filter", "");
+      $$("g[data-color=\"" + setting.accent.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+        return $$1.toUpperCase();
+      }) + "\"]").removeClass("selected selected--2");
+      $$("g[data-color=\"" + setting.accent.replace(/\-/g, " ").replace(/^([a-z])| ([a-z])/g, function($$1) {
+        return $$1.toUpperCase();
+      }) + "\"]").children("g[filter]").attr("filter", "");
+      setting.primary = $$(this).attr("data-color").toLowerCase().replace(/ /g, "-");
+      console.log("您选择的主色：" + $$(this).attr("data-color"));
+      $$(this).addClass("selected selected--1");
+      $$(this).children("g[filter]").attr("filter", "url(#drop-shadow)");
+      $$("#wheel svg").addClass("hide-nonaccents");
+      done = !done;
+    } else {
+      if ($$(this).attr("data-color").toLowerCase().replace(/ /g, "-") != setting.primary && unsupportedAccent.indexOf($$(this).attr("data-color")) == -1) {
+        setting.accent = $$(this).attr("data-color").toLowerCase().replace(/ /g, "-");
+        console.log("您选择的强调色：" + $$(this).attr("data-color"));
+        $$(this).addClass("selected selected--2");
+        $$(this).children("g[filter]").attr("filter", "url(#drop-shadow)");
+        console.log("主题色：" + JSON.stringify(setting));
+        theme.set.preview(setting.primary, setting.accent);
+        $$("#wheel svg").removeClass("hide-nonaccents");
+        done = !done;
+      }
+    }
+  });
+  $$("#apply").on("click", function() {
+    theme.set.page(setting.primary, setting.accent);
+    mdui.snackbar("已应用");
+  });
+  $("#theme-error").addClass("mdui-hidden");
 }

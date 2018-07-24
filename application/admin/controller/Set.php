@@ -3,7 +3,7 @@ namespace app\admin\controller;
 
 use think\Db;
 use think\facade\Request;
-use app\index\controller\Base;
+use app\admin\controller\Base;
 use app\index\model\Option;
 use app\index\model\Group;
 use app\index\model\Mail;
@@ -13,19 +13,23 @@ use app\common\model\Message;
 
 class Set extends Base
 {
-    public function index()
-    {
-        return;
-    }
-
     public function base()
     {
+        
         $base = Option::getValues();
         if (!empty(input('post.'))) {
-            Option::setValues(input('post.', 'htmlspecialchars'));
+            $data = input('post.','','htmlspecialchars');
+            $res = $this->validate($data,'app\admin\validate\Set.base');
+            if(!$res){
+                return json(['code'=>-1,'message'=>$res]);
+            }
+            unset($data['__token__']);
+            $data['siteFooterJs'] = \htmlspecialchars_decode($data['siteFooterJs']);
+            $data['notice'] = \htmlspecialchars_decode($data['notice']);
+            Option::setValues($data);
             return json(['code'=>0,'message'=>'更新成功！']);
         }
-        return view('base', [
+        return view('admin@set/base', [
             'base' => $base,
         ]);
     }
@@ -43,12 +47,18 @@ class Set extends Base
 
             $data['defaulegroup'] = input('post.defaulegroup');
             $data['closeContent'] = input('post.closeContent');
+            $data['__token__'] = input('post.__token__');
+
+            $res = $this->validate($data,'app\admin\validate\Set.baseReg');
+            if(true !== $res){
+                return json(['code'=>-1,'message'=>$res]);
+            }
 
             Option::setValues($data);
             return json(['code'=>0,'message'=>'更新成功！']);
         }
 
-        return view('baseReg', [
+        return view('admin@set/baseReg', [
             'reg' => $reg,
             'base' => $base,
             'userGroup' => Group::all(),
@@ -87,14 +97,19 @@ class Set extends Base
         '夜间模式'=> 'black',
         ];
         if (request()->isPost()) {
+            $data = input('post.','','htmlspecialchars');
             $data = input('post.', '', 'htmlentities');
             if (!input('?post.discolour')) {
                 $data['discolour'] = 'false';
             }
+            $res = $this->validate($data,'app\admin\validate\Set.baseTheme');
+            if(true !== $res){
+                return json(['code'=>-1,'message'=>$res]);
+            }
             Option::setValues($data);
             return json(['code'=>'0','message'=>'更新成功','time'=>time()]);
         }
-        return view('baseTheme', [
+        return view('admin@set/baseTheme', [
             'primaryList' => $primaryList,
             'accentList' => $accentList,
             'layoutList' => $layoutList,
@@ -108,8 +123,13 @@ class Set extends Base
 
         if (!empty(input('post.'))) {
             $type = input('post.type');
-
+            $data = input('post.','','htmlspecialchars');
             if ($type == 'mailBase') {
+                $res = $this->validate($data,'app\admin\validate\Set.baseMail');
+                if(true !== $res){
+                    return json(['code'=>-1,'message'=>$res]);
+                }
+                unset($data['__token__']);
                 Option::setValues(input('post.', 'htmlspecialchars'));
                 return json(['code'=>0,'message'=>'更新成功！']);
             } elseif ($type == 'sendTest') {
@@ -127,7 +147,7 @@ class Set extends Base
             }
         }
 
-        return view('baseMail', [
+        return view('admin@set/baseMail', [
             'mail' => $mail,
             'template' => $template,
         ]);
@@ -139,9 +159,17 @@ class Set extends Base
 
         if (!empty(input('post.'))) {
             if (empty(input('post.fid'))) {
+                $res = $this->validate(input('post.'),'app\admin\validate\Set.forum');
+                if(true !== $res){
+                    return json(['code'=>-1,'message'=>$res]);
+                }
                 Forum::create(input('post.'));
                 return json(['code'=>0,'message'=>'添加板块成功']);
             } else {
+                $res = $this->validate(input('post.'),'app\admin\validate\Set.forum');
+                if(true !== $res){
+                    return json(['code'=>-1,'message'=>$res]);
+                }
                 $res = Db::name('forum')->where('fid', input('post.fid'))->find();
                 if (empty($res)) {
                     return json(['code'=>'2041','message'=>'该板块不存在！']);
@@ -151,7 +179,7 @@ class Set extends Base
             }
         }
 
-        return view('forum', [
+        return view('admin@set/forum', [
             'forumData' => $fourm,
         ]);
     }
@@ -169,7 +197,7 @@ class Set extends Base
             if (input('post.type') == 'search') {
                 $topic = new Topic;
                 $res = $topic->Search(input('keyword'));
-                return view('topic', [
+                return view('admin@set/topic', [
                     'topicData' => $res,
                     'forumData' => $forum,
                 ]);
@@ -183,7 +211,7 @@ class Set extends Base
             }
         }
 
-        return view('topic', [
+        return view('admin@set/topic', [
             'topicData' => $topic,
             'forumData' => $forum,
         ]);
@@ -196,18 +224,26 @@ class Set extends Base
 
         if (!empty(input('post.'))) {
             if (empty(input('post.Id'))) {
+                 $res = $this->validate(input('post.'),'app\admin\validate\Set.link');
+                if(true !== $res){
+                    return json(['code'=>-1,'message'=>$res]);
+                }
                 Db::name('links')->strict(false)->insert(input('post.'));
                 return json(['code'=>0,'message'=>'添加成功','time'=>time()]);
             } else {
+                $res = $this->validate(input('post.'),'app\admin\validate\Set.link');
+                if(true !== $res){
+                    return json(['code'=>-1,'message'=>$res]);
+                }
                 $res = Db::name('links')->where('Id', input('post.Id'))->find();
                 if (empty($res)) {
                     return json(['code'=>'2050','message'=>'该Link不存在！']);
                 }
-                Db::name('links')->update(input('post.'));
+                Db::name('links')->strict(false)->update(input('post.'));
                 return json(['code'=>0,'message'=>'修改Link成功']);
             }
         }
-        return view('forumsetting', [
+        return view('admin@set/forumsetting', [
             'links' => $link,
             'forum' => $fourm,
         ]);
@@ -220,6 +256,10 @@ class Set extends Base
 
         if (request()->isPost()) {
             if (!empty(input('post.uid'))) {
+                $res = $this->validate(input('post.'),'app\admin\validate\Set.user');
+                if(true !== $res){
+                    return json(['code'=>-1,'message'=>$res]);
+                }
                 input('?post.status') ? $status = '1' : $status = '0';
                 $data = [
                     'username' => input('post.username'),
@@ -234,18 +274,22 @@ class Set extends Base
                 return json(outResult(0, '修改成功'));
             } elseif (input('?post.type') && input('?post.type')=='search') {
                 $res =  Db::name('user')->where('uid|username|email', 'like', '%'.input('post.keyword').'%');
-                return view('user', [
+                return view('admin@set/user', [
                     'userData' => $data,
                     'groupList' => $group,
                 ]);
             } else {
+                $res = $this->validate(input('post.'),'app\admin\validate\Set.user');
+                if(true !== $res){
+                    return json(['code'=>-1,'message'=>$res]);
+                }
                 $data = input('post.');
                 $data['password'] = \password_encode($data['password']);
                 Db::name('user')->strict(false)->insert($data);
                 return json(\outResult(0, '添加成功'));
             }
         }
-        return view('user', [
+        return view('admin@set/user', [
             'userData' => $data,
             'groupList' => $group,
         ]);
@@ -268,6 +312,10 @@ class Set extends Base
                     }
                 }
             }
+            $res = $this->validate($data,'app\admin\validate\Set.group');
+            if(true !== $res){
+                return json(['code'=>-1,'message'=>$res]);
+            }
             if (!isset($data['ID'])) {
                 Db::name('group')->strict(false)->insert($data);
                 return json(\outResult(0, '添加成功'));
@@ -276,7 +324,7 @@ class Set extends Base
                 return json(\outResult(0, '修改成功'));
             }
         }
-        return view('userGroup', [
+        return view('admin@set/userGroup', [
             'groupData' => $data,
         ]);
     }
@@ -290,21 +338,29 @@ class Set extends Base
                 if (input('post.type') == 'set') {
                     input('post.value') == 'true' ? $data = [input('post.sign', '', 'strtolower')=>'1'] : $data = [input('post.sign', '', 'strtolower')=>'0'];
                     $name = input('post.name', '', 'strtolower');
+                    if($name == 'admin')
+                    {
+                        return json(outResult(-1, '拒绝修改Admin权限'));
+                    }
                     $res = Db::name('auth_rule')->where('name', $name)->update($data);
                     return json(outResult(0, 'Success'));
                 }
             }
             
-            $res1 = Db::name('auth_rule')
+            $res = Db::name('auth_rule')
             ->where('title', input('post.title'))
             ->find();
-            if (!empty($res) || !empty($res1)) {
+            if (!empty($res)) {
                 return json(outResult(-1, '权限重复'));
+            }
+            $res = $this->validate(input('post.'),'app\admin\validate\Set.auth');
+            if(true !== $res){
+                return json(['code'=>-1,'message'=>$res]);
             }
             Db::name('auth_rule')->strict(false)->insert(input('post.'));
             return json(\outResult(0, '添加成功'));
         }
-        return view('Auth', [
+        return view('admin@set/Auth', [
             'Auth' => $data,
         ]);
     }
@@ -322,6 +378,6 @@ class Set extends Base
             $msg->addAllMessage($uid, session('uid'), input('post.title'), input('post.content'));
             return json(\outResult(0, '发送成功'));
         }
-        return view();
+        return view('admin@set/Expand');
     }
 }

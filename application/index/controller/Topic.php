@@ -133,7 +133,10 @@ class Topic extends Base
                 'content' => input('post.content'),
             ];
             !empty(input('post.recid')) ? $data['reCid'] = input('post.recid') : $data;
-
+            if(empty($data['content']))
+            {
+                return ['code'=>-1,'message'=>'评论内容不得为空'];
+            }
             $topic = topicModel::get($tid);
             if ($topic->closed == 1) {
                 return ['code'=>-1,'message'=>'Topic已被关闭，禁止回复'];

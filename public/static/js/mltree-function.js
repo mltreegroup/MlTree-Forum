@@ -151,16 +151,23 @@ function delTopic(_tid, _uid) {
 }
 
 function recomment(_id) {
-    editor.txt.clear();
+    editor.clearValue();
     var id = '#reply-' + _id;
     var data = $$(id).data();
     $$('#reply').trigger('click');
-    re_cid = data.cid;
-    var html = '<p>回复 <a href="/user/' + data.uid + '.html"> @' + data.username + ' </a>：<a href="#reply-content-' + data.cid + '" >#' + data.cid + '</a></p>';
+    var html = `{@${data.uid}/${data.cid}}`;
     $$('#recid').val(data.cid);
-    if (editor.txt.text() == null || editor.txt.text() == '') {
-        editor.txt.html(html);
-    } else {
-        editor.txt.append(html);
-    }
+    editor.setValue(html)
+}
+
+function getAjax(url, data, callback) {
+    $$.ajax({
+        method: 'POST',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (res) {
+            callback(res);
+        }
+    });
 }

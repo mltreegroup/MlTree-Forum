@@ -10,6 +10,17 @@ class Comment extends Model
     protected $pk = 'cid';
     protected $autoWriteTimestamp = true;
 
+    public function getContentAttr($val)
+    {
+        return \markdownEncode($val);
+    }
+    public function setContentAttr($val)
+    {
+        $res = replyRegular($val);
+        $val = str_replace('{'.$res[0].'}', $res[3], $val);
+        return $val;
+    }
+
     /**
      * 获取指定tid下的评论列表
      * @param [int] $tid [require|主题id]

@@ -1,0 +1,40 @@
+{include file="common/header"}
+
+<body class="mdui-theme-primary-blue mdui-theme-accent-blue mdui-appbar-with-toolbar">
+    <script src="__JS__/theme.js"></script> {include file="common/topbar"}
+    <div class="mdui-container">
+        <div class="mdui-row mdui-text-center">
+            <div class="system-message mf-panel mdui-m-y-3 mdui-typo">
+                <header class="mf-panel-hd">
+                    <h3>操作成功！</h3>
+                </header>
+                <div class="content mf-panel-bd">
+                    <p>
+                        <?php echo(strip_tags($msg));?>
+                    </p>
+                    <p>将于：
+                        <b id="wait">
+                            <?php echo($wait);?>
+                        </b>后页面自动
+                        <a id="href" href="<?php echo($url);?>">跳转</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        (function () {
+            var wait = document.getElementById('wait'),
+                href = document.getElementById('href').href;
+            var interval = setInterval(function () {
+                var time = --wait.innerHTML;
+                if (time <= 0) {
+                    location.href = href;
+                    clearInterval(interval);
+                };
+            }, 1000);
+        })();
+    </script>
+</body>
+
+</html>

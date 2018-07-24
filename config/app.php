@@ -15,7 +15,7 @@
 
 return [
     // 应用名称
-    'app_name'               => '',
+    'app_name'               => 'MlTreeForum',
     // 应用地址
     'app_host'               => '',
     // 应用调试模式
@@ -39,7 +39,7 @@ return [
     // 默认时区
     'default_timezone'       => 'Asia/Shanghai',
     // 是否开启多语言
-    'lang_switch_on'         => false,
+    'lang_switch_on'         => true,
     // 默认全局过滤方法 用逗号分隔多个
     'default_filter'         => '',
     // 默认语言
@@ -130,8 +130,8 @@ return [
     'route_cache_option'     => [],
 
     // 默认跳转页面对应的模板文件
-    'dispatch_success_tmpl'  => '../template/view/default/success.html',
-    'dispatch_error_tmpl'    => '../template/view/default/error.html',
+    'dispatch_success_tmpl'  => '../template/default/common/success.html',
+    'dispatch_error_tmpl'    => '../template/default/common/error.html',
 
     // 异常页面的模板文件
     'exception_tmpl'         => Env::get('think_path') . 'tpl/think_exception.tpl',

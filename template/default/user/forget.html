@@ -1,0 +1,84 @@
+{extend name="common/forum_public"} {block name="content"}
+
+<div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-offset-sm-3 mdui-m-y-1">
+
+    <div class="mdui-card mdui-m-t-1">
+        <div class="mdui-card-media">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">重置密码</div>
+                <div class="mdui-card-primary-subtitle">Reset Password</div>
+            </div>
+        </div>
+
+        <div class="mdui-card-content">
+            <form action="" method="post" class="layui-form">
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">邮箱</label>
+                    <input id="email" name="email" class="mdui-textfield-input" type="email" />
+                </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">邮箱验证码</label>
+                    <input name="code" class="mdui-textfield-input" type="text" />
+                    <button type="button" class="mdui-btn mdui-m-t-1 mdui-color-theme mdui-ripple" id="getResetCode">获取验证码</button>
+                </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">重置密码</label>
+                    <input name="password" class="mdui-textfield-input" type="password" />
+                </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">确认重置密码</label>
+                    <input name="repassword" class="mdui-textfield-input" type="password" />
+                </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">验证码</label>
+                    <input style="max-width: 60%;" name="captcha" class="mdui-textfield-input" type="text" required/>
+                    <img style="margin-top:4px;" alt="captcha" src="{:captcha_src()}" width="200" height="" onclick="this.src=this.src+'?'" />
+                    <div class="mdui-textfield-error">验证码不能为空</div>
+                </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <button class="mdui-btn mdui-btn-block mdui-color-theme mdui-ripple" lay-submit type="submit" lay-filter="reset">确认修改</button>
+                    <a href="{:url('user/login')}" class="mdui-btn mdui-float-right mdui-m-y-1 mdui-ripple">用户登录</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+{/block} {block name="js"}
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form;
+        var $$ = mdui.JQ;
+
+        form.on('submit(reset)', function (data) {
+
+            $$.ajax({
+                method: 'post',
+                url: '{:url("Reset")}',
+                data: data.field,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg(data.message, {
+                            icon: 1,
+                            end: function () {
+                                window.location.href = data.url;
+                            }
+                        });
+                    } else {
+                        layer.msg(data.message, { icon: 5 });
+                    }
+
+                },
+            })
+
+            return false;
+        })
+    });
+</script> {/block}

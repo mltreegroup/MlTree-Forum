@@ -1,4 +1,4 @@
-{extend name="public/admin_public"} {block name="content"}
+{extend name="../application/admin/view/public/admin_public.html"} {block name="content"}
 <div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
 
     <h1 class="mdui-m-l-3">Forum 拓展管理<small>友情链接Links</small></h1>
@@ -71,6 +71,7 @@
                         <input type="text" name="sold" placeholder="请输入排序默认0" autocomplete="off" class="layui-input">
                     </div>
                 </div>
+                 {:token()}
             </form>
         </div>
         <div class="mdui-dialog-actions">
@@ -107,6 +108,7 @@
                         <input type="text" name="sold" placeholder="请输入排序默认0" autocomplete="off" class="layui-input">
                     </div>
                 </div>
+                 {:token()}
             </form>
         </div>
         <div class="mdui-dialog-actions">

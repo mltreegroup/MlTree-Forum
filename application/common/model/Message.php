@@ -58,7 +58,7 @@ class Message extends Model
     public function addMessage($toUid, $uid=1, $title, $content)
     {
         $auth = new Auth;
-        if (!$auth->check('admin,message', $uid, 'or')) {
+        if (!$auth->check('admin,message', $uid, 'and')) {
             return [false,'无权限'];
         }
         if (empty($title) || empty($content)) {
@@ -81,7 +81,7 @@ class Message extends Model
     public function addAllMessage($toUid=[], $uid=1, $title, $content)
     {
         $auth = new Auth;
-        if (!$auth->check('admin,message', $uid, 'or')) {
+        if (!$auth->check('admin,message', $uid, 'and')) {
             return [false,'无权限'];
         }
         if (empty($title) || empty($content)) {
@@ -130,6 +130,14 @@ class Message extends Model
      */
     public function delMessage($mid, $uid=0)
     {
+        if(!user::isLogin())
+        {
+            return [false,'无权限'];
+        }
+        $auth = new Auth;
+        if (!$auth->check('admin,message', $uid, 'and')) {
+            return [false,'无权限'];
+        }
         if ($mid == 'all') {
             Db::name('message')
             ->where('toUid', $uid)
@@ -167,9 +175,17 @@ class Message extends Model
 
     public function addCommentMsg($cid)
     {
+        if(!user::isLogin())
+        {
+            return [false,'无权限'];
+        }
         $comment = Comment::get($cid);
         $topic = Topic::get($comment->tid);
         $user = User::get($topic->uid);
+        $auth = new Auth;
+        if (!$auth->check('admin,message', $user->uid, 'and')) {
+            return [false,'无权限'];
+        }
         $reuser = User::get($comment->uid);
         $content = config('app.Message.comment');
         $array = [
@@ -187,9 +203,17 @@ class Message extends Model
 
     public function addReplyMsg($cid)
     {
+        if(!user::isLogin())
+        {
+            return [false,'无权限'];
+        }
         $comment = Comment::get($cid);
         $topic = Topic::get($comment->tid);
         $user = User::get($topic->uid);
+        $auth = new Auth;
+        if (!$auth->check('admin,message', $user->uid, 'and')) {
+            return [false,'无权限'];
+        }
         $recomment = Comment::get($comment->reCid);
         $reuser = User::get($recomment->uid);
         $content = config('app.Message.reply');
@@ -209,8 +233,16 @@ class Message extends Model
 
     public function addTopMsg($tid)
     {
+        if(!user::isLogin())
+        {
+            return [false,'无权限'];
+        }
         $topic = Topic::get($tid);
         $user = User::get($topic->uid);
+        $auth = new Auth;
+        if (!$auth->check('admin,message', $user->uid, 'and')) {
+            return [false,'无权限'];
+        }
         $content = config('app.Message.top');
         $array = [
             '{title}' => $topic->subject,
@@ -225,8 +257,16 @@ class Message extends Model
 
     public function addEssenceMsg($tid)
     {
+        if(!user::isLogin())
+        {
+            return [false,'无权限'];
+        }
         $topic = Topic::get($tid);
         $user = User::get($topic->uid);
+        $auth = new Auth;
+        if (!$auth->check('admin,message', $user->uid, 'and')) {
+            return [false,'无权限'];
+        }
         $content = config('app.Message.top');
         $array = [
             '{title}' => $topic->subject,

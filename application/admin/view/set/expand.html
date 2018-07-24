@@ -1,4 +1,4 @@
-{extend name="public/admin_public"} {block name="content"}
+{extend name="../application/admin/view/public/admin_public.html"} {block name="content"}
 <div class="mdui-m-a-1 mdui-typo">
 
     <h1 class="mdui-m-l-3">拓展管理
@@ -26,7 +26,7 @@
                 <label class="mdui-textfield-label">Message</label>
                 <textarea class="mdui-textfield-input" name="content"></textarea>
             </div>
-
+            {:token()}
         </form>
         <button class="mdui-btn mdui-ripple mdui-btn-block mdui-color-theme-accent" id="send">
             <i class="mdui-icon material-icons">send</i>发送</button>

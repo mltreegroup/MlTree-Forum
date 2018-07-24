@@ -1,4 +1,4 @@
-{extend name="public/admin_public"} {block name="content"}
+{extend name="../application/admin/view/public/admin_public.html"} {block name="content"}
 <div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
 
     <h1 class="mdui-m-l-3">Forum 管理</h1>
@@ -62,6 +62,7 @@
                     </div>
                     <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
                 </div>
+                 {:token()}
             </form>
         </div>
         <div class="mdui-dialog-actions">
@@ -93,6 +94,7 @@
                     </div>
                     <div class="layui-form-mid layui-word-aux">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
                 </div>
+                 {:token()}
             </form>
         </div>
         <div class="mdui-dialog-actions">

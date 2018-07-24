@@ -11,16 +11,14 @@ class Base extends Controller
 {
 	protected function initialize()
     {
-        
         $uid = session('uid');
         $user = Db::name('user')->where('uid',session('uid'))->find();
         $this->assign('userData',$user);
         $this->assign('option',$this->siteOption('后台管理'));
         $this->assign('theme', Option::getValues('theme'));
         if (!User::isLogin()) {
-    return $this->error('无权限！', url('index/index/index'));
-}
-
+        return $this->error('无权限！', url('index/index/index'));
+        }
         $auth = new auth();
         if (empty($uid)) {
             return $this->error('无权限！',url('index/index/index'));

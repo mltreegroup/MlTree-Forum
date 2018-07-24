@@ -1,0 +1,53 @@
+{include file="common/header" title="$option.siteTitle" Keywords="$option.siteKeywords" Des="$option.siteDes"}
+
+<body class="mdui-theme-primary-pink mdui-theme-accent-pink mdui-appbar-with-toolbar">
+    <script src="__JS__/theme.js"></script>
+    {if !empty(session('uid'))} {include file="common/topbar_user"} {else /} {include file="common/topbar"}
+    {/if}
+    <div class="mdui-container">
+        <div class="mdui-row">
+            {block name="content"}{/block}
+
+        </div>
+    </div>
+    <!-- 右下角快捷方式 -->
+    <div class="mdui-fab-wrapper" id="mf-fixbar" mdui-fab="{trigger: 'hover'}">
+        <button class="mdui-fab mdui-ripple mdui-color-theme-accent" id="fixbar-top">
+            <!-- 默认显示的图标 -->
+            <i class="mdui-icon material-icons">arrow_upward</i>
+
+            <i class="mdui-icon mdui-fab-opened material-icons" >arrow_upward</i>
+        </button>
+        <div class="mdui-fab-dial">
+            <a href="{:url('index/topic/create')}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-pink" title="发帖">
+                <i class="mdui-icon material-icons">create</i>
+            </a>
+            {if $Request.controller === 'Topic' && $Request.action === 'index'} {if authCheck('top,admin')}
+            <a href="{:url('index/topic/set',['type'=>'top','tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-red" title="置顶">
+                <i class="mdui-icon material-icons">vertical_align_top</i>
+            </a>
+             {/if} {if authCheck('close,admin')}
+            <a href="{:url('index/topic/set',['type'=>'close','tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-purple"
+                title="关闭">
+                <i class="mdui-icon material-icons">close</i>
+            </a>
+            {/if} {if authCheck('essence,admin')}
+            <a href="{:url('index/topic/set',['type'=>'essence','tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-purple" title="精华">
+                <i class="mdui-icon material-icons">star</i>
+            </a>
+            {/if} {if authCheck('delete,admin')}
+            <a href="JavaScript:;" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-blue" title="删除" onclick="delTopic('{$topicData.tid}')">
+                <i class="mdui-icon material-icons">delete</i>
+            </a>
+            {/if} {if authCheck('update,admin')}
+            <a href="{:url('index/topic/update',['tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-orange" title="修改">
+                <i class="mdui-icon material-icons">update</i>
+            </a>
+            {/if} {/if}
+        </div>
+    </div>
+    {include file="common/footer"} {block name="js"}{/block}
+    {$option.siteFooterJs|raw}
+</body>
+
+</html>

@@ -10,7 +10,7 @@ class Forum extends Base
     {
         $data = Db::name('forum')->where('fid',$fid)->find();
         $option = [
-            'siteDes' => $data['seoTitle'],
+            'siteDes' => $data['seoDes'],
             'siteKeywords' => $data['seoKeywords'],
         ];
         $option = $this->siteOption($data['name'],$option);

@@ -1,0 +1,86 @@
+{extend name="common/forum_public"} {block name="content"}
+
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
+
+    <h3>发布主题</h3>
+
+    <div class="mdui-divider"></div>
+    <form>
+        <div class="mdui-m-y-1">
+            <select lay-ignore name="fid" class="mdui-select" mdui-select="{position: 'bottom'}" required>
+                {volist name="forum" id="vo"}
+                <option value="{$vo.fid}">{$vo.name}</option>
+                {/volist}
+            </select>
+        </div>
+
+
+        <div class="mdui-textfield mdui-m-b-1">
+            <label class="mdui-textfield-label">标题</label>
+            <input name="subject" class="mdui-textfield-input" type="text" placeholder="title" max="60" required/>
+        </div>
+
+        <textarea id="editor" name="content" required></textarea>
+
+        {:token()}
+        <input type="hidden" name="sign" value="{$attaSign}">
+    </form>
+
+    <div>
+        <button id="create" class="mdui-btn mdui-color-theme mdui-float-right">发布主题</button>
+        <button class="mdui-btn layui-btn mdui-color-orange" id="file">
+            <i class="mdui-icon material-icons">file_upload</i>上传附件</button>
+    </div>
+</div>
+
+{/block} {block name="js"}
+<script src="__JS__/simplemde.min.js"></script>
+<script src="__JS__/mltree-editor.js"></script>
+<script>
+    let option = {
+        uid: "{:session('uid')}",
+        url: '{:url("index/topic/create")}',
+    }
+    var editor = new MLTeditor(option)
+
+    layui.use('layer', function () {
+        let layer = layui.layer;
+
+        //绑定发帖事件
+        $$('#create').on('click', function () {
+            //设定textarea的内容
+            $$('#editor').text(editor.getValue());
+
+            //获取表单内容
+            let submitData = $$('form').serialize();
+
+            getAjax(option.url, submitData, function (res) {
+                if (res.code == 1) {
+                    mdui.snackbar({
+                        message: res.message,
+                        position: 'top',
+                        onClosed: function () {
+                            editor.clearValue();
+                            window.location.href = res.url;
+                        }
+                    })
+                } else {
+                    mdui.snackbar({
+                        message: res.message,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                }
+            })
+
+            return false;
+        });
+
+        layer.photos({
+            photos: '#mf-content,#mf-comments',
+            anim: 5
+        });
+    });
+</script> {/block}

@@ -1,4 +1,4 @@
-{extend name="public/admin_public"} {block name="content"}
+{extend name="../application/admin/view/public/admin_public.html"} {block name="content"}
 <div class="mdui-row">
     <div class="mdui-m-a-1 mdui-typo">
         <div class="mdui-col-xs-12 mdui-col-sm-6 mf-panel">
@@ -25,7 +25,7 @@
                     <li>主页：
                         <a href="https://forum.mltree.top">https://forum.mltree.top</a>
                     </li>
-                    <li>Coding：
+                    <li>Git：
                         <a href="https://github.com/mltreegroup/MlTree-Fourm">https://github.com/mltreegroup/MlTree-Fourm</a>
                     </li>
                     <li>许可证：
@@ -49,18 +49,35 @@
             <thead>
                 <tr>
                     <td>#</td>
-                    <td>内容</td>
+                    <td>标题</td>
+                    <td>介绍</td>
+                    <td>评级</td>
                     <td>推送日期</td>
                     <td>详细</td>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <!-- <tr>
                     <td>1</td>
                     <td>【版本更新】推送MlTree Forumv1.0.1</td>
+                    
                     <td>2018.06.23</td>
                     <td><a href=""><i class="mdui-icon material-icons">link</i></a></td>
+                </tr> -->
+                {volist name="updateList" id="vo"}
+                <tr>
+                    <td>{$i}</td>
+                    <td>【版本更新】推送MlTree Forum Ver{$vo->ver}</td>
+                    <td>{$vo->illustrate}</td>
+                    <td>{$vo->assess}</td>
+                    <td>{$vo->time}</td>
+                    <td>
+                        <a href="{$vo->url}">
+                            <i class="mdui-icon material-icons">link</i>
+                        </a>
+                    </td>
                 </tr>
+                {/volist}
             </tbody>
         </table>
     </div>

@@ -12,6 +12,8 @@
 // 应用公共文件
 use think\Db;
 use Auth\Auth;
+use Markdown\Parser;
+use League\CommonMark\CommonMarkConverter;
 
 function createStr($length)
 {
@@ -117,3 +119,119 @@ function outResult($code=0, $msg, $url='')
         return ['code'=>$code,'message'=>$msg,'url'=>$url,'time'=>time()];
     }
 }
+
+function markdownEncode($text)
+{
+    $parser = new Parser;
+    $html = $parser->makeHtml($text);
+    return $html;
+}
+
+// function markdownEncode($text)
+// {
+//     $converter = new CommonMarkConverter(['html_input' => 'escape']);
+//     $html = $converter->convertToHtml($text);
+//     return $html;
+// }
+
+function replyRegular($str)
+{
+    $pre = '{@(\d+)/(\d+)}';
+    if (preg_match($pre, $str, $arr)) {
+        $user = Db::name('user')->where('uid', $arr[1])->find();
+        $html = '回复 <a href="' . url('index/user/index', ['uid'=>$arr[1]]) . '">@' . $user['username'] . '</a>';
+        $html .= '：<a href="#replu-content-' . $arr[2] . '">#' . $arr[2] . '</a>';
+        return [$arr[0],$arr[1],$arr[2],$html];
+    }
+    return 'error';
+}
+
+    /**
+     * @param $url
+     * @return mixed
+     */
+
+   function curlGet($url)
+    {
+        // 1. 初始化
+        $ch = curl_init();
+        // 2. 设置选项，包括URL
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        // 3. 执行并获取HTML文档内容
+        $output = curl_exec($ch);
+        if ($output === FALSE) {
+            echo "CURL Error:" . curl_error($ch);
+        }
+        // 4. 释放curl句柄
+        curl_close($ch);
+        return $output;
+    }
+
+    /**
+     * @param $url
+     * @param $postData
+     * @return mixed
+     */
+    function curlPost($url, $postData = null)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        $ch_arr = array(CURLOPT_TIMEOUT => 3, CURLOPT_RETURNTRANSFER => 1);
+        curl_setopt_array($ch, $ch_arr);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        return $output;
+    }
+
+
+    /**
+     * @param $URL
+     * @param $type
+     * @param $params
+     * @param null $headers
+     * @return mixed
+     */
+    function curlRequest($URL,$type,$params=null,$headers=null)
+    {
+        $ch = curl_init($URL);
+        $timeout = 5;
+        if(isset($headers)){
+            curl_setopt ($ch, CURLOPT_HTTPHEADER, $headers);
+        }else {
+            curl_setopt ($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+        }
+        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        switch ($type){
+            case "GET" : curl_setopt($ch, CURLOPT_HTTPGET, true);break;
+            case "POST": curl_setopt($ch, CURLOPT_POST,true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS,$params);break;
+            case "PUT" : curl_setopt ($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+                curl_setopt($ch, CURLOPT_POSTFIELDS,$params);break;
+            case "PATCH": curl_setopt($ch, CULROPT_CUSTOMREQUEST, 'PATCH');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $params);break;
+            case "DELETE":curl_setopt ($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+                curl_setopt($ch, CURLOPT_POSTFIELDS,$params);break;
+        }
+        $file_contents = curl_exec($ch);//获得返回值
+        return $file_contents;
+        curl_close($ch);
+    }
+
+    /**
+     * 用于检测是否已安装 由pulic/install/install.lock决定
+     * @return true|false
+     */
+    function isInstall()
+    {
+        if (file_exists('install/install.lock')) {
+            return true;
+        }else{
+            return false;
+        }
+    }

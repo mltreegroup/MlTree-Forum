@@ -1,4 +1,4 @@
-{extend name="public/admin_public"} {block name="content"}
+{extend name="../application/admin/view/public/admin_public.html"} {block name="content"}
 <div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
 
     <h1 class="mdui-m-l-3">用户管理</h1>
@@ -81,6 +81,7 @@
                         </select>
                     </div>
                 </div>
+                 {:token()}
             </form>
         </div>
         <div class="mdui-dialog-actions">
@@ -128,6 +129,7 @@
                     </div>
                 </div>
                 <div class="layui-form-mid layui-word-aux">更多选项请进入数据库修改，我懒了。</div>
+                {:token()}
             </form>
         </div>
         <div class="mdui-dialog-actions">

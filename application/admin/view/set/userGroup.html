@@ -1,4 +1,4 @@
-{extend name="public/admin_public"} {block name="content"}
+{extend name="../application/admin/view/public/admin_public.html"} {block name="content"}
 <div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
 
     <h1 class="mdui-m-l-3">用户组管理</h1>
@@ -54,6 +54,7 @@
                         <a href="JavaScript:;" onclick="openAuth()">权限列表</a>
                     </div>
                 </div>
+                 {:token()}
             </form>
         </div>
         <div class="mdui-dialog-actions">
@@ -81,6 +82,7 @@
                         <a href="JavaScript:;" onclick="openAuth()">权限列表</a>
                     </div>
                 </div>
+                 {:token()}
             </form>
         </div>
         <div class="mdui-dialog-actions">

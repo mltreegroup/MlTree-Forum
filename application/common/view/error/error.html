@@ -1,7 +1,7 @@
-{include file="/../template@default/header" title="$title"}
+{include file="common/header" title="$title"}
 
 <body class="mdui-theme-primary-blue mdui-theme-accent-blue mdui-appbar-with-toolbar">
-    <script src="__JS__/theme.js"></script> {if !empty(session('uid'))} {include file="/../template@default/topbar_user"} {else /} {include file="/../template@default/topbar"}
+    <script src="__JS__/theme.js"></script> {if !empty(session('uid'))} {include file="/common/topbar_user"} {else /} {include file="/common/topbar"}
     {/if}
 
     <div class="mdui-container">

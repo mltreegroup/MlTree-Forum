@@ -1,0 +1,52 @@
+{extend name="common/forum_public"} {block name="content"}
+<!-- 置顶的内容 -->
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-shadow-1">
+            <ul class="mdui-list">
+                <li class="mdui-subheader">置顶</li>
+                {volist name="tops" id="vo"}
+                <li class="mdui-divider-inset mdui-m-y-0"></li>
+                <li class="mdui-list-item mdui-ripple">
+                    <div class="mdui-list-item-avatar">
+                        <img src="{$vo.userData.avatar}" alt="{$vo.userData.username}" title="{$vo.userData.username}">
+                    </div>
+                    <div class="mdui-list-item-content">
+                        <a class="mdui-list-item-title" href="{:url('index/topic/index',['tid'=>$vo.tid])}">{$vo.subject} {:outBadge($vo)}</a>
+                        <div class="mdui-list-item-text mdui-list-item-one-line">{$vo.content|raw}</div>
+                        <div class="mdui-list-item-text">
+                            <a href="{:url('index/forum/index',['fid'=>$vo.fid])}" class="layui-badge layui-bg-blue" title="{$vo.forumName}">{$vo.forumName}</a> <a href="{:url('index/user/inde',['uid'=>$vo.uid])}">{$vo.userData.username}</a>
+                            <span title="{$vo.create_time}"> {$vo.time_format}</span>
+                            <span class="mdui-float-right">
+                                <i class="mdui-icon material-icons">remove_red_eye</i>{$vo.views}</span>
+                            <span class="mdui-float-right">
+                                <i class="mdui-icon material-icons">comment</i>{$vo.comment}</span>
+                        </div>
+                    </div>
+                </li>
+                {/volist}
+                <li class="mdui-subheader">所有帖子</li>
+            </ul>
+            <div class="mdui-tab mdui-tab-centered" mdui-tab>
+                <a href="#topic-all" class="mdui-ripple">综合</a>
+                <a href="#topic-essence" class="mdui-ripple">精华</a>
+            </div>
+            <div class="mdui-divider mdui-m-y-0"></div>
+            <div id="topic-all">
+                <ul class="mdui-list" id="topic-cps">
+
+                </ul>
+            </div>
+
+            <div id="topic-essence">
+                <ul class="mdui-list" id="topic-ess">
+
+                </ul>
+            </div>
+</div>
+{include file="common/right_tool"} {/block}{block name="js"}
+<script src="__JS__/mltree-flow.js"></script>
+<script>
+    //调用flow加载
+    var flow = new mfFlow('index');
+    flow.flow();
+</script>
+{/block}

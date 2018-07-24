@@ -1,4 +1,4 @@
-{extend name="public/admin_public"} {block name="content"}
+{extend name="../application/admin/view/public/admin_public.html"} {block name="content"}
 <div class="mdui-m-a-1">
     <h1 class="mdui-m-l-3">邮件设置</h1>
     <div class="mdui-tab" mdui-tab>
@@ -10,6 +10,7 @@
     <div id="mail-base" class="mdui-p-a-2 mdui-table-fluid mdui-typo">
         <form id="1">
             <input type="hidden" name="type" value="mailBase">
+             {:token()}
             <table class="mdui-table mdui-textfield mdui-m-t-1">
                 <tbody>
                     <tr>
@@ -122,6 +123,7 @@
     <div id="mail-Template" class="mdui-p-a-2 mdui-table-fluid">
         <form id="3">
             <input type="hidden" name="type" value="Template">
+             {:token()}
             <table class="mdui-table mdui-textfield mdui-m-t-1">
                 <tbody>
                     <tr>

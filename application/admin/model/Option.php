@@ -15,7 +15,7 @@ class Option extends Model{
 	static function setValues($data)
 	{
 		foreach ($data as $key => $value) {
-			Db::name('options')->where('name',$key)->setField('value',$value);
+			Db::name('options')->where('name',$key)->strict(false)->setField('value',$value);
 		}
 	}
 	static function setValue($name,$data)

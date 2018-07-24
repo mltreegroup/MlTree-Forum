@@ -24,7 +24,7 @@ class User extends Model
     }
     protected function setPasswordAttr($val, $data)
     {
-        return password_encode($data['password']);
+        return password_encode($val);
     }
     protected function setGidAttr()
     {
@@ -138,7 +138,7 @@ class User extends Model
         if (!password_verify($oldPas, $userObj->password)) {
             return [false,'旧密码错误'];
         }
-        $userObj->password = password_encode($newPas);
+        $userObj->password = $newPas;
         $userObj->save();
         return [true,'密码修改成功'];
     }
@@ -156,7 +156,7 @@ class User extends Model
             return [false,'邮件验证码错误'];
         }
 
-        $userData['password'] = \password_encode($findData['password']);
+        $userData['password'] = password_encode($findData['password']);
         Db::name('user')->where('uid', $userData)->update($userData);
         session('forget.', null);
         return [true];

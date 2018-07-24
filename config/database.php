@@ -15,11 +15,11 @@ return [
     // 服务器地址
     'hostname'        => '127.0.0.1',
     // 数据库名
-    'database'        => 'beta_kingsr_cc',
+    'database'        => '',
     // 用户名
-    'username'        => 'beta_kingsr_cc',
+    'username'        => '',
     // 密码
-    'password'        => 'AY5HYay7cYhGbrQN',
+    'password'        => '',
     // 端口
     'hostport'        => '',
     // 连接dsn

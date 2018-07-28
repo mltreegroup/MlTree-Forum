@@ -170,3 +170,12 @@ function getAjax(url, data, callback) {
         }
     });
 }
+
+/**
+ * 定义跳转
+ */
+$$('.mtf-Jump').on('click', function() {
+    console.log(this);
+    let data = $$.data(this);
+    window.location.href = `/topic/${data.tid}.html`
+})

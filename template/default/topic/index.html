@@ -98,20 +98,21 @@
 <script src="__JS__/mltree-editor.js"></script>
 <script>
     let option = {
-        commentUrl: "{:url('index/topic/comment',['tid'=>$topicData.tid])}",
-        uid: "{:session('uid')}",
-        subject: "{$topicData.subject}",
-    }
-    //调用flow加载
+            commentUrl: "{:url('index/topic/comment',['tid'=>$topicData.tid])}",
+            uid: "{:session('uid')}",
+            subject: "{$topicData.subject}",
+        }
+        //调用flow加载
     var flow = new mfFlow('comment');
     flow.flow('{$topicData.tid}');
 
     var editor = new MLTeditor(option)
 
-    layui.use(['layer'], function () {
+    layui.use(['layer'], function() {
         var layer = layui.layer;
 
-        $$('#reply').on('click', function () {
+        $$('#reply').on('click', function() {
+            editor.clearValue();
             $$('#replyPanel').toggleClass('mdui-hidden');
             $$('#editor').toggleClass('mdui-hidden');
 
@@ -128,11 +129,11 @@
                 offset: 'b',
                 btn: '发布',
                 content: $('#replyPanel'),
-                cancel: function (index, layero) {
+                cancel: function(index, layero) {
                     $$('#replyPanel').toggleClass('mdui-hidden');
                     $$('#editor').toggleClass('mdui-hidden');
                 },
-                yes: function (index, layero) {
+                yes: function(index, layero) {
                     //设置textarea内容
                     $$('#editor').text(editor.getValue());
 
@@ -141,7 +142,7 @@
                     $$('#editor').toggleClass('mdui-hidden');
                     $$('#replyPanel').toggleClass('mdui-hidden');
 
-                    editor.setValue('');
+                    editor.clearValue();
                     layer.close(index);
 
                     $$.ajax({
@@ -149,12 +150,12 @@
                         url: option.commentUrl,
                         data: data,
                         dataType: 'json',
-                        success: function (res) {
+                        success: function(res) {
                             if (res.code == 1) {
                                 mdui.snackbar({
                                     message: res.message,
                                     position: 'top',
-                                    onClosed: function () {
+                                    onClosed: function() {
                                         location.reload();
                                     }
                                 })

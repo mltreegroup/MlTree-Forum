@@ -22,7 +22,7 @@ class Oauth{
     function __construct(){
         $this->urlUtils = new URL();
         $this->error = new ErrorCase();
-        $this->inc = config('qqconnect');
+        $this->inc = config('mtf.qqconnect');
     }
 
     public function qq_login($callbakc_url=''){

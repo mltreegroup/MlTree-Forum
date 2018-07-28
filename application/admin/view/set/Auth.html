@@ -1,4 +1,4 @@
-{extend name="../application/admin/view/pulic/admin_public.html"} {block name="content"}
+{extend name="../application/admin/view/public/admin_public.html"} {block name="content"}
 <div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
 
     <h1 class="mdui-m-l-3">权限管理</h1>
@@ -104,7 +104,7 @@
     $$('#user').addClass('mdui-collapse-item-open');
     $$('#setAuth').addClass('mdui-list-item-active');
 
-    $$('#submit').on('click', function () {
+    $$('#submit').on('click', function() {
         data = $$('#add').serialize();
 
         $$.ajax({
@@ -112,7 +112,7 @@
             url: '',
             data: data,
             dataType: 'json',
-            success: function (res) {
+            success: function(res) {
                 if (res.code == 0) {
                     mdui.snackbar(res.message, {
                         timeout: 2000,
@@ -136,42 +136,39 @@
         mdui.dialog({
             title: '你确定吗？',
             content: '此操作将删除此权限，同时使用到此权限的地方将默认通过',
-            buttons: [
-                {
-                    text: '取消'
-                },
-                {
-                    text: '确认',
-                    onClick: function (inst) {
-                        $$.ajax({
-                            method: 'post',
-                            url: '{:url("admin/api/del")}',
-                            data: {
-                                type: 'auth',
-                                id: aid,
-                                __token__: '{$Request.token}'
-                            },
-                            dataType: 'json',
-                            success: function (res) {
-                                if (res.code == 0) {
-                                    mdui.snackbar(res.message, {
-                                        timeout: 2000,
-                                        position: 'top',
-                                        onClosed: function () {
-                                            location.reload();
-                                        }
-                                    })
-                                } else {
-                                    mdui.snackbar(res.message, {
-                                        timeout: 2000,
-                                        position: 'top',
-                                    })
-                                }
+            buttons: [{
+                text: '取消'
+            }, {
+                text: '确认',
+                onClick: function(inst) {
+                    $$.ajax({
+                        method: 'post',
+                        url: '{:url("admin/api/del")}',
+                        data: {
+                            type: 'auth',
+                            id: aid,
+                            __token__: '{$Request.token}'
+                        },
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res.code == 0) {
+                                mdui.snackbar(res.message, {
+                                    timeout: 2000,
+                                    position: 'top',
+                                    onClosed: function() {
+                                        location.reload();
+                                    }
+                                })
+                            } else {
+                                mdui.snackbar(res.message, {
+                                    timeout: 2000,
+                                    position: 'top',
+                                })
                             }
-                        });
-                    }
+                        }
+                    });
                 }
-            ]
+            }]
         });
 
     }
@@ -187,12 +184,12 @@
                 value: value,
             },
             dataType: 'json',
-            success: function (res) {
+            success: function(res) {
                 if (res.code == 0) {
                     mdui.snackbar(res.message, {
                         timeout: 2000,
                         position: 'top',
-                        onClosed: function () {
+                        onClosed: function() {
                             location.reload();
                         }
                     })
@@ -218,12 +215,12 @@
                 value: value,
             },
             dataType: 'json',
-            success: function (res) {
+            success: function(res) {
                 if (res.code == 0) {
                     mdui.snackbar(res.message, {
                         timeout: 2000,
                         position: 'top',
-                        onClosed: function () {
+                        onClosed: function() {
                             location.reload();
                         }
                     })

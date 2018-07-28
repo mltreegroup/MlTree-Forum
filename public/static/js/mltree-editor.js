@@ -37,7 +37,7 @@ class MLTeditor {
             url: option.createUrl,
             data: dataObj,
             dataType: 'json',
-            success: function (res) {
+            success: function(res) {
                 callback(res);
             }
         });
@@ -52,7 +52,7 @@ class MLTeditor {
     }
 
     clearValue() {
-        this.setValue('');
+        this.setValue();
     }
 }
 
@@ -60,25 +60,24 @@ class MLTeditor {
 $$('#file').on('click', () => {
     mdui.dialog({
         content: "请注册账号，然后将附件上传至网盘后，再将网址粘贴过来。谢谢。<br>推荐MLT网盘、天翼云盘",
-        buttons: [
-            {
+        buttons: [{
                 text: 'MLT网盘',
                 close: true,
-                onClick: function () {
+                onClick: function() {
                     window.open('https://pan.kingsr.cc')
                 }
             },
             {
                 text: '百度网盘',
                 close: true,
-                onClick: function () {
+                onClick: function() {
                     window.open('https://pan.baidu.com')
                 }
             },
             {
                 text: '天翼云盘',
                 close: true,
-                onClick: function () {
+                onClick: function() {
                     window.open('https://cloud.189.cn/')
                 }
             },

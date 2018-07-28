@@ -281,6 +281,6 @@ CREATE TABLE `mf_user` (
 -- ----------------------------
 -- Records of mf_user
 -- ----------------------------
-INSERT INTO `mf_user` VALUES ('1', '1', '{email}', '{username}', '{password}', null, '', '', '', '0', '0', '0', '0', '0', '0', '', '', '0', '1', null);
+INSERT INTO `mf_user` VALUES ('1', '1', '{email}', '{username}', '{password}', '', '', '', '', '0', '0', '0', '0', '0', '0', '', '', '0', '1', null);
 
-SELECT * FROM 'mf_user' where `uid` = 1
+SELECT * FROM mf_user where `uid` = 1

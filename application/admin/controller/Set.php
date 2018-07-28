@@ -369,6 +369,10 @@ class Set extends Base
     {
         if (request()->isPost()) {
             $uid = explode(',', input('post.uid'));
+            $res = $this->validate(input('post.'), 'app\admin\validate\Set.message');
+            if (true !== $res) {
+                return json(['code' => -1, 'message' => $res]);
+            }
             if (count($uid) == 1) {
                 $msg = new Message;
                 $res = $msg->addMessage($uid[0], session('uid'), input('post.title'), input('post.content'));
@@ -378,6 +382,6 @@ class Set extends Base
             $msg->addAllMessage($uid, session('uid'), input('post.title'), input('post.content'));
             return json(\outResult(0, '发送成功'));
         }
-        return view('admin@set/Expand');
+        return view('admin@set/expand');
     }
 }

@@ -12,7 +12,7 @@ var $$ = mdui.JQ;
 var time = 60;
 var re_cid = 0;
 
-$$('#getCode').on('click', function () {
+$$('#getCode').on('click', function() {
 
     if ($$('#email').val() == '' || $$('#username').val() == '') {
         mdui.snackbar({
@@ -28,7 +28,7 @@ $$('#getCode').on('click', function () {
                 username: $$('#username').val()
             },
             dataType: 'json',
-            success: function (res) {
+            success: function(res) {
                 if (res.code == 0) {
                     mdui.snackbar({
                         message: res.message,
@@ -61,7 +61,7 @@ function time_reg() {
     }
 }
 
-$$('#getResetCode').on('click', function () {
+$$('#getResetCode').on('click', function() {
 
     if ($$('#email').val() == '') {
         mdui.snackbar({
@@ -76,7 +76,7 @@ $$('#getResetCode').on('click', function () {
                 email: $$('#email').val(),
             },
             dataType: 'json',
-            success: function (res) {
+            success: function(res) {
                 if (res.code == 0) {
                     mdui.snackbar({
                         message: res.message,
@@ -116,23 +116,22 @@ function delTopic(_tid, _uid) {
     mdui.dialog({
         title: '删除主题',
         content: '确定删除本主题吗？',
-        buttons: [
-            {
+        buttons: [{
                 text: '取消'
             },
             {
                 text: '确认',
-                onClick: function (inst) {
+                onClick: function(inst) {
                     $$.ajax({
                         method: 'GET',
                         url: '/api/api/del/type/topic/id/' + _tid + '/uid/' + _uid,
                         dataType: 'json',
-                        success: function (res) {
+                        success: function(res) {
                             if (res.code == 0) {
                                 mdui.snackbar({
                                     message: res.message,
                                     position: 'top',
-                                    onClosed: function () {
+                                    onClosed: function() {
                                         window.history.go(-1);
                                     }
                                 });
@@ -166,7 +165,7 @@ function getAjax(url, data, callback) {
         url: url,
         data: data,
         dataType: 'json',
-        success: function (res) {
+        success: function(res) {
             callback(res);
         }
     });

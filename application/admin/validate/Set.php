@@ -38,14 +38,14 @@ class Set extends Validate
         'fid' => 'number',
         'cgroup' => 'print',
 
-        'Id' => 'require|token|number',
+        'Id' => 'number',
         'picurl' => 'url',
         'url' => 'require|url',
         'sold' => 'number',
-        'title' => 'require',
+        'title' => 'require|token',
 
         'email' => 'require|email|token',
-        'gid' => 'requeire|number',
+        'gid' => 'number',
         'password' => 'print',
         'status' => 'require|number',
         'uid' => 'require|number',
@@ -119,7 +119,7 @@ class Set extends Validate
         ],
 
         'message' => [
-            'titile',
+            'title',
             'content',
         ],
 

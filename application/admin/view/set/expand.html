@@ -37,7 +37,7 @@
 
 <script>
     mdui.mutation()
-    layui.use('form', function () {
+    layui.use('form', function() {
         var form = layui.form;
     });
     var $$ = mdui.JQ,
@@ -46,7 +46,7 @@
     $$('#user').addClass('mdui-collapse-item-open');
     $$('#setExpand').addClass('mdui-list-item-active');
 
-    $$('#send').on('click', function () {
+    $$('#send').on('click', function() {
         data = $$('form').serialize();
 
         $$.ajax({
@@ -54,7 +54,7 @@
             url: '',
             data: data,
             dataType: 'json',
-            success: function (res) {
+            success: function(res) {
                 if (res.code == 0) {
                     mdui.snackbar(res.message, {
                         timeout: 2000,
@@ -72,6 +72,4 @@
 
         return false;
     })
-
-
 </script> {/block}

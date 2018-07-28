@@ -27,7 +27,7 @@ class QC extends Oauth
     public function __construct($access_token = "", $openid = "")
     {
         parent::__construct();
-        $this->ins = config('qqconnect');
+        $this->ins = config('mtf.qqconnect');
         
         $this->keysArr = array(
                 "oauth_consumer_key" => (int)$this->inc["appid"],

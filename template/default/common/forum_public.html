@@ -2,8 +2,7 @@
 
 <body class="mdui-theme-primary-pink mdui-theme-accent-pink mdui-appbar-with-toolbar">
     <script src="__JS__/theme.js"></script>
-    {if !empty(session('uid'))} {include file="common/topbar_user"} {else /} {include file="common/topbar"}
-    {/if}
+    {if !empty(session('uid'))} {include file="common/topbar_user"} {else /} {include file="common/topbar"} {/if}
     <div class="mdui-container">
         <div class="mdui-row">
             {block name="content"}{/block}
@@ -26,9 +25,8 @@
             <a href="{:url('index/topic/set',['type'=>'top','tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-red" title="置顶">
                 <i class="mdui-icon material-icons">vertical_align_top</i>
             </a>
-             {/if} {if authCheck('close,admin')}
-            <a href="{:url('index/topic/set',['type'=>'close','tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-purple"
-                title="关闭">
+            {/if} {if authCheck('close,admin')}
+            <a href="{:url('index/topic/set',['type'=>'close','tid'=>$topicData.tid])}" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-purple" title="关闭">
                 <i class="mdui-icon material-icons">close</i>
             </a>
             {/if} {if authCheck('essence,admin')}
@@ -46,8 +44,7 @@
             {/if} {/if}
         </div>
     </div>
-    {include file="common/footer"} {block name="js"}{/block}
-    {$option.siteFooterJs|raw}
+    {include file="common/footer"} {block name="js"}{/block} {$option.siteFooterJs|raw}
 </body>
 
 </html>

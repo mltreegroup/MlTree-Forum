@@ -20,12 +20,9 @@
             <input name="subject" class="mdui-textfield-input" type="text" placeholder="title" max="60" required/>
         </div>
 
-        <textarea id="editor" name="content" required></textarea>
-
-        {:token()}
+        <textarea class="OwO-text" id="editor" name="content" required></textarea> {:token()}
         <input type="hidden" name="sign" value="{$attaSign}">
     </form>
-
     <div>
         <button id="create" class="mdui-btn mdui-color-theme mdui-float-right">发布主题</button>
         <button class="mdui-btn layui-btn mdui-color-orange" id="file">
@@ -43,23 +40,23 @@
     }
     var editor = new MLTeditor(option)
 
-    layui.use('layer', function () {
+    layui.use('layer', function() {
         let layer = layui.layer;
 
         //绑定发帖事件
-        $$('#create').on('click', function () {
+        $$('#create').on('click', function() {
             //设定textarea的内容
             $$('#editor').text(editor.getValue());
 
             //获取表单内容
             let submitData = $$('form').serialize();
 
-            getAjax(option.url, submitData, function (res) {
+            getAjax(option.url, submitData, function(res) {
                 if (res.code == 1) {
                     mdui.snackbar({
                         message: res.message,
                         position: 'top',
-                        onClosed: function () {
+                        onClosed: function() {
                             editor.clearValue();
                             window.location.href = res.url;
                         }
@@ -68,7 +65,7 @@
                     mdui.snackbar({
                         message: res.message,
                         position: 'top',
-                        onClosed: function () {
+                        onClosed: function() {
                             location.reload();
                         }
                     })

@@ -2,21 +2,12 @@
 namespace app\install\controller;
 
 use think\Controller;
-use app\common\model\Message;
-use app\index\model\User;
 use think\Db;
-use app\index\model\Option;
 
 class Index extends Controller
 {
     public function Index()
     {
-        $msgObj = new Message;
-        $msg = $msgObj->getMessageList(session('uid'),0);
-        $this->assign('msg',['unread'=>count($msg['data'])]);
-        $data = Db::name('links')->order('sold')->select();
-        $this->assign('option', Option::getValues('base'));
-
         if (isInstall()) {
             return $this->error('你已经安装过了，如需重新安装，请删除./install/install.lock文件','index/index/index');
         }
@@ -52,7 +43,7 @@ class Index extends Controller
             }
 
             file_put_contents('./install/install.lock',time());
-            return $this->success('安装完成，请享受MlTreeForum给你带来的快感吧！','index/index/index');
+            return redirect('index/index/index');
         }
         
         return view('install@index');

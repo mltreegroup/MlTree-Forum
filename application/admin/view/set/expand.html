@@ -1,4 +1,4 @@
-{extend name="public/admin_public"} {block name="content"}
+{extend name="../application/admin/view/public/admin_public.html"} {block name="content"}
 <div class="mdui-m-a-1 mdui-typo">
 
     <h1 class="mdui-m-l-3">拓展管理
@@ -26,7 +26,7 @@
                 <label class="mdui-textfield-label">Message</label>
                 <textarea class="mdui-textfield-input" name="content"></textarea>
             </div>
-
+            {:token()}
         </form>
         <button class="mdui-btn mdui-ripple mdui-btn-block mdui-color-theme-accent" id="send">
             <i class="mdui-icon material-icons">send</i>发送</button>
@@ -37,7 +37,7 @@
 
 <script>
     mdui.mutation()
-    layui.use('form', function () {
+    layui.use('form', function() {
         var form = layui.form;
     });
     var $$ = mdui.JQ,
@@ -46,7 +46,7 @@
     $$('#user').addClass('mdui-collapse-item-open');
     $$('#setExpand').addClass('mdui-list-item-active');
 
-    $$('#send').on('click', function () {
+    $$('#send').on('click', function() {
         data = $$('form').serialize();
 
         $$.ajax({
@@ -54,7 +54,7 @@
             url: '',
             data: data,
             dataType: 'json',
-            success: function (res) {
+            success: function(res) {
                 if (res.code == 0) {
                     mdui.snackbar(res.message, {
                         timeout: 2000,
@@ -72,6 +72,4 @@
 
         return false;
     })
-
-
 </script> {/block}

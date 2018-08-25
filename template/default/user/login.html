@@ -1,0 +1,83 @@
+{extend name="common/forum_public"} {block name="content"}
+
+<div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-offset-sm-3 mdui-m-y-1">
+    <form action="" method="post" class="layui-form">
+        <div class="mdui-card">
+            <div class="mdui-card-media">
+                <img src="__IMG__/card.png" alt="">
+                <div class="mdui-card-media-covered mdui-card-media-covered">
+                    <div class="mdui-card-primary">
+                        <div class="mdui-card-primary-title">登录</div>
+                        <div class="mdui-card-primary-subtitle">Login</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mdui-card-content">
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">邮箱</label>
+                    <input name="email" class="mdui-textfield-input" type="email" required/>
+                    <div class="mdui-textfield-error">邮箱不能为空</div>
+                </div>
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">密码</label>
+                    <input name="password" class="mdui-textfield-input" type="password" required/> {:token()}
+                    <div class="mdui-textfield-error">密码不能为空</div>
+                </div>
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">验证码</label>
+                    <input name="captcha" class="mdui-textfield-input" type="text" required/>
+                    <img alt="captcha" src="{:captcha_src()}" width="200" height="" onclick="this.src=this.src+'?'" />
+                    <div class="mdui-textfield-error">验证码不能为空</div>
+                </div>
+
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <button class="mdui-btn mdui-btn-block mdui-color-theme mdui-ripple" lay-submit type="submit" lay-filter="login">登录</button>
+                    <a style="margin-top:4px;" class="mdui-btn mdui-m-y-1 mdui-ripple" href="{:url('user/qqLogin')}">QQ登录</a>
+                    <a href="{:url('user/forgetPas')}" class="mdui-btn mdui-float-right mdui-m-y-1 mdui-ripple">
+                        忘记密码？</a>
+                    <a href="{:url('user/reg')}" class="mdui-btn mdui-float-right mdui-m-y-1 mdui-ripple">用户注册</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+{/block} {block name="js"}
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form;
+        var $$ = mdui.JQ;
+
+        form.on('submit(login)', function (data) {
+
+            $$.ajax({
+                method: 'post',
+                url: '{:url("login")}',
+                data: data.field,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg(data.message, {
+                            icon: 1,
+                            end: function () {
+                                window.location.href = data.url;
+                            }
+                        });
+                    } else {
+                        layer.msg(data.message, {
+                            icon: 5,
+                            end: function () {
+                                location.reload();
+                            }
+                        });
+                    }
+
+                },
+            })
+
+            return false;
+        })
+    });
+</script> {/block}

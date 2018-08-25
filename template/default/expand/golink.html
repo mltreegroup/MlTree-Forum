@@ -1,0 +1,17 @@
+{extend name="common/forum_public"} {block name="content"}
+
+<div class="mdui-col-xs-12 mdui-m-y-1 mdui-typo">
+    <div class="mf-panel mdui-shadow-4 mdui-hoverable">
+        <header class="mf-panel-hd">
+            <h3>即将访问非本站网页</h3>
+        </header>
+        <div class="mf-panel-bd">
+            <p>目标网址: <u>{$url}</u> </p>
+            <br/>
+            <a href="{$url}" class="mdui-btn mdui-btn-raised mdui-ripple">访问目标</a>
+        </div>
+    </div>
+</div>
+{/block}{block name="js"}
+
+{/block}

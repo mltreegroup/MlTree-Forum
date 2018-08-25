@@ -1,0 +1,174 @@
+{extend name="common/forum_public"} {block name="content"}
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-m-y-1 mdui-typo">
+    <div class="mf-panel mdui-shadow-2">
+        <header class="mf-panel-hd">
+            <h3>{$topicData.subject}
+                <br/> {:outBadge($topicData)}
+            </h3>
+            <a class="mdui-text-color-grey-400" href="{:url('index/user/index',['uid'=>$topicData.uid])}">
+                <strong>{$topicUser.username}</strong>
+            </a>
+            <span title="{$topicData.create_time}"> {$topicData.create_time|time_format} </span>
+            <span>
+                <i class="mdui-icon material-icons">looks</i>{$topicData.views}</span>
+        </header>
+        <div class="mf-panel-bd">
+            <div class="content" id="mf-content">{$topicData.content|raw|markdownEncode}</div>
+
+            {if !empty($attaList)}
+            <div class="attaList">
+                <header>
+                    <p>附件列表：</p>
+                </header>
+                <div>
+                    {volist name="attaList" id="vo"}
+                    <ul>
+                        <li>
+                            <a href="{$vo.url}" download="{$vo.fileName}">
+                                <div class="mdui-chip">
+                                    <img class="mdui-chip-icon" src="__IMG__/File.png" />
+                                    <span class="mdui-chip-title">{$vo.fileName}</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    {/volist}
+                </div>
+            </div>
+            {/if}
+        </div>
+        <div class="mf-panel-footer">
+            <div class="mdui-float-right mdui-valign mdui-m-y-1">
+                <span>最后更新于：
+                    <span>{$topicData.update_time}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mdui-card mf-comment">
+        <h3 class="mdui-m-f-2 mdui-text-color-theme-accent">回帖
+            <button class="mdui-btn mdui-float-right mdui-ripple mdui-color-theme-accent mdui-btn-raised" id="reply">评论</button>
+        </h3>
+    </div>
+    <div id="mf-comments">
+
+    </div>
+</div>
+<div class="mdui-col-xs-0 mdui-col-md-4 mdui-m-y-1 mdui-hidden-xs">
+    <div class="mf-panel mdui-text-center">
+        <header class="mf-panel-hd mdui-color-theme">
+            <img src="{$topicUser.avatar}" alt="{$topicUser.username}" class="mdui-img-circle" width="64">
+            <br/>
+            <a href="{:url('index/user/index',['uid'=>$topicData.uid])}" class="mdui-text-color-white-text">
+                <h2>{$topicUser.username}</h2>
+            </a>
+        </header>
+        <div class="mf-panel-bd">
+            <table class="mdui-table">
+                <thead>
+                    <tr>
+                        <th width="33.3333%">主题数</th>
+                        <th width="33.3333%">回帖数</th>
+                        <th>精华数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{$topicUser.topics}</td>
+                        <td>{$topicUser.comments}</td>
+                        <td>{$topicUser.essence}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- 回复区域 -->
+<form class="mdui-hidden" id="replyPanel">
+    <textarea id="editor" class="mdui-hidden" name="content"></textarea>
+    <input type="hidden" id="recid" name="recid" value="">
+</form>
+
+{/block} {block name="js"}
+<script src="__JS__/simplemde.min.js"></script>
+<script src="__JS__/mltree-flow.js"></script>
+<script src="__JS__/mltree-editor.js"></script>
+<script>
+    let option = {
+            commentUrl: "{:url('index/topic/comment',['tid'=>$topicData.tid])}",
+            uid: "{:session('uid')}",
+            subject: "{$topicData.subject}",
+        }
+        //调用flow加载
+    var flow = new mfFlow('comment');
+    flow.flow('{$topicData.tid}');
+
+    var editor = new MLTeditor(option)
+
+    layui.use(['layer'], function() {
+        var layer = layui.layer;
+
+        $$('#reply').on('click', function() {
+            editor.clearValue();
+            $$('#replyPanel').toggleClass('mdui-hidden');
+            $$('#editor').toggleClass('mdui-hidden');
+
+            var device = layui.device(),
+                k = '824px';
+            if (device.weixin || device.android || device.ios) {
+                k = '100%';
+            }
+            layer.open({
+                type: 1,
+                anim: 2,
+                title: '回复『' + option.subject + '』',
+                area: [k, '55%'],
+                offset: 'b',
+                btn: '发布',
+                content: $('#replyPanel'),
+                cancel: function(index, layero) {
+                    $$('#replyPanel').toggleClass('mdui-hidden');
+                    $$('#editor').toggleClass('mdui-hidden');
+                },
+                yes: function(index, layero) {
+                    //设置textarea内容
+                    $$('#editor').text(editor.getValue());
+
+                    var data = $$('#replyPanel').serialize();
+
+                    $$('#editor').toggleClass('mdui-hidden');
+                    $$('#replyPanel').toggleClass('mdui-hidden');
+
+                    editor.clearValue();
+                    layer.close(index);
+
+                    $$.ajax({
+                        method: 'post',
+                        url: option.commentUrl,
+                        data: data,
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res.code == 1) {
+                                mdui.snackbar({
+                                    message: res.message,
+                                    position: 'top',
+                                    onClosed: function() {
+                                        location.reload();
+                                    }
+                                })
+                            } else {
+                                mdui.snackbar({
+                                    message: res.message,
+                                    position: 'top',
+                                })
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    })
+</script>{/block}

@@ -12,6 +12,9 @@ class Base extends Controller
 {
 	protected function initialize()
     {
+        if(!isInstall()){
+            return $this->redirect('install\index\index');
+        }
         $data = Db::name('links')->order('sold')->select();
         if (User::isLogin(cookie('userKey'))) {
             $this->assign('userData', Db::name('user')->where('uid', session('uid'))->find());

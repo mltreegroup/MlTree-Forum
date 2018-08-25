@@ -8,176 +8,79 @@
 // | Author: Kingsr <kingsrml@vip.qq.com>
 // +----------------------------------------------------------------------
 
+//注册一个全局变量
 
-//注册编辑组件
-var E = window.wangEditor;
-var editor = new E('#editor');
-var $$ = mdui.JQ;
-
-function regEditor(type = 'def', option = {}) {
-    if (option.reply == true) {
-
+class MLTeditor {
+    constructor(option) {
+        this.option = option;
+        this.Meditor = new SimpleMDE({
+            element: document.getElementById("editor"),
+            spellChecker: false,
+            autofocus: true,
+            autosave: {
+                enabled: true,
+                uniqueId: "MLTFEditor",
+                delay: 1000,
+            },
+            placeholder: "请开始你的创作吧~",
+            prompturls: true,
+            renderingConfig: {
+                singleLineBreaks: false,
+                codeSyntaxHighlighting: true,
+            },
+        })
     }
 
-    if (type == 'comment') {
-        editor.customConfig.menus = [
-            'bold',
-            'italic',
-            'underline',
-            'emoticon',
-            'image',
-            'link',
-        ];
-    }
-    //配置图片上传
-    editor.customConfig.debug = true;
-    editor.customConfig.uploadImgServer = option.uploadImg;
-    editor.customConfig.uploadFileName = 'file';
-    editor.customConfig.uploadImgMaxLength = 1;
-    editor.customConfig.customAlert = function (info) {
-        layer.msg(info, {
-            icon: 5
+    submitData(dataObj, callback) {
+        $$.ajax({
+            method: 'post',
+            url: option.createUrl,
+            data: dataObj,
+            dataType: 'json',
+            success: function(res) {
+                callback(res);
+            }
         });
     }
 
-    editor.customConfig.onchangeTimeout = 1000;
-    editor.customConfig.onchange = function (html) {
-        $$('#content').val(html);
+    setValue(content = '') {
+        this.Meditor.value(content)
     }
-    editor.create();
+
+    getValue() {
+        return this.Meditor.value();
+    }
+
+    clearValue() {
+        this.setValue();
+    }
 }
 
-layui.use(['upload', 'jquery'], function () {
-    var upload = layui.upload,
-        $ = layui.$;
-
-    var files;
-
-    var uploadInst = upload.render({
-        elem: '#file',
-        method: 'POST',
-        url: option.uploadFile,
-        accept: 'file',
-        auto: false,
-        bindAction: '#create',
-        data: {
-            uid: option.uid,
-            sign: option.sign,
-        },
-        choose: function (obj) {
-            files = obj.pushFile();
-            obj.preview(function (index, file, res) {
-                var html = '<div class="mdui-chip">';
-                html += '<span class="mdui-chip-title" >' + file.name + '</span>';
-                html += '<span class="mdui-chip-delete"><i class="mdui-icon material-icons">cancel</i></span>';
-                html += '</div>';
-
-                var chip = $$('#fileList').append(html);
-                chip.removeClass('mdui-hidden-xs');
-
-                chip.find('.mdui-chip-delete').on('click', function () {
-                    delete files[index];
-                    chip.remove();
-                    uploadInst.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
-                })
-            })
-        },
-
-    });
-
-    layer.photos({
-        photos: '#mf-content,#mf-comments',
-        anim: 5
-    });
-});
-
-layui.use(['layer'], function () {
-    var layer = layui.layer;
-
-    $$('#reply').on('click', function () {
-        $$('#replyPanel').toggleClass('mdui-hidden');
-        $$('#editor').toggleClass('mdui-hidden');
-        document.getElementById(editor.textElemId).focus();
-
-        var device = layui.device(),
-            k = '824px';
-        if (device.weixin || device.android || device.ios) {
-            k = '100%';
-        }
-        layer.open({
-            type: 1,
-            anim: 2,
-            title: '回复『' + option.subject + '』',
-            area: k,
-            offset: 'b',
-            btn: '发布',
-            content: $('#replyPanel'),
-            cancel: function (index, layero) {
-                $$('#replyPanel').toggleClass('mdui-hidden');
-                $$('#editor').toggleClass('mdui-hidden');
+//绑定上传附件事件
+$$('#file').on('click', () => {
+    mdui.dialog({
+        content: "请注册账号，然后将附件上传至网盘后，再将网址粘贴过来。谢谢。<br>推荐MLT网盘、天翼云盘",
+        buttons: [{
+                text: 'MLT网盘',
+                close: true,
+                onClick: function() {
+                    window.open('https://pan.kingsr.cc')
+                }
             },
-            yes: function (index, layero) {
-                var data = $$('#replyPanel').serialize();
-                data.reCid = re_cid;
-                $$('#editor').toggleClass('mdui-hidden');
-                $$('#replyPanel').toggleClass('mdui-hidden');
-                editor.txt.clear()
-                layer.close(index);
-                $$.ajax({
-                    method: 'post',
-                    url: option.commentUrl,
-                    data: data,
-                    dataType: 'json',
-                    success: function (res) {
-                        if (res.code == 1) {
-                            mdui.snackbar({
-                                message: res.message,
-                                position: 'top',
-                                onClosed: function () {
-                                    location.reload();
-                                }
-                            })
-                        } else {
-                            mdui.snackbar({
-                                message: res.message,
-                                position: 'top',
-                            })
-                        }
-                    }
-                });
-            }
-        });
-    });
-})
-
-$$('#create').on('click', function () {
-    //获取表单内容
-    var formdata = $$('form').serialize();
-    
-    $$.ajax({
-        method: 'post',
-        url: option.createUrl,
-        data: formdata,
-        dataType: 'json',
-        success: function (res) {
-            if (res.code == 1) {
-                mdui.snackbar({
-                    message: res.message,
-                    position: 'top',
-                    onClosed: function () {
-                        window.location.href = res.url;
-                    }
-                })
-            } else {
-                mdui.snackbar({
-                    message: res.message,
-                    position: 'top',
-                    onClosed: function () {
-                        location.reload();
-                    }
-                })
-            }
-        }
-    });
-    return false;
+            {
+                text: '百度网盘',
+                close: true,
+                onClick: function() {
+                    window.open('https://pan.baidu.com')
+                }
+            },
+            {
+                text: '天翼云盘',
+                close: true,
+                onClick: function() {
+                    window.open('https://cloud.189.cn/')
+                }
+            },
+        ]
+    })
 });

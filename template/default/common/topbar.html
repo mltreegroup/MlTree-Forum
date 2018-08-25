@@ -1,0 +1,72 @@
+<!-- 站点导航部分 -->
+<header class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target:'#mobile-menu',overlay:true,swipe:true}">
+            <i class="mdui-icon material-icons">menu</i>
+        </a>
+        <a href="{:url('index/index')}" class="mdui-typo-title">MlTree Forum</a>
+        {// 输出Forum导航} {:outTopbar()}
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="javascript:;" mdui-dialog="{target: '#color-panel'}" class="mdui-btn mdui-btn-icon color-input" style="display: {$theme.discolour=='true' ? 'inline-block' : 'none'}">
+            <i class="mdui-icon material-icons">color_lens</i>
+        </a>
+        <a href="{:url('user/login')}" class="mdui-btn mdui-ripple mdui-hidden-xs">
+            <i class="mdui-icon material-icons">person</i>登录</a>
+        <a href="{:url('user/reg')}" class="mdui-btn mdui-ripple mdui-hidden-xs">
+            <i class="mdui-icon material-icons">person_add</i>注册</a>
+    </div>
+
+</header>
+<!-- 论坛左侧手机版菜单 -->
+<div class="mdui-drawer mdui-drawer-close" id="mobile-menu">
+    <ul class="mdui-list mdui-color-white" mdui-collapse="{accordion: true}">
+
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">home</i>
+            <a href="{:url('index/index')}" title="Home">
+                <div class="mdui-list-item-content">首页</div>
+            </a>
+        </li>
+        <li class="mdui-collapse-item mdui-ripple">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">people</i>
+                <div class="mdui-list-item-content">站点导航</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <a href="https://blog.kingsr.cc">
+                    <li class="mdui-list-item mdui-ripple">作者博客</li>
+                </a>
+            </ul>
+        </li>
+
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">person</i>
+            <a href="{:url('index/user/login')}" title="Login">
+                <div class="mdui-list-item-content">登录</div>
+            </a>
+        </li>
+
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">person_add</i>
+            <a href="{:url('index/user/reg')}" title="Register">
+                <div class="mdui-list-item-content">注册</div>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="mdui-dialog" id="color-panel">
+    <div class="mdui-dialog-content">
+        <div class="mdui-dialog-title">设定主题</div>
+        <p class="mdui-typo-title">主题色</p>
+        <div class="mdui-row-sm-2 mdui-row-md-3" id="layout-list"></div>
+        <p class="mdui-typo-title">主色</p>
+        <div class="mdui-row-sm-2 mdui-row-md-3" id="primary-list"></div>
+        <p class="mdui-typo-title">强调色</p>
+        <div class="mdui-row-sm-2 mdui-row-md-3" id="accent-list"></div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" onclick="theme.reset()">初始化</button>
+        </div>
+    </div>
+</div>

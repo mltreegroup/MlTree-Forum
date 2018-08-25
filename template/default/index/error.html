@@ -1,0 +1,12 @@
+{extend name="common/forum_public"} {block name="content"}
+<div class="mdui-col-xs-12 mdui-typo mdui-m-y-3 mdui-text-center">
+    <div class="mf-panel mdui-shadow-3 mdui-hoverable">
+        <div class="mf-panel-hd">
+            <h3 class="mf-panel-title">{$information.title}</h3>
+        </div>
+        <div class="mf-panel-bd">
+            {$information.content|raw}
+        </div>
+    </div>
+</div>
+{/block}{block name="js"} {/block}

@@ -6,6 +6,11 @@ use think\Db;
 
 class Api extends Base
 {
+    public function index()
+    {
+        return 'Welcome to MlTree Forum';
+    }
+
     public function del()
     {
         if (!empty(input('post.'))) {

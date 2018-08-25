@@ -18,6 +18,10 @@ class User extends Base
             $userTopicList = userModel::getTopicList($uid);
             $user = new userModel;
             $userInfo = $user->getInfor($uid);
+            if(!$userInfo)
+            {
+                return $this->error('用户不存在');
+            }
             return view('index_public', [
                 'option' => $this->siteOption('用户信息'),
                 'userData' => userModel::get(session('uid')),

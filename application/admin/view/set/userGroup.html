@@ -1,4 +1,4 @@
-{extend name="public/admin_public"} {block name="content"}
+{extend name="../application/admin/view/public/admin_public.html"} {block name="content"}
 <div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
 
     <h1 class="mdui-m-l-3">用户组管理</h1>
@@ -54,6 +54,7 @@
                         <a href="JavaScript:;" onclick="openAuth()">权限列表</a>
                     </div>
                 </div>
+                {:token()}
             </form>
         </div>
         <div class="mdui-dialog-actions">
@@ -77,10 +78,12 @@
                     <div class="layui-input-block">
                         <input type="text" name="rules" placeholder="请输入用户祖权限" autocomplete="off" class="layui-input">
                     </div>
+                    <input type="hidden" name="ID" value="">
                     <div class="layui-form-mid layui-word-aux">请对照权限列表填写此项(多个权限用英文,分隔)，保持空则自动填写所有权限。
                         <a href="JavaScript:;" onclick="openAuth()">权限列表</a>
                     </div>
                 </div>
+                {:token()}
             </form>
         </div>
         <div class="mdui-dialog-actions">
@@ -94,12 +97,12 @@
 <script>
     var $$ = mdui.JQ,
         data = '',
-        inst = new mdui.Dialog('#editGroup');//注册对话框
+        inst = new mdui.Dialog('#editGroup'); //注册对话框
 
     $$('#user').addClass('mdui-collapse-item-open');
     $$('#setUserGroup').addClass('mdui-list-item-active');
 
-    $$('#submit').on('click', function () {
+    $$('#submit').on('click', function() {
         data = $$('#add').serialize();
 
         $$.ajax({
@@ -107,7 +110,7 @@
             url: '',
             data: data,
             dataType: 'json',
-            success: function (res) {
+            success: function(res) {
                 if (res.code == 0) {
                     mdui.snackbar(res.message, {
                         timeout: 2000,
@@ -125,7 +128,7 @@
 
         return false;
     })
-    $$('#edit').on('click', function () {
+    $$('#edit').on('click', function() {
         data = $$('#editForm').serialize();
 
         $$.ajax({
@@ -133,12 +136,12 @@
             url: '',
             data: data,
             dataType: 'json',
-            success: function (res) {
+            success: function(res) {
                 if (res.code == 0) {
                     mdui.snackbar(res.message, {
                         timeout: 2000,
                         position: 'top',
-                        onClosed: function () {
+                        onClosed: function() {
                             location.reload();
                         }
                     })
@@ -158,7 +161,7 @@
     function editorGroup(id) {
         var data = $$(id).find('td');
 
-        $$('#editGroup [name="Id"]').val(data[0].innerText);
+        $$('#editGroup [name="ID"]').val(data[0].innerText);
         $$('#editGroup [name="groupName"]').val(data[1].innerText);
         $$('#editGroup [name="rules"]').val(data[2].innerText);
 
@@ -173,41 +176,38 @@
         mdui.dialog({
             title: '你确定吗？',
             content: '此操作将删除此用户组，同时将该用户组下的所有用户归为Gid=2的注册会员用户组',
-            buttons: [
-                {
-                    text: '取消'
-                },
-                {
-                    text: '确认',
-                    onClick: function (inst) {
-                        $$.ajax({
-                            method: 'post',
-                            url: '{:url("admin/api/del")}',
-                            data: {
-                                type: 'group',
-                                id: gid,
-                            },
-                            dataType: 'json',
-                            success: function (res) {
-                                if (res.code == 0) {
-                                    mdui.snackbar(res.message, {
-                                        timeout: 2000,
-                                        position: 'top',
-                                        onClosed: function () {
-                                            location.reload();
-                                        }
-                                    })
-                                } else {
-                                    mdui.snackbar(res.message, {
-                                        timeout: 2000,
-                                        position: 'top',
-                                    })
-                                }
+            buttons: [{
+                text: '取消'
+            }, {
+                text: '确认',
+                onClick: function(inst) {
+                    $$.ajax({
+                        method: 'post',
+                        url: '{:url("admin/api/del")}',
+                        data: {
+                            type: 'group',
+                            id: gid,
+                        },
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res.code == 0) {
+                                mdui.snackbar(res.message, {
+                                    timeout: 2000,
+                                    position: 'top',
+                                    onClosed: function() {
+                                        location.reload();
+                                    }
+                                })
+                            } else {
+                                mdui.snackbar(res.message, {
+                                    timeout: 2000,
+                                    position: 'top',
+                                })
                             }
-                        });
-                    }
+                        }
+                    });
                 }
-            ]
+            }]
         });
 
     }

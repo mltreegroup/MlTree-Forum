@@ -1,0 +1,100 @@
+{extend name="common/forum_public"} {block name="content"}
+
+<div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
+    <div class="mdui-card">
+        <div class="mdui-card-media">
+            <img src="__IMG__/card.png" height="200px" />
+            <div class="mlt-user-info">
+              <div class="mlt-avatar-box">
+                <img src="{$userInfo.avatar}" alt="{$userInfo.username}的头像" id="avatar_preview" />
+              </div>
+              <div class="mlt-user-username">
+                {$userInfo.username}
+              </div>
+              <div class="mlt-user-data">
+                <a href>{$userInfo.topics} 主题</a>
+                <span class="mdui-m-x-1">|</span>
+                <a href>{$userInfo.comments} 回复</a>
+                <span class="mdui-m-x-1">|</span>
+                <a href>{$userInfo.motto|default="这家伙很懒，什么也没留下"}</a>
+              </div>
+            </div>
+        </div>
+
+        <div class="mdui-card-content">
+            <div class="mdui-tab" mdui-tab>
+                <a href="#theme" class="mdui-ripple">主题</a>
+                <a href="#info" class="mdui-ripple">个人资料</a>
+            </div>
+            <div id="theme">
+                <ul class="mdui-list">
+                    {volist name="userTopic" id="vo"}
+                    <li class="mdui-list-item mdui-ripple">
+                        <div class="mdui-list-item-avatar">
+                            <img src="{$vo.userData.avatar}" alt="{$vo.userData.username}" title="{$vo.userData.username}">
+                        </div>
+                        <div class="mdui-list-item-content">
+                            <a class="mdui-list-item-title" href="{:url('index/topic/index',['tid'=>$vo.tid])}">{$vo.subject}</a>
+                            <div class="mdui-list-item-text mdui-list-item-one-line">{$vo.content|raw}</div>
+                            <div class="mdui-list-item-text">
+                                <a class="mdui-list-item-title" href="{:url('index/user/inde',['uid'=>$vo.uid])}">{$vo.userData.username}</a>
+                                <span title="{$vo.create_time}"> {$vo.time_format}</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mdui-divider-inset mdui-m-y-0"></li>
+                    {/volist}
+                </ul>
+            </div>
+            <div id="info">
+                <div class="mdui-col-xs-12">
+                    <h5>活跃情况</h5>
+                    <ul>
+                        <li>用户组：{$userInfo.groupData.groupName}</li>
+                        <li>注册时间：{$userInfo.create_date|date='Y-m-d H:i'}</li>
+                        <li>最后访问：{$userInfo.login_date|date='Y-m-d H:i'}</li>
+                        <li>主题数：{$userInfo.topics}</li>
+                        <li>回帖数：{$userInfo.comments}</li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{/block} {block name="js"}
+
+<script src="__JS__/wangEditor.js"></script>
+
+<script>
+    layui.use(['upload', 'form'], function () {
+        var upload = layui.upload,
+            form = layui.form;
+        var $$ = mdui.JQ;
+
+        form.on('submit(pass)', function (data) {
+            $$.ajax({
+                method: 'post',
+                url: '{:url("set")}',
+                data: data.field,
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code == 1) {
+                        mdui.snackbar({
+                            message: res.message,
+                            position: 'top',
+                            onClosed: function () {
+                                window.location.href = res.url;
+                            },
+                        })
+                    } else {
+                        layer.msg(res.message, { icon: 5 });
+                    }
+                },
+            });
+            return false;
+        });
+    })
+</script> {/block}

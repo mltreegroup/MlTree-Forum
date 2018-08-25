@@ -1,0 +1,26 @@
+<footer class="mlt-footer">
+    <p>Powered by
+        <a href="https://forum.mltree.top" target="_blank"> MlTree Forum</a> | All Rights Reserved © MlTree Forum | 运行时间:{:get_runtime()}s | <script type="text/javascript" src="https://api.kingsr.cc/api/hitokoto/hitencode"></script><script>hitokoto()</script>
+    </p>
+    <a class="mdui-float-right link" href="http://www.miitbeian.gov.cn" target="_blank">{$option.siteIcp}</a>
+</footer>
+<script src="__JS__/mltree-function.js"></script>
+<script>
+    //返回顶部
+    mdui.mutation()
+    $("#fixbar-top").click(function () {
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1000);
+        return false;
+    });
+    var msgoption = {
+        uid: '{:session("uid")}',
+        url: '{:url("api/api/MessageList",["uid"=>session("uid")])}',
+        get: '{:url("api/api/getMessage",["uid"=>session("uid")])}',
+        addUrl: '{:url("api/api/addMessage",["uid"=>session("uid")])}',
+        readUrl: '{:url("api/api/readMessage",["uid"=>session("uid")])}',
+        delUrl: '{:url("api/api/delMessage",["uid"=>session("uid")])}',
+    }
+</script>
+<script src="__JS__/mltree-message.js"></script>

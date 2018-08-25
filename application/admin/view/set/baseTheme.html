@@ -1,4 +1,4 @@
-{extend name="public/admin_public"} {block name="content"}
+{extend name="../application/admin/view/public/admin_public.html"} {block name="content"}
 <div class="mdui-m-a-1 mdui-typo">
     <form action="">
         <h1 class="mdui-m-l-3">模板设置
@@ -27,6 +27,7 @@
                 <i class="mdui-switch-icon"></i>
             </label>
         </div>
+         {:token()}
     </form>
     <div class="mdui-m-l-3">
         <button class="mdui-btn mdui-ripple mdui-color-theme" onclick="theme.reset()">初始化</button>

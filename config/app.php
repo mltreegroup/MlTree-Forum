@@ -15,7 +15,7 @@
 
 return [
     // 应用名称
-    'app_name'               => '',
+    'app_name'               => 'MlTreeForum',
     // 应用地址
     'app_host'               => '',
     // 应用调试模式
@@ -39,7 +39,7 @@ return [
     // 默认时区
     'default_timezone'       => 'Asia/Shanghai',
     // 是否开启多语言
-    'lang_switch_on'         => false,
+    'lang_switch_on'         => true,
     // 默认全局过滤方法 用逗号分隔多个
     'default_filter'         => '',
     // 默认语言
@@ -130,8 +130,8 @@ return [
     'route_cache_option'     => [],
 
     // 默认跳转页面对应的模板文件
-    'dispatch_success_tmpl'  => '../template/view/default/success.html',
-    'dispatch_error_tmpl'    => '../template/view/default/error.html',
+    'dispatch_success_tmpl'  => '../template/default/common/success.html',
+    'dispatch_error_tmpl'    => '../template/default/common/error.html',
 
     // 异常页面的模板文件
     'exception_tmpl'         => Env::get('think_path') . 'tpl/think_exception.tpl',
@@ -143,30 +143,4 @@ return [
     // 异常处理handle类 留空使用 \think\exception\Handle
     'exception_handle'       => '',
 
-    /**
-     * QQ互联登录配置
-     */
-    'qqconnect'              => [
-        'appid' => '',
-        'appkey' => '',
-        'callback' => '',
-        'scope' => 'get_user_info',
-        'errorReport' => true
-    ],
-
-    /**
-     * 配置回复信息模板
-     * 可选参数：
-     * {username} 帖子所属人昵称
-     * {reuser} 回复用户昵称
-     * {reuserUrl} 回复用户地址
-     * {topicUrl} 帖子地址
-     */
-    'Message' => [
-        'comment' => '<a href="/user.html">{username}</a>：<a href="{reuserUrl}">{reuser}</a>评论了你的Topic『<a href="{topicUrl}">{title}</a>』',
-        'reply' => '<a href="/user.html">{username}</a>：<a href="{reuserUrl}">{reuser}</a>回复了你在『<a href="{topicUrl}">{title}</a>』的评论:<br>『<br>{comment}<br>』',
-        'top' => '<a href="/user.html">{username}</a>：你的Topic『<a href="{topicUrl}">{title}</a>』被设置为置顶',
-        'essence' => '<a href="/user.html">{username}</a>：你的Topic『<a href="{topicUrl}">{title}</a>』被设置为精华',
-        'move' => '<a href="/user.html">{username}</a>：你的Topic『<a href="{topicUrl}">{title}</a>』被移动',
-    ],
 ];

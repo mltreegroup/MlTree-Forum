@@ -1,14 +1,19 @@
 <footer class="mlt-footer">
     <p>Powered by
-        <a href="https://forum.mltree.top" target="_blank"> MlTree Forum</a> | All Rights Reserved © MlTree Forum | 运行时间:{:get_runtime()}s | <script type="text/javascript" src="https://api.kingsr.cc/api/hitokoto/hitencode"></script><script>hitokoto()</script>
+        <a href="https://forum.mltree.top" target="_blank"> MlTree Forum</a> | All Rights Reserved © MlTree Forum | 运行时间:{:get_runtime()}s |
+        <script type="text/javascript" src="https://api.kingsr.cc/api/hitokoto/hitencode"></script>
+        <script>
+            hitokoto()
+        </script>
     </p>
     <a class="mdui-float-right link" href="http://www.miitbeian.gov.cn" target="_blank">{$option.siteIcp}</a>
 </footer>
+<script src="//cdn.kingsr.cc/cdn/js/prism.js"></script>
 <script src="__JS__/mltree-function.js"></script>
 <script>
     //返回顶部
     mdui.mutation()
-    $("#fixbar-top").click(function () {
+    $("#fixbar-top").click(function() {
         $('body,html').animate({
             scrollTop: 0
         }, 1000);

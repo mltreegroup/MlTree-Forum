@@ -124,6 +124,14 @@ class RuleGroup extends Rule
             return false;
         }
 
+        // 检查前置行为
+        if (isset($this->option['before'])) {
+            if (false === $this->checkBefore($this->option['before'])) {
+                return false;
+            }
+            unset($this->option['before']);
+        }
+
         // 解析分组路由
         if ($this instanceof Resource) {
             $this->buildResourceRule($this->resource, $this->option);
@@ -501,6 +509,39 @@ class RuleGroup extends Rule
         }
 
         return $this->option('prefix', $prefix);
+    }
+
+    /**
+     * 设置资源允许
+     * @access public
+     * @param  array     $only
+     * @return $this
+     */
+    public function only($only)
+    {
+        return $this->option('only', $only);
+    }
+
+    /**
+     * 设置资源排除
+     * @access public
+     * @param  array     $except
+     * @return $this
+     */
+    public function except($except)
+    {
+        return $this->option('except', $except);
+    }
+
+    /**
+     * 设置资源路由的变量
+     * @access public
+     * @param  array     $vars
+     * @return $this
+     */
+    public function vars($vars)
+    {
+        return $this->option('var', $vars);
     }
 
     /**

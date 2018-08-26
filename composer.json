@@ -21,7 +21,8 @@
         "topthink/think-captcha": "^2.0",
         "topthink/think-image": "^1.0",
         "phpmailer/phpmailer": "^6.0",
-        "league/commonmark": "^0.17.5"
+        "league/commonmark": "^0.17.5",
+        "league/html-to-markdown": "^4.7"
     },
     "autoload": {
         "psr-4": {

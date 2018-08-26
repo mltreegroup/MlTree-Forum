@@ -258,7 +258,6 @@ class Request
      * php://input内容
      * @var string
      */
-    // php://input
     protected $input;
 
     /**
@@ -523,6 +522,18 @@ class Request
     }
 
     /**
+     * 设置当前完整URL 包括QUERY_STRING
+     * @access public
+     * @param  string $url URL
+     * @return $this
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+        return $this;
+    }
+
+    /**
      * 获取当前完整URL 包括QUERY_STRING
      * @access public
      * @param  bool $complete 是否包含域名
@@ -545,6 +556,18 @@ class Request
         }
 
         return $complete ? $this->domain() . $this->url : $this->url;
+    }
+
+    /**
+     * 设置当前完整URL 不包括QUERY_STRING
+     * @access public
+     * @param  string $url URL
+     * @return $this
+     */
+    public function setBaseUrl($url)
+    {
+        $this->baseUrl = $url;
+        return $this;
     }
 
     /**
@@ -986,7 +1009,7 @@ class Request
     public function post($name = '', $default = null, $filter = '')
     {
         if (empty($this->post)) {
-            $this->post = !empty($_POST) ? $_POST : $this->getJsonInputData($this->input);
+            $this->post = !empty($_POST) ? $_POST : $this->getInputData($this->input);
         }
 
         return $this->input($this->post, $name, $default, $filter);
@@ -1003,22 +1026,19 @@ class Request
     public function put($name = '', $default = null, $filter = '')
     {
         if (is_null($this->put)) {
-            $data = $this->getJsonInputData($this->input);
-
-            if (!empty($data)) {
-                $this->put = $data;
-            } else {
-                parse_str($this->input, $this->put);
-            }
+            $this->put = $this->getInputData($this->input);
         }
 
         return $this->input($this->put, $name, $default, $filter);
     }
 
-    protected function getJsonInputData($content)
+    protected function getInputData($content)
     {
-        if (false !== strpos($this->contentType(), 'application/json')) {
+        if (false !== strpos($this->contentType(), 'application/json') || 0 === strpos($content, '{"')) {
             return (array) json_decode($content, true);
+        } elseif (strpos($content, '=')) {
+            parse_str($content, $data);
+            return $data;
         }
 
         return [];
@@ -1580,7 +1600,9 @@ class Request
             return $result;
         }
 
-        return $this->param($this->config['var_ajax']) ? true : $result;
+        $result           = $this->param($this->config['var_ajax']) ? true : $result;
+        $this->mergeParam = false;
+        return $result;
     }
 
     /**
@@ -1597,7 +1619,9 @@ class Request
             return $result;
         }
 
-        return $this->param($this->config['var_pjax']) ? true : $result;
+        $result           = $this->param($this->config['var_pjax']) ? true : $result;
+        $this->mergeParam = false;
+        return $result;
     }
 
     /**
@@ -2056,6 +2080,30 @@ class Request
     }
 
     /**
+     * 设置php://input数据
+     * @access public
+     * @param  string $input RAW数据
+     * @return $this
+     */
+    public function withInput($input)
+    {
+        $this->input = $input;
+        return $this;
+    }
+
+    /**
+     * 设置文件上传数据
+     * @access public
+     * @param  array $files 上传信息
+     * @return $this
+     */
+    public function withFiles(array $files)
+    {
+        $this->file = $files;
+        return $this;
+    }
+
+    /**
      * 设置COOKIE数据
      * @access public
      * @param  array $cookie 数据
@@ -2146,5 +2194,13 @@ class Request
     public function __isset($name)
     {
         return isset($this->param[$name]);
+    }
+
+    public function __debugInfo()
+    {
+        $data = get_object_vars($this);
+        unset($data['dispatch'], $data['config']);
+
+        return $data;
     }
 }

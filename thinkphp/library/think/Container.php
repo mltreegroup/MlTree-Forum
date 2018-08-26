@@ -11,15 +11,19 @@
 
 namespace think;
 
+use ArrayAccess;
+use ArrayIterator;
 use Closure;
+use Countable;
 use InvalidArgumentException;
+use IteratorAggregate;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
 use think\exception\ClassNotFoundException;
 
-class Container implements \ArrayAccess
+class Container implements ArrayAccess, IteratorAggregate, Countable
 {
     /**
      * 容器对象实例
@@ -152,6 +156,9 @@ class Container implements \ArrayAccess
         } elseif ($concrete instanceof Closure) {
             $this->bind[$abstract] = $concrete;
         } elseif (is_object($concrete)) {
+            if (isset($this->bind[$abstract])) {
+                $abstract = $this->bind[$abstract];
+            }
             $this->instances[$abstract] = $concrete;
         } else {
             $this->bind[$abstract] = $concrete;
@@ -276,6 +283,16 @@ class Container implements \ArrayAccess
                 unset($this->instances[$name]);
             }
         }
+    }
+
+    /**
+     * 获取容器中的对象实例
+     * @access public
+     * @return array
+     */
+    public function all()
+    {
+        return $this->instances;
     }
 
     /**
@@ -422,8 +439,9 @@ class Container implements \ArrayAccess
         $params = $reflect->getParameters();
 
         foreach ($params as $param) {
-            $name  = $param->getName();
-            $class = $param->getClass();
+            $name      = $param->getName();
+            $lowerName = Loader::parseName($name);
+            $class     = $param->getClass();
 
             if ($class) {
                 $args[] = $this->getObjectParam($class->getName(), $vars);
@@ -431,6 +449,8 @@ class Container implements \ArrayAccess
                 $args[] = array_shift($vars);
             } elseif (0 == $type && isset($vars[$name])) {
                 $args[] = $vars[$name];
+            } elseif (0 == $type && isset($vars[$lowerName])) {
+                $args[] = $vars[$lowerName];
             } elseif ($param->isDefaultValueAvailable()) {
                 $args[] = $param->getDefaultValue();
             } else {
@@ -501,5 +521,25 @@ class Container implements \ArrayAccess
     public function offsetUnset($key)
     {
         $this->__unset($key);
+    }
+
+    //Countable
+    public function count()
+    {
+        return count($this->instances);
+    }
+
+    //IteratorAggregate
+    public function getIterator()
+    {
+        return new ArrayIterator($this->instances);
+    }
+
+    public function __debugInfo()
+    {
+        $data = get_object_vars($this);
+        unset($data['instances'], $data['instance']);
+
+        return $data;
     }
 }

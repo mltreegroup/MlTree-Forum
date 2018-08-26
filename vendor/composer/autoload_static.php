@@ -27,6 +27,7 @@ class ComposerStaticInit42482ef7d6a06f67f1e097290e7a8e0e
         ),
         'L' => 
         array (
+            'League\\HTMLToMarkdown\\' => 22,
             'League\\CommonMark\\' => 18,
         ),
     );
@@ -51,6 +52,10 @@ class ComposerStaticInit42482ef7d6a06f67f1e097290e7a8e0e
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
+        'League\\HTMLToMarkdown\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/html-to-markdown/src',
         ),
         'League\\CommonMark\\' => 
         array (

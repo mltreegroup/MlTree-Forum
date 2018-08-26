@@ -27,6 +27,8 @@ Route::rule('callback/[:code]/[:state]', 'index/user/callback');
 Route::rule('create', 'index/topic/create');
 Route::rule('update/[:tid]', 'index/topic/update');
 
+Route::rule('settings','index/settings');
+
 return [
 
 ];

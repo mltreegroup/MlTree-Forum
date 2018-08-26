@@ -6,7 +6,7 @@ use think\Validate;
 class User extends Validate
 {
     protected $rule = [
-        'username'  => 'require|max:10',
+        'username'  => 'require|max:16',
         'oldpassword' => 'require|max:30|min:3',
         'password'   => 'require|max:30|min:3',
         'repassword' => 'require|max:30|min:3',

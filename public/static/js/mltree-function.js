@@ -145,7 +145,8 @@ function delTopic(_tid, _uid) {
                     });
                 }
             }
-        ]
+        ],
+        history:false //减少恼人的跳转BUG
     });
 }
 

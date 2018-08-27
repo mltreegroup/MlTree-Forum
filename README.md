@@ -26,7 +26,7 @@ API支持：程序正在向API化，前后端分离的方向迈进。提供了�
 
 官网有详细的安装教程。点击下方链接到达。
 
-[安装说明](https://forum.mltree.top/topic/2.html)
+[安装说明](https://forum.mltree.top/topic/18.html)
 
 #### 使用说明
 

@@ -85,7 +85,9 @@
         <p>Powered by
             <a href="https://forum.mltree.top" target="_blank"> MlTree Forum</a> | All Rights Reserved © MlTree Forum | 运行时间:0.9422s |
             <script type="text/javascript" src="https://api.kingsr.cc/api/hitokoto/hitencode"></script>
-            <script>hitokoto()</script>
+            <script>
+                hitokoto()
+            </script>
         </p>
         <a class="mdui-float-right link" href="http://www.miitbeian.gov.cn" target="_blank">桂ICP备16007573号 - 1</a>
     </footer>
@@ -94,7 +96,11 @@
         var $$ = mdui.JQ;
         mdui.alert(`
         安装需知<br>此程序的版权所有归MlTree团队。开源版本的服务，不涉及任何售后服务。<br>程序的最终解释权归MlTree所有。
-        `);
+        `, '版权说明', function(e) {
+            e.close();
+        }, {
+            history: false,
+        });
     </script>
 </body>
 

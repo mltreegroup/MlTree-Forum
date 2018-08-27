@@ -12,7 +12,7 @@ class Index extends Controller
             return $this->error('你已经安装过了，如需重新安装，请删除./install/install.lock文件','index/index/index');
         }
         if (\request()->isPost()) {
-            $data = file_get_contents("./install/database.php");
+            $data = file_get_contents("../install/database.php");
             //替换database
             $dataarr = [
                 '{prefix}' => input('post.prefix'),

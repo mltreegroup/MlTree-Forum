@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>安装 - MlTree Forum - 安装引导程序</title>
+    <title>安装 - MlTree Forum</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="keywords" content="MlTree Forum PHP 开源 轻论坛 轻社区 Material Design Thinkphp" />
     <meta name="description" content="本站是 MlTree Forum 论坛社区产品的官方交流站点。MlTree Forum是一款由Thinkphp构建、Material Design风格的轻论坛。" />
@@ -24,16 +24,16 @@
             <div class="mdui-card mdui-col-xs-12 mdui-col-sm-6 mdui-col-offset-sm-3">
                 <div class="mdui-card-header">
                     <img class="mdui-card-header-avatar" src="__IMG__/LOGO.png" />
-                    <div class="mdui-card-header-title">安装引导程序</div>
+                    <div class="mdui-card-header-title">安装MlTree Forum</div>
                     <div class="mdui-card-header-subtitle">Install</div>
                 </div>
                 <div class="mdui-card-content">
-                    <span>安装须知：数据库如果链接错误，则不会提示任何报错！请注意。</span>
+                    <span>请注意,数据库如果连接错误，则不会提示任何报错。</span>
                     <h4>数据库配置</h4>
                     <div class="mdui-textfield">
                         <label class="mdui-textfield-label">数据库地址</label>
-                        <input class="mdui-textfield-input" name="hostname" type="text" />
-                        <div class="mdui-textfield-helper">默认为localhost可不填</div>
+                        <input class="mdui-textfield-input" value="localhost" required name="hostname" type="text" />
+                        <div class="mdui-textfield-helper">默认请填写localhost</div>
                     </div>
                     <div class="mdui-textfield">
                         <label class="mdui-textfield-label">数据库端口</label>
@@ -57,7 +57,7 @@
                         <label class="mdui-textfield-label">数据库密码</label>
                         <input class="mdui-textfield-input" name="datapassword" type="text" required />
                     </div>
-                    <h4>管理员配置</h4>
+                    <h4>创始人信息</h4>
                     <div class="mdui-textfield">
                         <label class="mdui-textfield-label">用户名</label>
                         <input class="mdui-textfield-input" name="username" type="text" required/>
@@ -73,7 +73,7 @@
 
                 </div>
                 <div class="mdui-card-actions">
-                    <button class="mdui-btn mdui-ripple" type="reset">取消</button>
+                    <button class="mdui-btn mdui-ripple mdui-text-color-red" type="reset">重新填写</button>
                     <button class="mdui-btn mdui-ripple" type="submit">确定</button>
                 </div>
             </div>
@@ -89,17 +89,22 @@
                 hitokoto()
             </script>
         </p>
-        <a class="mdui-float-right link" href="http://www.miitbeian.gov.cn" target="_blank">桂ICP备16007573号 - 1</a>
+        <!--安装界面写个卵备案号-->
     </footer>
     <script>
-        mdui.mutation()
+        mdui.mutation();
         var $$ = mdui.JQ;
-        mdui.alert(`
-        安装需知<br>此程序的版权所有归MlTree团队。开源版本的服务，不涉及任何售后服务。<br>程序的最终解释权归MlTree所有。
-        `, '版权说明', function(e) {
-            e.close();
-        }, {
-            history: false,
+
+        mdui.dialog({
+            title:"安装须知",//注：原弹窗有错别字
+            content:"此程序的版权所有归MlTree团队。开源版本不涉及任何售后服务。<br>程序的最终解释权归MlTree团队所有。",
+            history:false,
+            buttons:[
+                {
+                    text:"了解",
+                    close:true
+                }
+            ]
         });
     </script>
 </body>

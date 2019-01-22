@@ -1,0 +1,217 @@
+{extend name="../application/admin/template/public/main"}
+{block name="head"}{/block}
+{block name="muen"}
+{include file='../application/admin/template/public/topbar' /}
+{/block}
+{block name="main"}
+<div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
+
+    <h1 class="mdui-m-l-3">用户组管理</h1>
+
+    <div class="mdui-btn-group mdui-m-l-3">
+        <button type="button" class="mdui-btn" mdui-dialog="{target: '#addGroup'}">
+            <i class="mdui-icon material-icons">add</i>
+        </button>
+    </div>
+
+    <table class="mdui-table mdui-textfield mdui-table-hoverable">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>用户组昵称</th>
+                <th>用户组权限</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {volist name="groupData" id="vo"}
+            <tr id="{$vo.gid}">
+                <td>{$vo.gid}</td>
+                <td>{$vo.groupName}</td>
+                <td>{$vo.rules}</td>
+                <td>
+                    <div class="mdui-btn-group">
+                        <button class="mdui-btn" onclick="editorGroup('#{$vo.gid}')">编辑</button>
+                        <button class="mdui-btn" onclick="del('{$vo.gid}')">删除</button>
+                    </div>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+
+    <div class="mdui-dialog mdui-typo" id="addGroup">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title">添加用户组</div>
+            <form id="add" class="mdui-m-y-1">
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">用户组名称</label>
+                    <input type="text" name="groupName" required lay-verify="required" placeholder="请输入用户组名称"
+                        autocomplete="off" class="mdui-textfield-input">
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">用户组权限</label>
+
+                    <input type="text" name="rules" placeholder="请输入用户祖权限" autocomplete="off" class="mdui-textfield-input">
+
+                    <div class="mdui-textfield-helper">请对照权限列表填写此项(多个权限用英文,分隔)，保持空则自动填写所有权限。
+                        <a href="JavaScript:;" onclick="openAuth()">权限列表</a>
+                    </div>
+                </div>
+                {:token()}
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="submit">添加</button>
+        </div>
+    </div>
+
+    <div class="mdui-dialog mdui-typo" id="editGroup">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title">修改用户组</div>
+            <form id="editForm" class="layui-form layui-form-pane mdui-m-y-1">
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">用户组名称</label>
+
+                    <input type="text" name="groupName" required placeholder="请输入用户组名称"
+                        autocomplete="off" class="mdui-textfield-input">
+
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">用户组权限</label>
+                    <input type="text" name="rules" placeholder="请输入用户祖权限" autocomplete="off" class="mdui-textfield-input">
+                    <input type="hidden" name="ID" value="">
+                    <div class="mdui-textfield-helper">请对照权限列表填写此项(多个权限用英文,分隔)，保持空则自动填写所有权限。
+                        <a href="JavaScript:;" onclick="openAuth()">权限列表</a>
+                    </div>
+                </div>
+                {:token()}
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="edit">保存</button>
+        </div>
+    </div>
+
+</div>
+
+{/block} {block name="js"}
+<script>
+    var $$ = mdui.JQ,
+        data = '',
+        inst = new mdui.Dialog('#editGroup'); //注册对话框
+
+    $$('#user').addClass('mdui-collapse-item-open');
+    $$('#setUserGroup').addClass('mdui-list-item-active');
+
+    $$('#submit').on('click', function () {
+        data = $$('#add').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+    $$('#edit').on('click', function () {
+        data = $$('#editForm').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+
+    function editorGroup(id) {
+        var data = $$(id).find('td');
+
+        $$('#editGroup [name="ID"]').val(data[0].innerText);
+        $$('#editGroup [name="groupName"]').val(data[1].innerText);
+        $$('#editGroup [name="rules"]').val(data[2].innerText);
+
+        inst.open();
+    }
+
+    function openAuth() {
+        window.open("{:url('Auth')}", "newwindow",
+            "height=500, width=500, toolbar=no, menubar=no, scrollbars=yes, resizable=no, location=no, status=no");
+    }
+
+    function del(gid) {
+        mdui.dialog({
+            title: '你确定吗？',
+            content: '此操作将删除此用户组，同时将该用户组下的所有用户归为Gid=2的注册会员用户组',
+            buttons: [{
+                text: '取消'
+            }, {
+                text: '确认',
+                onClick: function (inst) {
+                    $$.ajax({
+                        method: 'post',
+                        url: '{:url("admin/api/del")}',
+                        data: {
+                            type: 'group',
+                            id: gid,
+                        },
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res.code == 0) {
+                                mdui.snackbar(res.msg, {
+                                    timeout: 2000,
+                                    position: 'top',
+                                    onClosed: function () {
+                                        location.reload();
+                                    }
+                                })
+                            } else {
+                                mdui.snackbar(res.msg, {
+                                    timeout: 2000,
+                                    position: 'top',
+                                })
+                            }
+                        }
+                    });
+                }
+            }]
+        });
+
+    }
+</script> {/block}

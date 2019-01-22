@@ -1,0 +1,104 @@
+<header class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#left-menu'}">
+            <i class="mdui-icon material-icons">menu</i>
+        </a>
+        <a href="{:url('admin/index/index')}" class="mdui-typo-headline">MlTree Forum</a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon" onclick="location.reload()">
+            <i class="mdui-icon material-icons">refresh</i>
+        </a>
+
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#more'}">
+            <i class="mdui-icon material-icons">more_vert</i>
+        </a>
+        <ul class="mdui-menu mdui-menu-cascade" id="more">
+            <li class="mdui-menu-item">
+                <a href="{:url('index/index/index')}" class="mdui-ripple">返回前台</a>
+            </li>
+        </ul>
+
+    </div>
+</header>
+
+
+
+<div class="mdui-drawer" id="left-menu">
+    <ul class="mdui-list mdui-collapse" id="collapse" mdui-collapse="{accordion:true}">
+
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">home</i>
+            <div class="mdui-list-item-content">
+                <a href="{:url('admin/index/index')}">后台首页</a>
+            </div>
+        </li>
+
+        <li class="mdui-collapse-item" id="sys">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">settings</i>
+                <div class="mdui-list-item-content">系统设置</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <a href="{:url('set/base')}">
+                    <li class="mdui-list-item mdui-ripple" id="base">基础设置</li>
+                </a>
+                <a href="{:url('set/baseReg')}">
+                    <li class="mdui-list-item mdui-ripple" id="baseReg">注册访问</li>
+                </a>
+                <a href="{:url('set/baseTheme')}">
+                    <li class="mdui-list-item mdui-ripple" id="baseTheme">模板设置</li>
+                </a>
+                <a href="{:url('set/baseMail')}">
+                    <li class="mdui-list-item mdui-ripple" id="baseMail">邮件设置</li>
+                </a>
+            </ul>
+        </li>
+
+        <li class="mdui-collapse-item" id="forum">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">forum</i>
+                <div class="mdui-list-item-content">论坛管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+
+
+            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <a href="{:url('set/forum')}">
+                    <li class="mdui-list-item mdui-ripple" id="setForum">板块管理</li>
+                </a>
+                <a href="{:url('set/topic')}">
+                    <li class="mdui-list-item mdui-ripple" id="setTopic">主题管理</li>
+                </a>
+                <a href="{:url('set/forumSetting')}">
+                    <li class="mdui-list-item mdui-ripple" id="forumSetting">论坛设置</li>
+                </a>
+            </ul>
+        </li>
+
+        <li class="mdui-collapse-item" id="user">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">group</i>
+                <div class="mdui-list-item-content">用户管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+
+
+            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <a href="{:url('set/user')}">
+                    <li class="mdui-list-item mdui-ripple" id="setUser">用户管理</li>
+                </a>
+                <a href="{:url('set/userGroup')}">
+                    <li class="mdui-list-item mdui-ripple" id="setUserGroup">用户组管理</li>
+                </a>
+                <a href="{:url('set/Auth')}">
+                    <li class="mdui-list-item mdui-ripple" id="setAuth">权限管理</li>
+                </a>
+                <a href="{:url('set/Expand')}">
+                    <li class="mdui-list-item mdui-ripple" id="setExpand">拓展管理</li>
+                </a>
+            </ul>
+        </li>
+
+    </ul>
+</div>

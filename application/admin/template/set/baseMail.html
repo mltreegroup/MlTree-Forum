@@ -1,0 +1,249 @@
+{extend name="../application/admin/template/public/main"}
+{block name="head"}{/block}
+{block name="muen"}
+{include file='../application/admin/template/public/topbar' /}
+{/block}
+{block name="main"}
+<div class="mdui-m-a-1">
+    <h1 class="mdui-m-l-3">邮件设置</h1>
+    <div class="mdui-tab" mdui-tab>
+        <a href="#mail-base" class="mdui-ripple">基本设置</a>
+        <a href="#mail-sendTest" class="mdui-ripple">发信测试</a>
+        <a href="#mail-Template" class="mdui-ripple">邮件模板</a>
+    </div>
+    <!-- 基本设置 -->
+    <div id="mail-base" class="mdui-p-a-2 mdui-table-fluid mdui-typo">
+        <form id="1">
+            <input type="hidden" name="type" value="mailBase">
+             {:token()}
+            <table class="mdui-table mdui-textfield mdui-m-t-1">
+                <tbody>
+                    <tr>
+                        <td witdh="10%">发件人姓名</td>
+                        <td>
+                            <input class="mdui-textfield-input" type="text" name="fromName" value="{$mail.fromName}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>发信邮箱</td>
+                        <td>
+                            <input class="mdui-textfield-input" type="text" name="fromAdress" value="{$mail.fromAdress}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SMTP服务器</td>
+                        <td>
+                            <input class="mdui-textfield-input" type="text" name="smtpHost" value="{$mail.smtpHost}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>端口</td>
+                        <td>
+                            <input class="mdui-textfield-input" type="text" name="smtpPort" value="{$mail.smtpPort}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>加密方式</td>
+                        <td>
+                            <select name="encriptionType" class="mdui-select" mdui-select>
+                                {if $mail.encriptionType == 'SSL'}
+                                <option value="no">不启用</option>
+                                <option value="TLS">TLS</option>
+                                <option value="SSL" selected="selected">SSL</option>
+                                {elseif $mail.encriptionType == 'TLS'}
+                                <option value="no">不启用</option>
+                                <option value="TLS" selected="selected">TLS</option>
+                                <option value="SSL">SSL</option>
+                                {else /}
+                                <option value="no" selected="selected">不启用</option>
+                                <option value="TLS">TLS</option>
+                                <option value="SSL">SSL</option>
+                                {/if} {/volist}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>用户名</td>
+                        <td>
+                            <input class="mdui-textfield-input" type="text" name="smtpUser" value="{$mail.smtpUser}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>密码</td>
+                        <td>
+                            <input class="mdui-textfield-input" type="text" name="smtpPass" value="{$mail.smtpPass}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>回信地址</td>
+                        <td>
+                            <input class="mdui-textfield-input" type="text" name="replyTo" value="{$mail.replyTo}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button id="submit" type="submit" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent">保存设置</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <!-- 发送测试 -->
+    <div id="mail-sendTest" class="mdui-p-a-2 mdui-table-fluid mdui-typo">
+        <form id="2">
+            <input type="hidden" name="type" value="sendTest">
+            <table class="mdui-table mdui-textfield mdui-m-t-1">
+                <tbody>
+                    <tr>
+                        <td witdh="10%">收件人邮箱</td>
+                        <td>
+                            <input class="mdui-textfield-input" type="text" name="sendTo" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>标题</td>
+                        <td>
+                            <input class="mdui-textfield-input" type="text" name="title" value="这是一封来自MlTree Forum的测试邮件" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>内容</td>
+                        <td>
+                            <textarea name="content" icols="10" class="mdui-textfield-input">这是一封由MlTree Forum发出的测试邮件，用于测试邮件设置是否正常工作。</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button id="sendTest" type="submit" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent">发 送</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <!-- 邮件模板 -->
+    <div id="mail-Template" class="mdui-p-a-2 mdui-table-fluid">
+        <form id="3">
+            <input type="hidden" name="type" value="Template">
+             {:token()}
+            <table class="mdui-table mdui-textfield mdui-m-t-1">
+                <tbody>
+                    <tr>
+                        <td witdh="10%">账户激活</td>
+                        <td>
+                            <div id="stats">{$template.active_mail_content|raw}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>找回密码</td>
+                        <td>
+                            <div id="pass">{$template.reset_mail_content|raw}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button id="Template" type="submit" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent">保存设置</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    </form>
+</div>
+
+{/block} {block name="js"}
+<script>
+    var $$ = mdui.JQ,
+        data = '';
+
+    $$('#sys').addClass('mdui-collapse-item-open');
+    $$('#baseMail').addClass('mdui-list-item-active');
+
+    $$('#submit').on('click', function () {
+        data = $$('#1').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+
+    $$('#sendTest').on('click', function () {
+        data = $$('#2').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        });
+
+        return false;
+    });
+
+    $$('#Template').on('click', function () {
+        data = $$('#3').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    });
+
+</script> {/block}

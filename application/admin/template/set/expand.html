@@ -1,0 +1,76 @@
+{extend name="../application/admin/template/public/main"}
+{block name="head"}{/block}
+{block name="muen"}
+{include file='../application/admin/template/public/topbar' /}
+{/block}
+{block name="main"}
+<div class="mdui-m-a-1 mdui-typo">
+
+    <h1 class="mdui-m-l-3">拓展管理
+        <small>msg</small>
+    </h1>
+
+    <div class="mdui-col-xs-12 mdui-col-sm-3">
+        <form>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">account_circle</i>
+                <label class="mdui-textfield-label">用户ID</label>
+                <input class="mdui-textfield-input" name="uid" type="text" />
+                <div class="mdui-textfield-helper">多个用户用英文逗号 (,) 隔开</div>
+            </div>
+
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">title</i>
+                <label class="mdui-textfield-label">Title</label>
+                <input class="mdui-textfield-input" name="title" type="text" />
+            </div>
+
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">textsms</i>
+                <label class="mdui-textfield-label">msg</label>
+                <textarea class="mdui-textfield-input" name="content"></textarea>
+            </div>
+            {:token()}
+        </form>
+        <button class="mdui-btn mdui-ripple mdui-btn-block mdui-color-theme-accent" id="send">
+            <i class="mdui-icon material-icons">send</i>发送</button>
+    </div>
+</div>
+
+{/block} {block name="js"}
+
+<script>
+    mdui.mutation()
+    var $$ = mdui.JQ,
+        data = '';
+
+    $$('#user').addClass('mdui-collapse-item-open');
+    $$('#setExpand').addClass('mdui-list-item-active');
+
+    $$('#send').on('click', function () {
+        data = $$('form').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+</script> {/block}

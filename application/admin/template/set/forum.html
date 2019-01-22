@@ -1,0 +1,228 @@
+{extend name="../application/admin/template/public/main"}
+{block name="head"}{/block}
+{block name="muen"}
+{include file='../application/admin/template/public/topbar' /}
+{/block}
+{block name="main"}
+<div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
+
+    <h1 class="mdui-m-l-3">Forum 管理</h1>
+
+    <div class="mdui-btn-group mdui-m-l-3">
+        <button type="button" class="mdui-btn" mdui-dialog="{target: '#addForum'}">
+            <i class="mdui-icon material-icons">add</i>
+        </button>
+    </div>
+
+    <table class="mdui-table mdui-textfield mdui-table-hoverable">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Fid</th>
+                <th>板块名称</th>
+                <th>板块描述</th>
+                <th>权限用户祖</th>
+                <th>板块管理</th>
+            </tr>
+        </thead>
+        <tbody>
+            {volist name="forumData" id="vo"}
+            <tr id="{$vo.fid}">
+                <td>{$vo.sort}</td>
+                <td>{$vo.fid}</td>
+                <td>{$vo.name}</td>
+                <td>{$vo.introduce}</td>
+                <td>{$vo.cgroup}</td>
+                <td>
+                    <div class="mdui-btn-group">
+                        <button class="mdui-btn" onclick="editorForum('#{$vo.fid}')">编辑</button>
+                        <button class="mdui-btn" onclick="del('{$vo.fid}')">删除</button>
+                    </div>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+
+    <div class="mdui-dialog mdui-typo" id="addForum">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title">添加板块</div>
+            <form id="addForm" class="layui-form layui-form-pane mdui-m-y-1">
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">板块名称</label>
+                    <input type="text" name="name" required lay-verify="required" placeholder="请输入板块名称" autocomplete="off"
+                        class="mdui-textfield-input">
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">板块描述</label>
+                    <textarea name="introduce" placeholder="请输入板块描述" rows="5" class="mdui-textfield-input"></textarea>
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">权限用户组</label>
+                    <input type="text" name="cgroup" required lay-verify="required" placeholder="请输入权限用户祖" autocomplete="off"
+                        class="mdui-textfield-input">
+                    <div class="mdui-textfield-helper">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
+                </div>
+                {:token()}
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="submit">添加</button>
+        </div>
+    </div>
+
+    <div class="mdui-dialog mdui-typo" id="editorForum">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title">编辑板块</div>
+            <form id="editForm" class="layui-form layui-form-pane mdui-m-y-1">
+                <div class="mdui-textfield">
+                    <input type="hidden" name="fid" id="editfid">
+                    <label class="mdui-textfield-label">板块名称</label>
+                    <input type="text" name="name" required lay-verify="required" placeholder="请输入板块名称" autocomplete="off"
+                        class="mdui-textfield-input">
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">板块描述</label>
+                    <textarea name="introduce" placeholder="请输入板块描述" rows="5" class="mdui-textfield-input"></textarea>
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">权限用户组</label>
+                    <input type="text" name="cgroup" required lay-verify="required" placeholder="请输入权限用户祖" autocomplete="off"
+                        class="mdui-textfield-input">
+                    <div class="mdui-textfield-helper">默认为0(即全部用户组)，多个用户组请用,(英文逗号)隔开</div>
+                </div>
+                {:token()}
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="edit">保存</button>
+        </div>
+    </div>
+</div>
+
+{/block} {block name="js"}
+<script>
+    var $$ = mdui.JQ,
+        data = '',
+        inst = new mdui.Dialog('#editorForum'); //注册对话框
+
+    $$('#forum').addClass('mdui-collapse-item-open');
+    $$('#setForum').addClass('mdui-list-item-active');
+
+    $$('#submit').on('click', function () {
+        data = $$('#addForm').serialize();
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+    $$('#edit').on('click', function () {
+        data = $$('#editForm').serialize();
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClose: function () {
+                            inst.close();
+                        },
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClose: function () {
+                            inst.close();
+                        }
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+
+    function editorForum(id) {
+        var data = $$(id).find('td');
+
+        $$('#editorForum [name="fid"]').val(data[1].innerText);
+        $$('#editorForum [name="name"]').val(data[2].innerText);
+        $$('#editorForum textarea').val(data[3].innerText);
+        $$('#editorForum [name="cgroup"]').val(data[4].innerText);
+
+        inst.open();
+
+    }
+
+    function del(fid) {
+        mdui.dialog({
+            title: '你确定吗？',
+            content: '此操作将删除此版块分区，同时将版块下的所有Topic移动到Fid=1的板块下',
+            buttons: [{
+                    text: '取消'
+                },
+                {
+                    text: '确认',
+                    onClick: function (inst) {
+                        $$.ajax({
+                            method: 'post',
+                            url: '{:url("admin/api/del")}',
+                            data: {
+                                type: 'forum',
+                                id: fid,
+                            },
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res.code == 0) {
+                                    mdui.snackbar(res.msg, {
+                                        timeout: 2000,
+                                        position: 'top',
+                                        onClosed: function () {
+                                            location.reload();
+                                        }
+                                    })
+                                } else {
+                                    mdui.snackbar(res.msg, {
+                                        timeout: 2000,
+                                        position: 'top',
+                                    })
+                                }
+                            }
+                        });
+                    }
+                }
+            ]
+        });
+
+    }
+</script> {/block}

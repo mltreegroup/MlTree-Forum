@@ -1,0 +1,267 @@
+{extend name="../application/admin/template/public/main"}
+{block name="head"}{/block}
+{block name="muen"}
+{include file='../application/admin/template/public/topbar' /}
+{/block}
+{block name="main"}
+<div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
+
+    <h1 class="mdui-m-l-3">用户管理</h1>
+
+    <div class="mdui-btn-group mdui-m-l-3">
+        <button type="button" class="mdui-btn" mdui-dialog="{target: '#addUser'}">
+            <i class="mdui-icon material-icons">add</i>
+        </button>
+    </div>
+    <div class="mdui-textfield mdui-textfield-expandable mdui-m-l-3 mdui-float-left" style="max-width: 30%">
+        <button class="mdui-textfield-icon mdui-btn mdui-btn-icon">
+            <i class="mdui-icon material-icons">search</i>
+        </button>
+        <form action="" method="post">
+            <input class="mdui-textfield-input" type="text" name="keyword" placeholder="请输入用户ID或用户昵称、邮箱检索用户" />
+            <input type="hidden" name="type" value="search">
+        </form>
+        <button class="mdui-textfield-close mdui-btn mdui-btn-icon">
+            <i class="mdui-icon material-icons">close</i>
+        </button>
+    </div>
+
+    <table class="mdui-table mdui-textfield mdui-table-hoverable">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>昵称</th>
+                <th>所属用户组</th>
+                <th>邮箱</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {volist name="userData" id="vo"}
+            <tr id="{$vo.uid}">
+                <td>{$vo.uid}</td>
+                <td>{$vo.username}</td>
+                <td>{$vo.gid}</td>
+                <td>{$vo.email}</td>
+                <td>
+                    <div class="mdui-btn-group">
+                        <button class="mdui-btn" onclick="edit('#{$vo.uid}')">编辑</button>
+                        <button class="mdui-btn" onclick="del('{$vo.uid}')">删除</button>
+                    </div>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+
+    <div class="mdui-dialog mdui-typo" id="addUser">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title">添加用户</div>
+            <form id="addForm" class="layui-form layui-form-pane mdui-m-y-1">
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">昵称</label>
+
+                    <input type="text" name="username" required autocomplete="off" class="mdui-textfield-input">
+
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">邮箱</label>
+
+                    <input type="email" name="email" required autocomplete="off" class="mdui-textfield-input">
+
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">密码</label>
+
+                    <input type="password" name="password" required autocomplete="off" class="mdui-textfield-input">
+
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">所属用户组</label>
+
+                    <select name="gid">
+                        {volist name="groupList" id="vo"}
+                        <option value="{$vo.gid}">{$vo.groupName}</option>
+                        {/volist}
+                    </select>
+
+                </div>
+                {:token()}
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="submit">添加</button>
+        </div>
+    </div>
+
+    <div class="mdui-dialog mdui-typo" id="editUser">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title">修改用户</div>
+            <form id="editForm" class="layui-form layui-form-pane mdui-m-y-1">
+                <input type="hidden" name="uid">
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">昵称</label>
+
+                    <input type="text" name="username" required autocomplete="off" class="mdui-textfield-input">
+                </div>
+
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">邮箱</label>
+
+                    <input type="email" name="email" required autocomplete="off" class="mdui-textfield-input">
+
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">密码</label>
+
+                    <input type="password" name="password" placeholder="如不修改请保留空" autocomplete="off" class="mdui-textfield-input">
+
+                </div>
+
+                <label class="mdui-textfield-label">所属用户组</label>
+                <select name="gid" class="mdui-select" mdui-select>
+                    {volist name="groupList" id="vo"}
+                    <option value="{$vo.gid}">{$vo.groupName}</option>
+                    {/volist}
+                </select>
+
+                <div class="mdui-textfield">
+                    <span>状态</span>
+                    <label class="mdui-switch">
+                        <input name="status" value="1" type="checkbox" checked />
+                        <i class="mdui-switch-icon"></i>
+                    </label>
+                </div>
+                {:token()}
+                <div class="mdui-textfield-helper">更多选项请进入数据库修改，我懒了。</div>
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="edit">保存</button>
+        </div>
+    </div>
+
+</div>
+
+{/block} {block name="js"}
+
+<script>
+    var $$ = mdui.JQ,
+        data = '',
+        inst = new mdui.Dialog('#editUser');
+
+    $$('#user').addClass('mdui-collapse-item-open');
+    $$('#setUser').addClass('mdui-list-item-active');
+
+    $$('#submit').on('click', function () {
+        data = $$('#addForm').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+
+    $$('#edit').on('click', function () {
+        data = $$('#editForm').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+
+    function edit(id) {
+        var data = $$(id).find('td');
+
+        $$('#editForm [name="uid"]').val(data[0].innerText);
+        $$('#editForm [name="username"]').val(data[1].innerText);
+        $$('#editForm [name="email"]').val(data[3].innerText);
+
+        inst.open();
+    }
+
+    function del(uid) {
+        mdui.dialog({
+            title: '你确定吗？',
+            content: '将会删除此用户一切数据',
+            buttons: [{
+                    text: '取消'
+                },
+                {
+                    text: '确认',
+                    onClick: function (inst) {
+                        $$.ajax({
+                            method: 'post',
+                            url: '{:url("admin/api/del")}',
+                            data: {
+                                type: 'user',
+                                id: uid,
+                            },
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res.code == 0) {
+                                    mdui.snackbar(res.msg, {
+                                        timeout: 2000,
+                                        position: 'top',
+                                        onClosed: function () {
+                                            location.reload();
+                                        }
+                                    })
+                                } else {
+                                    mdui.snackbar(res.msg, {
+                                        timeout: 2000,
+                                        position: 'top',
+                                    })
+                                }
+                            }
+                        });
+                    }
+                }
+            ]
+        });
+
+    }
+</script> {/block}

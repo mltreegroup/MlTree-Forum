@@ -1,0 +1,58 @@
+{extend name="../application/admin/template/public/main"}
+{block name="head"}{/block}
+{block name="muen"}
+{include file='../application/admin/template/public/topbar' /}
+{/block}
+{block name="main"}
+<div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
+    <form>
+        <h1 class="mdui-m-l-3">注册 & 访问设置<small>application/app.php</small></h1>
+        <div class="mdui-col-xs-12 mdui-col-sm-3">
+            <select name="type" class="mdui-select" mdui-select>
+                
+            </select>
+        </div>
+        <div class="mdui-col-xs-12 mdui-col-sm-9">
+            <textarea name="content" id="" cols="30" rows="10">
+
+            </textarea>
+        </div>
+         {:token()}
+    </form>
+</div>
+
+{/block} {block name="js"}
+<script>
+    var $$ = mdui.JQ,
+        data = '';;
+
+    $$('#sys').addClass('mdui-collapse-item-open');
+    $$('#baseReg').addClass('mdui-list-item-active');
+
+    $$('#submit').on('click', function () {
+        data = $$('form').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+</script> {/block}

@@ -1,0 +1,237 @@
+{extend name="../application/admin/template/public/main"}
+{block name="head"}{/block}
+{block name="muen"}
+{include file='../application/admin/template/public/topbar' /}
+{/block}
+{block name="main"}
+<div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
+
+    <h1 class="mdui-m-l-3">Forum 拓展管理<small>友情链接Links</small></h1>
+
+    <div class="mdui-btn-group mdui-m-l-3">
+        <button type="button" class="mdui-btn" mdui-dialog="{target: '#addLink'}">
+            <i class="mdui-icon material-icons">add</i>
+        </button>
+    </div>
+
+    <table class="mdui-table mdui-textfield">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>排序</th>
+                <th>链接名称</th>
+                <th>URL</th>
+                <th>链接图片</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {volist name="links" id="vo"}
+            <tr id="{$vo.Id}">
+                <td>{$vo.Id}</td>
+                <td>{$vo.sold}</td>
+                <td>{$vo.title}</td>
+                <td>
+                    <a href="{$vo.url}" target="_blank">{$vo.url}</a>
+                </td>
+                <td>
+                    <a href="{$vo.picurl|default='__IMG__/link.jpg'}" target="_blank">{$vo.picurl|default='__IMG__/link.jpg'}</a>
+                </td>
+                <td>
+                    <div class="mdui-btn-group">
+                        <button class="mdui-btn" onclick="editorForum('#{$vo.Id}')">编辑</button>
+                        <button class="mdui-btn" onclick="del('{$vo.Id}')">删除</button>
+                    </div>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+
+    <div class="mdui-dialog mdui-typo" id="addLink">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title mdui-typo-title">添加Link</div>
+            <form id="addForm" class="mdui-m-y-1">
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">Link名称</label>
+                    <input type="text" name="title" required lay-verify="required" placeholder="请输入Link名称" autocomplete="off"
+                        class="mdui-textfield-input">
+
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">Link地址</label>
+
+                    <input type="url" name="url" required lay-verify="required" placeholder="请输入LinkURL" autocomplete="off"
+                        class="mdui-textfield-input">
+
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">图片地址</label>
+
+                    <input type="url" name="picurl" placeholder="请输入Link图片地址" autocomplete="off" class="mdui-textfield-input">
+
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">排序</label>
+
+                    <input type="text" name="sold" placeholder="请输入排序默认0" autocomplete="off" class="mdui-textfield-input">
+
+                </div>
+                {:token()}
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="submitadd">添加</button>
+        </div>
+    </div>
+
+    <div class="mdui-dialog mdui-typo" id="editLink">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title mdui-typo-title">修改Link</div>
+            <form id="editForm" class="mdui-m-y-1">
+                <input type="hidden" name="Id">
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">Link名称</label>
+
+                    <input type="text" name="title" required lay-verify="required" placeholder="请输入Link名称" autocomplete="off"
+                        class="mdui-textfield-input">
+
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">Link地址</label>
+
+                    <input type="url" name="url" required lay-verify="required" placeholder="请输入LinkURL" autocomplete="off"
+                        class="mdui-textfield-input">
+
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">图片地址</label>
+
+                    <input type="url" name="picurl" placeholder="请输入Link图片地址" autocomplete="off" class="mdui-textfield-input">
+
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">排序</label>
+
+                    <input type="text" name="sold" placeholder="请输入排序默认0" autocomplete="off" class="mdui-textfield-input">
+
+                </div>
+                {:token()}
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="submitedit">保存</button>
+        </div>
+    </div>
+
+</div>
+
+{/block} {block name="js"}
+<script>
+    var $$ = mdui.JQ,
+        data = '',
+        inst = new mdui.Dialog('#editLink'); //注册对话框
+
+    $$('#forum').addClass('mdui-collapse-item-open');
+    $$('#forumSetting').addClass('mdui-list-item-active');
+
+    $$('#submitadd').on('click', function () {
+        data = $$('#addForm').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+
+    $$('#submitedit').on('click', function () {
+        data = $$('#editForm').serialize();
+
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+
+    function editorForum(id) {
+        var data = $$(id).find('td');
+
+        $$('#editForm [name="Id"]').val(data[0].innerText);
+        $$('#editForm [name="title"]').val(data[2].innerText);
+        $$('#editForm [name="url"]').val(data[3].innerText);
+        $$('#editForm [name="picurl"]').val(data[4].innerText);
+        $$('#editForm [name="sold"]').val(data[1].innerText);
+
+        inst.open();
+    }
+
+    function del(lid) {
+        $$.ajax({
+            method: 'post',
+            url: '{:url("admin/api/del")}',
+            data: {
+                type: 'link',
+                id: lid,
+            },
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top',
+                    })
+                }
+            }
+        });
+    }
+</script> {/block}

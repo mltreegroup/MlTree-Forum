@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MlTreeForum管理后台</title>
+
+    <meta name="keywords" content="MlTreeForum PHP 开源 轻论坛 轻社区 Material Design Thinkphp" />
+    <meta name="description" content="本站是 MlTree Forum 论坛社区产品的官方交流站点。MlTree Forum是一款由Thinkphp构建、Material Design风格的轻论坛。" />
+    <meta name="author" content="北林">
+
+    <link rel="stylesheet" href="__CSS__mdui.min.css">
+    <link rel="stylesheet" href="__CSS__common.mtf.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_921451_z1ctc9bc3j.css">
+    <script src="__JS__mdui.min.js"></script>
+    {block name="head"}{/block}
+</head>
+
+<body class="mdui-drawer-body-left mdui-theme-primary-blue mdui-theme-accent-pink mdui-appbar-with-toolbar">
+    <header id="app-muen" class="mdui-appbar mdui-appbar-fixed" v-cloak>
+        {block name="muen"}{/block}
+    </header>
+    <div id="app-content" class="mdui-container" v-cloak>
+        {block name="main"}{/block}
+    </div>
+    {include file='../application/admin/template/public/footer' /}
+    {block name="footer"}{/block}
+    <script src="__JS__main.mtf.js"></script>
+    {block name="js"}{/block}
+</body>
+
+</html>

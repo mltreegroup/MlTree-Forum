@@ -1,0 +1,32 @@
+<div class="mdui-col-sm-4" id="">
+    <div class="mdui-card mdui-m-b-1">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">公告</div>
+            <div class="mdui-card-primary-subtitle">Announcement</div>
+        </div>
+
+        <div class="mdui-card-content">欢迎来到MlTree Forum</div>
+    </div>
+    <a href="{:url('forum/topic/create')}" class="mdui-btn mdui-btn-block mdui-color-theme mdui-hidden-xs" title="Post"><i class="mdui-icon material-icons">send</i> 发帖</a>
+    <form action="{:url('forum/index/Search')}" method="GET">
+        <div class="mdui-textfield mdui-textfield-floating-label">
+            <label class="mdui-textfield-label">Search</label>
+            <input class="mdui-textfield-input" name="kw" type="search"/>
+          </div>
+    </form>
+    <div class="mdui-card mdui-m-y-1">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">友情连接</div>
+            <div class="mdui-card-primary-subtitle">Friend Link</div>
+        </div>
+
+        <div class="mdui-card-content">
+            {volist name="links" id="vo"}
+            <div class="mdui-chip">
+                <img class="mdui-chip-icon" src="{$vo.picurl|default='__IMG__/link.jpg'}" />
+                <a class="mdui-chip-title mlt-a-simple" href="{$vo.url}" target="_blank">{$vo.title}</a>
+            </div>
+            {/volist}
+        </div>
+    </div>
+</div>

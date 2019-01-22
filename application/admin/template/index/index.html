@@ -1,0 +1,93 @@
+{extend name="../application/admin/template/public/main"}
+{block name="head"}{/block}
+{block name="muen"}
+{include file='../application/admin/template/public/topbar' /}
+{/block}
+{block name="main"}
+<div class="mdui-row">
+    <div class="mdui-m-a-1 mdui-typo">
+        <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-card mdui-m-r-1">
+            <div class="mdui-card-header-title">
+                <h3><i class="mdui-icon material-icons">settings</i>系统信息</h3>
+            </div>
+
+            <div class="mdui-card-content">
+                <ul>
+                    {volist name="serverinfo" id="vo"}
+                    <li>{$key} : {$vo}</li>
+                    {/volist}
+                </ul>
+            </div>
+        </div>
+        <div class="mdui-col-xs-12 mdui-col-sm-5 mdui-card">
+            <div class="mdui-card-header-title">
+                <h3><i class="mdui-icon material-icons">info</i>关于MlTree Forum</h3>
+            </div>
+
+            <div class="mdui-card-content">
+                <h2>MlTree Forum 1.0.1</h2>
+                <ul>
+                    <li>主页：
+                        <a href="https://forum.mltree.top">https://forum.mltree.top</a>
+                    </li>
+                    <li>Git：
+                        <a href="https://github.com/mltreegroup/MlTree-Fourm">https://github.com/mltreegroup/MlTree-Fourm</a>
+                    </li>
+                    <li>许可证：
+                        <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License v2.0</a>
+                    </li>
+                    <li>其他：
+                        <a href="https://t.me/joinchat/Hewif0uvElMgVnAK_WrFJw
+">https://t.me/joinchat/Hewif0uvElMgVnAK_WrFJw
+                        </a> OR
+                        <a href="https://jq.qq.com/?_wv=1027&k=5Jtch2I">https://jq.qq.com/?_wv=1027&k=5Jtch2I</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mdui-row mdui-typo">
+    <div class="mdui-col-xs-12">
+        <h3><i class="mdui-icon material-icons">fiber_new</i>订阅推送</h3>
+        <table class="mdui-table" style="max-height: 300px;">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>标题</td>
+                    <td>介绍</td>
+                    <td>评级</td>
+                    <td>推送日期</td>
+                    <td>详细</td>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr>
+                    <td>1</td>
+                    <td>【版本更新】推送MlTree Forumv1.0.1</td>
+                    
+                    <td>2018.06.23</td>
+                    <td><a href=""><i class="mdui-icon material-icons">link</i></a></td>
+                </tr> -->
+                {volist name="updateList" id="vo"}
+                <tr>
+                    <td>{$i}</td>
+                    <td>【版本更新】推送MlTree Forum Ver{$vo->ver}</td>
+                    <td>{$vo->illustrate}</td>
+                    <td>{$vo->assess}</td>
+                    <td>{$vo->time}</td>
+                    <td>
+                        <a href="{$vo->url}">
+                            <i class="mdui-icon material-icons">link</i>
+                        </a>
+                    </td>
+                </tr>
+                {/volist}
+            </tbody>
+        </table>
+    </div>
+</div>
+{/block}
+{block name="Js"}
+
+{/block}

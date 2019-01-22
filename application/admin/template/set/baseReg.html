@@ -1,0 +1,143 @@
+{extend name="../application/admin/template/public/main"}
+{block name="head"}{/block}
+{block name="muen"}
+{include file='../application/admin/template/public/topbar' /}
+{/block}
+{block name="main"}
+<div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
+    <form>
+        <h1 class="mdui-m-l-3">注册 & 访问设置</h1>
+        <table class="mdui-table mdui-textfield">
+            <tbody>
+                <tr>
+                    <td>允许访问</td>
+                    <td>
+                        <label class="mdui-switch">
+                            <input name="siteStatus" value="1" type="checkbox" {eq name="base.siteStatus" value="1"}checked{/eq}/>
+                            <i class="mdui-switch-icon"></i>
+                        </label>
+                    </td>
+                    <td>
+                        设置论坛是否可以访问，关闭后仅『超级管理员』权限可以访问
+                    </td>
+                </tr>
+                <tr>
+                    <td>闭站提示</td>
+                    <td>
+                        <textarea name="closeContent" id="closeContent" cols="30" rows="3" class="mdui-textfield-input">{$base.closeContent|raw}</textarea>
+                    </td>
+                    <td>
+                        设置论坛是否可以访问，关闭后仅『超级管理员』权限可以访问
+                    </td>
+                </tr>
+                <tr>
+                    <td>允许注册</td>
+                    <td>
+                        <label class="mdui-switch">
+                            <input name="regStatus" type="checkbox" value="1" {eq name="reg.regStatus" value="1"}checked{/eq}/>
+                            <i class="mdui-switch-icon"></i>
+                        </label>
+                    </td>
+                    <td>
+                        是否允许新用户注册
+                    </td>
+                </tr>
+                <tr>
+                    <td>允许QQ注册</td>
+                    <td>
+                        <label class="mdui-switch">
+                            <input name="allowQQreg" type="checkbox" value="1" {eq name="reg.allowQQreg" value="1"}checked{/eq}/>
+                            <i class="mdui-switch-icon"></i>
+                        </label>
+                    </td>
+                    <td>
+                        是否允许新用户直接使用QQ注册
+                    </td>
+                </tr>
+                <tr>
+                    <td>手机版默认全屏</td>
+                    <td>
+                        <label class="mdui-switch">
+                            <input name="full" type="checkbox" value="1" {eq name="base.full" value="1"}checked{/eq}/>
+                            <i class="mdui-switch-icon"></i>
+                        </label>
+                    </td>
+                    <td>
+                        QQ浏览器等手机浏览器访问时自动进入全屏
+                    </td>
+                </tr>
+                <tr>
+                    <td>默认用户组</td>
+                    <td>
+                        <select name="defaulegroup" class="mdui-select" mdui-select>
+                            {volist name="userGroup" id="vo"} {if $vo.gid == $reg.defaulegroup}
+                            <option value="{$vo.gid}" selected="selected">{$vo.groupName}</option>
+                            {else /}
+                            <option value="{$vo.gid}">{$vo.groupName}</option>
+                            {/if} {/volist}
+                        </select>
+                    </td>
+                    <td>
+                        用户注册后默认属于的用户组
+                    </td>
+                </tr>
+                <tr>
+                    <td>验证邮件验证码</td>
+                    <td>
+                        <label class="mdui-checkbox">
+                            <input name="emailActive" type="checkbox" value="1" {eq name="reg.emailActive" value="1"}checked{/eq} />
+                            <i class="mdui-checkbox-icon"></i>
+                        </label>
+                    </td>
+                    <td>
+                        启用后，新用户注册需要凭借邮件中的验证码才能注册。
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <button id="submit" type="submit" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent">保存设置</button>
+                    </td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+         {:token()}
+    </form>
+</div>
+
+{/block} {block name="js"}
+<script>
+    var $$ = mdui.JQ,
+        data = '';;
+
+    $$('#sys').addClass('mdui-collapse-item-open');
+    $$('#baseReg').addClass('mdui-list-item-active');
+
+    $$('#submit').on('click', function () {
+        data = $$('form').serialize();
+        console.log(data);
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+</script> {/block}

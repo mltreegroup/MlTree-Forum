@@ -1,0 +1,161 @@
+{extend name="../application/admin/template/public/main"}
+{block name="head"}{/block}
+{block name="muen"}
+{include file='../application/admin/template/public/topbar' /}
+{/block}
+{block name="main"}
+<div class="mdui-m-a-1 mdui-typo mdui-table-fluid">
+    <h1 class="mdui-m-l-3">Topic 管理</h1>
+    <div class="mdui-textfield mdui-textfield-expandable mdui-m-l-3" style="max-width: 30%">
+        <button class="mdui-textfield-icon mdui-btn mdui-btn-icon">
+            <i class="mdui-icon material-icons">search</i>
+        </button>
+        <form action="" method="post">
+            <input class="mdui-textfield-input" type="text" name="keyword" placeholder="Search" />
+            <input type="hidden" name="type" value="search">
+        </form>
+        <button class="mdui-textfield-close mdui-btn mdui-btn-icon">
+            <i class="mdui-icon material-icons">close</i>
+        </button>
+    </div>
+    <table class="mdui-table mdui-textfield">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>标题</th>
+                <th>所属板块</th>
+                <th>内容</th>
+                <th class="mdui-table-col-numeric">浏览数</th>
+                <th class="mdui-table-col-numeric">评论数</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {volist name="topicData" id="vo"}
+            <tr id="{$vo.tid}">
+                <td>{$vo.tid}</td>
+                <td>{$vo.subject}</td>
+                <td>{$forumData[$vo['fid']-1]['name']}</td>
+                <td class="mdui-text-truncate" style="max-height: 10%;max-width: 400px;">{$vo.content|raw|strip_tags}</td>
+                <td class="mdui-table-col-numeric">{$vo.views}</td>
+                <td class="mdui-table-col-numeric">{$vo.comment}</td>
+                <td style="min-width:220px;">
+                    <div class="mdui-btn-group">
+                        <button class="mdui-btn" onclick="moveTopic('#{$vo.tid}')">移动</button>
+                        <button class="mdui-btn" onclick="location.href='/update/{$vo.tid}.html'">编辑</button>
+                        <button class="mdui-btn" onclick="del('{$vo.tid}')">删除</button>
+                    </div>
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+
+    <div class="mdui-dialog mdui-typo" id="moveTopic">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title">移动主题 - </div>
+            <form id="moveForm" class="layui-form layui-form-pane mdui-m-y-1">
+                <div class="mdui-textfield">
+                    <select name="fid" class="mdui-select" mdui-select>
+                        {volist name="forumData" id="vo"}
+                        <option value="{$vo.fid}">{$vo.name}</option>
+                        {/volist}
+                    </select>
+                </div>
+                <input type="hidden" name="tid">
+                <input type="hidden" name="type" value="move">
+            </form>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" id="move">修改</button>
+        </div>
+    </div>
+</div>
+{/block} {block name="js"}
+<script>
+    var $$ = mdui.JQ,
+        data = '',
+        ins = new mdui.Dialog('#moveTopic');
+
+    $$('#forum').addClass('mdui-collapse-item-open');
+    $$('#setTopic').addClass('mdui-list-item-active');
+
+    $$('#move').on('click', function () {
+        data = $$('#moveForm').serialize();
+        $$.ajax({
+            method: 'post',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    mdui.snackbar(res.msg, {
+                        timeout: 2000,
+                        position: 'top'
+                    })
+                }
+
+            }
+        })
+
+        return false;
+    })
+
+    function moveTopic(id) {
+        var data = $$(id).find('td');
+
+        $$('#moveTopic .mdui-dialog-title').text('移动主题 - ' + data[1].innerText + ' TID[' + data[0].innerText + ']');
+        $$('#moveTopic [name="tid"]').val(data[0].innerText);
+        ins.open();
+    }
+
+    function del(tid) {
+        mdui.dialog({
+            title: '你确定吗？',
+            content: '删除此Topic',
+            buttons: [{
+                    text: '取消'
+                },
+                {
+                    text: '确认',
+                    onClick: function (inst) {
+                        $$.ajax({
+                            method: 'post',
+                            url: '{:url("admin/api/del")}',
+                            data: {
+                                type: 'topic',
+                                id: tid,
+                                __token__: '{$Request.token}',
+                            },
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res.code == 0) {
+                                    mdui.snackbar(res.msg, {
+                                        timeout: 2000,
+                                        position: 'top',
+                                        onClosed: function () {
+                                            location.reload();
+                                        }
+                                    })
+                                } else {
+                                    mdui.snackbar(res.msg, {
+                                        timeout: 2000,
+                                        position: 'top',
+                                    })
+                                }
+                            }
+                        });
+                    }
+                }
+            ]
+        });
+    }
+</script> {/block}

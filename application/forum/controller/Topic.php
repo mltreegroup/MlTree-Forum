@@ -1,7 +1,7 @@
 <?php
 namespace app\forum\controller;
 
-use app\common\model\Topic as topicModel;
+use app\common\model\Topic as TopicModel;
 use app\common\model\User;
 use app\forum\controller\Base;
 use Auth\Auth;
@@ -35,13 +35,9 @@ class Topic extends Base
             $topic = new TopicModel;
             $res = $topic->found(session('uid'), input('post.', '', 'htmlspecialchars'));
             if ($res[0]) {
-                return json([
-                    'code' => '1',
-                    'message' => '发布成功，正在跳转……',
-                    'url' => url('index/topic/index', ['tid' => $res[1]]),
-                ]);
+                return outRes(0, '发布成功，正在前往话题页', url('forum/topic/index', ['tid' => $res[1]]));
             } else {
-                return json(\outResult(-1, $res[1]));
+                return outRes(-1, $res[1]);
             }
         }
         $forumData = Db::name('forum')->field('fid,name,cgroup')->select();

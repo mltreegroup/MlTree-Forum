@@ -39,10 +39,10 @@
                                 <img src="{$vo.memberData.avatar}" alt="{$vo.memberData.username}" title="{$vo.memberData.username}">
                             </div>
                             <div class="mdui-list-item-content">
-                                <a class="mdui-list-item-title" href="{:url('index/topic/index',['tid'=>$vo.tid])}">{$vo.subject}</a>
+                                <a class="mdui-list-item-title" href="{:url('forum/topic/index',['tid'=>$vo.tid])}">{$vo.subject}</a>
                                 <div class="mdui-list-item-text mdui-list-item-one-line">{$vo.content|raw}</div>
                                 <div class="mdui-list-item-text">
-                                    <a class="mdui-list-item-title" href="{:url('index/user/inde',['uid'=>$vo.uid])}">{$vo.memberData.username}</a>
+                                    <a class="mdui-list-item-title" href="{:url('forum/user/index',['uid'=>$vo.uid])}">{$vo.memberData.username}</a>
                                     <span title="{$vo.create_time}"> {$vo.time_format}</span>
                                 </div>
                             </div>
@@ -139,10 +139,10 @@
                                 <img src="{$vo.memberData.avatar}" alt="{$vo.memberData.username}" title="{$vo.memberData.username}">
                             </div>
                             <div class="mdui-list-item-content">
-                                <a class="mdui-list-item-title" href="{:url('index/topic/index',['tid'=>$vo.tid])}">{$vo.subject}</a>
+                                <a class="mdui-list-item-title" href="{:url('forum/topic/index',['tid'=>$vo.tid])}">{$vo.subject}</a>
                                 <div class="mdui-list-item-text mdui-list-item-one-line">{$vo.content|raw}</div>
                                 <div class="mdui-list-item-text">
-                                    <a class="mdui-list-item-title" href="{:url('index/user/inde',['uid'=>$vo.uid])}">{$vo.memberData.username}</a>
+                                    <a class="mdui-list-item-title" href="{:url('forum/user/index',['uid'=>$vo.uid])}">{$vo.memberData.username}</a>
                                     <span title="{$vo.create_time}"> {$vo.time_format}</span>
                                 </div>
                             </div>

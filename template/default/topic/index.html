@@ -62,12 +62,13 @@
         commentUrl: '{:url("api/getCommentList")}',
     });
     post.getCommentList('{$topicData.tid}');
-
+    post.postComment('{$topicData.tid}');
     $$('#share').on('click', () => {
         Main.shareTopic('#share', {
             url:'{:url("forum/topic/index",["tid"=>$topicData.tid])}',
             subject: '{$topicData.subject}',
         })
     })
+
 </script>
 {/block}

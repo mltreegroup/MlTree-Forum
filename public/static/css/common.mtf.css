@@ -1,0 +1,276 @@
+/* 基础样式 */
+body{
+    background-color: #f1f1f1;
+}
+@media screen and (max-width: 600px) {
+    body{
+        margin: 0;
+    }
+    .mdui-container,.mdui-container-fluid{
+        padding-left: 0;
+        padding-right: 0;
+        width: 100%;
+    }
+}
+/* 公共通用样式*/
+.mlt-a-simple
+{
+    text-decoration: none;
+    color:black;
+}
+textarea{
+    border-radius: 5px;
+    width: 98%;
+    margin-right: 1%;
+    background-color: #f1f1f1;
+    background-image: url('../images/tree_128x128.png');
+    background-repeat: no-repeat;
+}
+.textarea-fixed{
+    overflow-x:visible;
+    overflow-y:visible;
+}
+/* 定义MTF徽章样式 */
+.mtf-badge{
+    padding: 5px;
+    color: white;
+}
+
+/* 定义panel样式 */
+.mtf-panel{
+    width: 100%;
+}
+
+.mtf-list-time{
+    font-size: 10px;
+}
+
+/* Start 定义评论列表的样式 */
+.mtf-comment{
+    padding:  30px;
+    margin-bottom: 4px;
+}
+.mtf-userinfo-line{
+    display: inline-block;
+}
+.mtf-userinfo-avatar{
+    display: inline-block;
+    width: 54px;
+    height: 54px;
+}
+.avatar{
+    width: 40px;
+    display: inline;
+    margin-right: 14px;
+}
+.mtf-comment-name{
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+.mtf-comment-motto{
+    font-size: 14px;
+    color: #646464;
+}
+.mtf-comment-time{
+    float: right;
+    display: block;
+}
+.mtf-comment-content{
+    line-height: 1.6;
+}
+/* End 定义评论面板的样式 */
+
+.mtf-btn-group{
+    margin-right: 10px;
+}
+
+/*Topic 列表样式*/
+.mtf-topics > .end{
+    text-align: center;
+    color: #646464;
+    font-size: 14px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left:auto;
+}
+.mtf-topic{
+    padding: 14px;
+}
+.mtf-topic:hover{
+    background-color:rgba(0,0,0,.08);
+}
+.mtf-topics a{
+    text-decoration: none;
+    color:black;
+}
+.mtf-topic-avatar{
+    float: left;
+    margin-right: 20px;
+    width: 54px;
+    height: 54px;
+    border-radius: 5px;
+}
+@keyframes avatar-ro{
+    from{
+        transform:rotate(0);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+.mtf-topic-avatar:hover{
+    animation: avatar-ro 1s;
+}
+.mtf-topic-avatar img{
+    display: inline-block;
+    width: 54px;
+    line-height: 54px;
+    border-radius: 5px;
+}
+.mtf-topic-info{
+    line-height: 1.4;
+}
+.mtf-topic-info .title{
+    margin-bottom: 6px;
+    font-size: 17px;
+}
+.mtf-topic-info .connent{
+    margin-bottom: 6px;
+    color:#646464;
+    font-size:14px;
+}
+.mtf-topic-info .info{
+    color:black;
+    font-size:12px;
+    display: block;
+    margin-left: 75px;
+}
+.mtf-topic-info .info>a{
+    color:#646464;
+    font-size:12px;
+}
+.mtf-topic-info .info>span{
+    float: right;
+    margin-right: 5px;
+}
+/*自定义页脚样式*/
+.mlt-footer {
+    /*页脚整体外观*/
+    line-height: 40px;
+    background: #f2f2f2;
+    border-top: 1px solid #e4e4e4;
+    font-size: 10pt;
+    color: #222;
+}
+.mlt-footer a{
+    color:black;
+    text-decoration: none;
+}
+.mlt-footer p, .mlt-footer .link{
+    /*页脚链接和文字*/
+    margin-left: 30px;
+    color: #666;
+    display: inline-block;
+    line-height: 40px;
+    font-family: sans-serif;
+    font-size: 10pt;
+    margin-right: 30px;
+    text-decoration: none;
+}
+.mlt-footer>a:visited {
+    color: #609;
+}
+/* share列表样式 */
+.mlt-share img{
+    width: 32px;
+    height: 32px;
+    float: left;
+}
+
+/*用户界面外观*/
+.mlt-user-info{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 24px 16px 16px;
+    color: #fff;
+  }
+  .mlt-user-info .mlt-avatar-box{
+    position: relative;
+    float: left;
+    margin-right: 16px;
+    height: 60px;
+  }
+  .mlt-user-info .mlt-avatar-box .mlt-avatar-upload{
+    display:none;
+    overflow: hidden;
+    height: 48px;
+    width: 48px;
+    position: absolute;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+  }
+  .mlt-user-info .mlt-avatar-box:hover .mlt-avatar-upload{
+    display: block;
+  }
+  .mlt-user-info .mlt-avatar-box img{
+    width: 56px;
+    height:56px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  .mlt-user-info .mlt-user-data,.mlt-user-info .mlt-user-username{
+    margin-left: 76px;
+  }
+  .mlt-user-info .mlt-user-username{
+    font-size:30px;
+    display: block;
+    line-height: 36px;
+    opacity: 1;
+  }
+  .mlt-user-info .mlt-user-data{
+    position: relative;
+    opacity: 1;
+    line-height: 24px;
+    font-size: 14px;
+    color: hsla(0,0%,100%,.54);
+    margin-right: 188px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .mlt-user-info .mlt-user-data a{
+    color: #fff;
+    text-decoration: none;
+  }
+  .mlt-user-info .mlt-user-data a:hover{
+    border-bottom: 1px solid hsla(0,0%,100%,.7);
+  }
+  .mlt-user-info .mlt-user-control{
+    position: absolute;
+    right: 152px;
+    bottom: 28px;
+  }
+  .mlt-user-info #avatar_new{
+    display: block;
+    width: 48px;
+    min-width:48px;
+    height: 48px;
+    background-color: rgba(0,0,0,.26)!important;
+  }
+  /*字体设置*/
+  *:not(code):not(pre){
+    font-family: "Roboto","Noto Sans",sans-serif, Arial, "微软雅黑";
+  }
+  code,pre{
+    font-family: "Monaco","Dejavu Sans Mono","Fira Code Pro","Source Code Pro",monospace,sans-serif,"Arial","微软雅黑";
+  }
+  .CodeMirror, .CodeMirror-scroll {
+      max-height: 500px;
+  }

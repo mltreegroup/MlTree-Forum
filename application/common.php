@@ -11,6 +11,7 @@
 
 // 应用公共文件
 require __DIR__ . '/../vendor/autoload.php';
+use Auth\Auth;
 
 function createStr($length)
 {
@@ -149,4 +150,40 @@ function replyRegular($str)
         return [$arr[0], $arr[1], $arr[2], $html];
     }
     return 'error';
+}
+
+/**
+ * 快速检查权限，无需实例化
+ * @param  string|array  $name     需要验证的规则列表，支持逗号分隔的权限规则或索引数组
+ * @param  integer  $uid      认证用户ID
+ * @param  string   $relation 如果为 'or' 表示满足任一条规则即通过验证;如果为 'and' 则表示需满足所有规则才能通过验证
+ * @param  string   $mode     执行check的模式
+ * @param  integer  $type     规则类型
+ * @return boolean           通过验证返回true;失败返回false
+ */
+function fastAuth($name, $uid, $relation = 'or', $mode = 'url', $type = 1)
+{
+    $auth = new Auth;
+    return $auth->check($name, $uid, $relation, $mode, $type);
+}
+
+/**
+ * 输出帖子的徽章标识
+ * @param array $data 帖子查询出的结果，包含top,essence,closed等信息
+ * @return string $value 徽章字符串
+ */
+function outBadge($data)
+{
+    $value = '';
+    if ($data['tops'] == 1) {
+        $value = '<i class="mdui-icon iconfont icon-zhiding mdui-color-indigo-accent mtf-icon-size" title="置顶"></i> ';
+    }
+    if ($data['essence'] == 1) {
+        $value = $value . '<i class="mdui-icon iconfont icon-jinghua1 mdui-color-orange-accent mtf-icon-size" title="精华"></i> ';
+    }
+    if ($data['closed'] == 1) {
+        $value = $value . '<i class="mdui-icon iconfont icon-hebingxingzhuang mdui-color-red-a700 mtf-icon-size" title="关闭"></i> ';
+    }
+
+    return $value;
 }

@@ -58,5 +58,9 @@ class Api extends Base
         if (!User::isLogin()) {
             return outRes(10201,'无权限或未登录');
         }
+
+        $info = input('post.');
+        $comment = new Comment;
+        return $comment->add($info);
     }
 }

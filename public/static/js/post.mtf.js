@@ -2,10 +2,10 @@ class mtfPost {
     constructor(option = {}) {
         this.topicListUrl = option.topicListUrl;
         this.commentUrl = option.commentUrl;
-        this.topicPage = 1;
-        this.topicPages = 1;
-        this.commentPage = 1;
-        this.commentPages = 1;
+        this.topicPage = 0;
+        this.topicPages = 0;
+        this.commentPage = 0;
+        this.commentPages = 0;
     }
 
     getTopicList(dom, fid, type = "common") {
@@ -52,7 +52,7 @@ class mtfPost {
                                 </div>
                                 <div class="mtf-topic-info">
                                     <div class="title">
-                                    <i class="mdui-icon material-icons">star</i><a href="/Topic/${val.tid}.html">${val.subject.substr(0, 50)}</a>
+                                    ${val.Badge} <a href="/Topic/${val.tid}.html">${val.subject.substr(0, 50)}</a>
                                     </div>
                                     <div class="connent mdui-list-item-one-line">${val.content}</div>
                                     <div class="info"><a href="/Member/${val.uid}.html" class="user">${val.userData.username}</a> 发表于 <a class="time">${val.create_time}</a>
@@ -63,6 +63,7 @@ class mtfPost {
                             </div>
                             <div class="mdui-divider"></div>`;
                     $(dom).append(html);
+                    console.log(val.Badge);
                 });
                 topicPage += 1;
                 /**
@@ -143,7 +144,7 @@ class mtfPost {
                 return;
             } else {
                 mdui.JQ.each(data.data.data, (i, val) => {
-                    html = `<div class="mdui-card mtf-comment mdui-ripple">
+                    html = `<div class="mdui-card mtf-comment mdui-ripple" id="mtf-commentid-${val.cid}">
                     <div class="mtf-comment-info">
                         <div class="mtf-userinfo">
                             <div class="mtf-userinfo-avatar">
@@ -425,7 +426,6 @@ class mtfPost {
             inst.toggle();
 
             $$('.mtf-post-comment').on('click', function () {
-                console.log('OK');
                 var content = $$('#mtf-comment-content').val();
                 post(content);
             })
@@ -447,7 +447,7 @@ class mtfPost {
                             message: res.msg,
                             position: 'top',
                             onClosed: function () {
-
+                                location.href = res.url;
                             }
                         });
                     } else {
@@ -460,6 +460,59 @@ class mtfPost {
             })
         }
 
+
+    }
+
+    setTopic(tid, subject) {
+        var html = `<form id="setForm">
+        <div class="mtf-block">
+            <label class="mdui-textfield-label">欲操作项目(二次操作为取消)</label>
+            <select name="type" class="mdui-select" mdui-select>
+                <option value="top">置顶</option>
+                <option value="essence">精华</option>
+                <option value="closed">关闭</option>
+            </select>
+        </div>
+        <div class="mtf-block">
+            <label class="mdui-checkbox">
+                <input name="msg" type="checkbox" />
+                <i class="mdui-checkbox-icon"></i>
+                是否通知作者
+            </label>
+        </div>
+        <input type="hidden" name="tid" value="${tid}">
+    </form>`;
+
+        mdui.dialog({
+            title: `设置帖子【${subject}】`,
+            content: html,
+            buttons: [{
+                    text: '取消'
+                },
+                {
+                    text: '确认',
+                    onClick: function (inst) {
+                        let data = $$('#setForm').serialize();
+                        $$.ajax({
+                            method: 'POST',
+                            data: data,
+                            url: '/forum/topic/set.html',
+                            dataType: 'json',
+                            success: function (res) {
+                                mdui.snackbar({
+                                    message: res.msg,
+                                    position: 'right-top',
+                                });
+                            }
+                        });
+                    }
+                }
+            ],
+            onOpen: function () {
+                //开始时执行一次初始化
+                mdui.mutation();
+            }
+        });
 
     }
 }

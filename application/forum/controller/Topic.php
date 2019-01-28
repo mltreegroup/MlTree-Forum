@@ -1,6 +1,7 @@
 <?php
 namespace app\forum\controller;
 
+use app\common\model\Message;
 use app\common\model\Topic as TopicModel;
 use app\common\model\User;
 use app\forum\controller\Base;
@@ -15,7 +16,7 @@ class Topic extends Base
             return \redirect('forum\index\index');
         }
 
-        $topic = new topicModel;
+        $topic = new TopicModel;
         $res = $topic->getTopic($tid);
         if (!$res[0]) {
             return $this->error($res[1], 'forum\index\index');
@@ -94,6 +95,55 @@ class Topic extends Base
             // ]);
         } else {
             return $this->error('无权限');
+        }
+    }
+
+    public function set()
+    {
+        if (!fastAuth('admin', session('uid'))) {
+            return outRes(0, '无权限');
+        }
+
+        $type = input('post.type');
+        $tid = input('post.tid');
+        $msg = input('?post.msg');
+
+        $topic = TopicModel::get($tid);
+        $msgObj = new Message;
+
+        if ($type == 'top') {
+            if (!empty($topic)) {
+                $resMsg = '已取消置顶';
+                $topic->tops == 1 ? $topic->tops = 0 : $topic->tops = 1;
+                $topic->isAutoWriteTimestamp(false)->save();
+                if ($topic->tops == 1 && $msg) {
+                    $msgObj->addTopMsg($tid);
+                    $resMsg = '已设置为置顶';
+                }
+                return outRes(0, $resMsg);
+            }
+        } elseif ($type == 'essence') {
+            if (!empty($topic)) {
+                $resMsg = '已取消精华';
+                $topic->essence == 1 ? $topic->essence = 0 : $topic->essence = 1;
+                $topic->isAutoWriteTimestamp(false)->save();
+                if ($topic->essence == 1 && $msg) {
+                    $msgObj->addEssenceMsg($tid);
+                    $resMsg = '已设置为精华';
+                }
+                return outRes(0, $resMsg);
+            }
+        } elseif ($type == 'closed') {
+            if (!empty($topic)) {
+                $topic->closed == 1 ? $topic->closed = 0 : $topic->closed = 1;
+                $topic->isAutoWriteTimestamp(false)->save();
+                if ($topic->closed == 1) {
+                    $resMsg = '已关闭主题';
+                } else {
+                    $resMsg = '已开启主题';
+                }
+                return outRes(0, $resMsg);
+            }
         }
     }
 }

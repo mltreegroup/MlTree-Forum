@@ -30,12 +30,22 @@ textarea{
     overflow-x:visible;
     overflow-y:visible;
 }
+.mtf-block{
+    display: block;
+    margin: 10px;
+}
+.mtf-inline{
+    display: inline;
+}
 /* 定义MTF徽章样式 */
 .mtf-badge{
     padding: 5px;
     color: white;
 }
-
+.mtf-icon-size{
+    font-size: 14px;
+    color:white;
+}
 /* 定义panel样式 */
 .mtf-panel{
     width: 100%;

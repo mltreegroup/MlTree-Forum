@@ -112,7 +112,7 @@ class Topic extends Model
             $value['time_format'] = time_format($value['create_time']);
             $value['userData'] = $user->where('uid', $value['uid'])->field('username,avatar')->find();
             $value['forumName'] = Db::name('forum')->where('fid', $value['fid'])->field('name')->find()['name'];
-            //$value['Badge'] = outBadge($value);
+            $value['Badge'] = outBadge($value);
         }
         return [$topicData, $pages];
     }
@@ -229,7 +229,8 @@ class Topic extends Model
         $topic['time_format'] = time_format($topic['create_time']);
         $topic['usertopic'] = $user->where('uid', $topic['uid'])->field('username,avatar')->find();
         $topic['forumName'] = Db::name('forum')->where('fid', $topic['fid'])->field('name')->find()['name'];
-
+        $topic['Badge'] = outBadge($topic);
+        
         $topic->views += 1;
         $topic->save();
 

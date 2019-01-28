@@ -1,6 +1,6 @@
 <?php
 //分页配置
 return [
-    'type'     => 'bootstrap2',
+    'type'     => 'Mdui',
     'var_page' => 'page',
 ];

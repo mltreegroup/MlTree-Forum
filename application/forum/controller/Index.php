@@ -3,7 +3,7 @@ namespace app\forum\controller;
 
 use app\forum\controller\Base;
 
-use app\common\model\Comment;
+use app\common\model\Common;
 
 class Index extends Base
 {
@@ -25,11 +25,8 @@ class Index extends Base
         return $this->mtfView('public/serach', '搜索：' . $kw, ['data' => $data, 'kw' => $kw]);
     }
 
-    public function test($page=0)
+    public function test()
     {
-        $topic = new Topic;
-        $res = Topic::page($page,10)->order(['tid'=>'desc','create_time'=>'desc'])->select();
-        dump($res);
-        //return json($res);
+        return $this->mtfView('forum/test');
     }   
 }

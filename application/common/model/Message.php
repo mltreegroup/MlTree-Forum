@@ -172,6 +172,11 @@ class Message extends Model
         return [true, $res];
     }
 
+    /**
+     * 新增帖子被回复的信息
+     * @param int $cid 评论的id
+     * @return true|false
+     */
     public function addCommentMsg($cid)
     {
         if (!user::isLogin()) {
@@ -200,6 +205,11 @@ class Message extends Model
         return true;
     }
 
+    /**
+     * 新增评论被回复的信息
+     * @param int $cid 评论的id
+     * @return true|false
+     */
     public function addReplyMsg($cid)
     {
         if (!user::isLogin()) {
@@ -229,6 +239,11 @@ class Message extends Model
         return true;
     }
 
+    /**
+     * 新增帖子被置顶的西信息
+     * @param int $tid 被置顶的帖子id
+     * @return true|false
+     */
     public function addTopMsg($tid)
     {
         if (!user::isLogin()) {
@@ -252,6 +267,11 @@ class Message extends Model
         return true;
     }
 
+    /**
+     * 新增帖子被设置为精华的信息
+     * @param int $tid 被设置的帖子id
+     * @return true|false
+     */
     public function addEssenceMsg($tid)
     {
         if (!user::isLogin()) {

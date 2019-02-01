@@ -1,6 +1,6 @@
-{extend name="default/public/main"}
+{extend name="mtfBrown/public/main"}
 {block name="muen"}
-{include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
+{include file='mtfBrown/public/topbar' /}{// 默认的topbar直接使用这一段即可}
 {/block}
 {block name="main"}
 <div class="row">
@@ -9,17 +9,17 @@
         <div class="mdui-card">
             <div class="mdui-card-media">
                 <div style="height:200px;width:100%;background-image: url(__IMG__bg.jpg);background-size: cover"></div>
-                <div class="mlt-user-info">
-                    <div class="mlt-avatar-box">
-                        <div class="mlt-avatar-upload">
+                <div class="mtf-user-info">
+                    <div class="mtf-avatar-box">
+                        <div class="mtf-avatar-upload">
                             <button id="avatar_new" title="上传新头像" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">photo_camera</i></button>
                         </div>
                         <img src="{$memberData.avatar}" alt="{$memberData.username}的头像" id="avatar_preview" />
                     </div>
-                    <div class="mlt-user-username">
+                    <div class="mtf-user-username">
                         {$memberData.username}
                     </div>
-                    <div class="mlt-user-data">
+                    <div class="mtf-user-data">
                         <span>{$memberData.motto|default="这家伙很懒，什么也没留下"}</span>
                     </div>
                 </div>
@@ -113,14 +113,14 @@
         <div class="mdui-card">
             <div class="mdui-card-media">
                 <div style="height:200px;width:100%;background-image: url(__IMG__bg.jpg);background-size: cover"></div>
-                <div class="mlt-user-info">
-                    <div class="mlt-avatar-box">
+                <div class="mtf-user-info">
+                    <div class="mtf-avatar-box">
                         <img src="{$userInfo.avatar}" alt="{$userInfo.username}的头像" id="avatar_preview" />
                     </div>
-                    <div class="mlt-user-username">
+                    <div class="mtf-user-username">
                         {$userInfo.username}
                     </div>
-                    <div class="mlt-user-data">
+                    <div class="mtf-user-data">
                         <span>{$userInfo.motto|default="这家伙很懒，什么也没留下"}</span>
                     </div>
                 </div>

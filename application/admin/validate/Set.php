@@ -20,10 +20,7 @@ class Set extends Validate
         'closeContent' => 'print',
         'full' => 'require|number',
         
-        'themePrimary' => 'require|token',
-        'themeLayout' => 'require',
-        'themeAccent' => 'require',
-        'discolour' => 'require',
+        'sign' => 'require',
 
         'fromAdress' => 'require|email',
         'fromName' => 'require',
@@ -78,10 +75,7 @@ class Set extends Validate
         'baseReg' => ['siteStatus','regStatus','defaulegroup','allowQQreg','full'],
 
         'baseTheme' => [
-            'themePrimary',
-            'themeLayout',
-            'themeAccent',
-            'discolour',
+            'sign',
         ],
 
         'forum' => [

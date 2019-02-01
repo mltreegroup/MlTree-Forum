@@ -13,7 +13,7 @@ class Topic extends Base
     public function index($tid = 0)
     {
         if ($tid == 0) {
-            return \redirect('forum\index\index');
+            return redirect(url('forum\index\index'));
         }
 
         $topic = new TopicModel;
@@ -48,51 +48,41 @@ class Topic extends Base
         ]);
     }
 
-    public function editor($uid = 0, $tid = 0)
+    public function editor($tid = 0)
     {
-        if ($uid == 0) {
-            $uid = session('uid');
-        }
-        if ($uid == 0 || $tid == 0) {
-            return redirect('forum\index\index');
+        $uid = session('uid');
+        if ($uid == 0 && $tid == 0) {
+            return redirect(url('forum\index\index'));
         } elseif (!User::isLogin()) {
             return $this->error('请先登录。', 'forum/user/login');
         }
 
         //查询帖子信息
-        $topic = topicModel::get($tid);
+        $topic = TopicModel::get($tid);
         $forumData = Db::name('forum')->field('fid,name')->select();
         //查询用户信息
         $user = user::get($uid);
         //判断是否拥有权限
         $auth = new auth;
-
-        if ($auth->check('update', $uid) || $auth->check('admin', $uid)) {
+        if ($auth->check('update', $uid) && $topic->uid == $uid || $auth->check('admin', $uid)) {
             if (!empty(input('post.'))) {
                 $res = $this->validate(input('post.'), 'app\common\validate\Topic.create');
                 if ($res !== true) {
                     return \outRes(-1, $res);
                 } else {
-                    $topic = new topicModel;
+                    $topic = new TopicModel;
                     $data = [
-                        'subject' => input('post.subject', '', 'htmlspecialchars'),
-                        'content' => input('post.content', '', 'htmlspecialchars'),
+                        'subject' => input('post.subject'),
+                        'content' => input('post.content'),
                     ];
                     $topic->update($data, ['tid' => $tid]);
                     return outRes(0, '发布成功，正在跳转...', url('forum/topic/index', ['tid' => $tid]));
-                    //return json(['code' => '1', 'message' => '发布成功，正在跳转……', 'url' => url('index/topic/index', ['tid' => $tid])]);
                 }
             }
-            dump($topic);
             return $this->mtfView('topic/editor', '编辑', [
                 'topicData' => $topic,
                 'forum' => $forumData,
             ]);
-            // return view('update', [
-            //     'topicData' => $topic,
-            //     'forum' => $forumData,
-            //     'option' => $this->siteOption('编辑 - ' . $topic->subject),
-            // ]);
         } else {
             return $this->error('无权限');
         }

@@ -1,0 +1,79 @@
+{extend name="default/public/main"}
+{block name="head"}
+<link rel="stylesheet" href="__MOD__prism/prism.css">
+<script src="__JS__qrcode.min.js"></script>
+{/block}
+{block name="muen"}
+{include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
+{/block}
+{block name="main"}
+<div class="mdui-row">
+    <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2">
+        <div class="mdui-card mdui-m-t-1">
+            <div id="reply-content-18" style="margin-bottom:0px;" class="mdui-card mtf-comment">
+                <div class="mtf-comment-info">
+                    <div class="mtf-userinfo">
+                        <div class="mtf-userinfo-avatar">
+                            <img src="{$topicData.userData.avatar}" alt="{$topicData.userData.username}" class="avatar mdui-img-rounded">
+                        </div>
+                        <div class="mtf-userinfo-line">
+                            <div class="mtf-comment-name">{$topicData.Badge|raw}{$topicData.subject}</div>
+                            <div class="mtf-comment-motto">{$topicData.userData.username}</div>
+                        </div>
+                        <div style="float:right;font-size: 12px;color:#646464">{$topicData.time_format}</div>
+                    </div>
+
+                    <div id="topicContent" class="mtf-comment-content mdui-typo">{$topicData.content|raw}</div>
+                    <div class="mtf-comment-footer">
+                        <div class="mtf-btn-group">
+                            <button class="mdui-btn mdui-ripple" id="share"><i class="mdui-icon material-icons">share</i>
+                                分享</button>
+                            <button class="mdui-btn mdui-ripple reply" data-subject="{$topicData.subject}"><i class="mdui-icon material-icons">comment</i>
+                                评论</button>
+
+                            <button class="mdui-btn mdui-ripple mdui-color-theme-accent mdui-float-right" id="set">设置</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mdui-row mdui-m-y-1">
+    <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2">
+        <h2 class="mdui-m-l-5">共{$topicData.comment}个回复</h2>
+        <div class="mdui-shadow-1 mtf-comments" id="commentList">
+        </div>
+    </div>
+</div>
+
+
+
+{/block}
+
+{block name="js"}
+<script src="__JS__marked.min.js"></script>
+<script src="__JS__post.mtf.js"></script>
+<script src="__MOD__prism/prism.js"></script>
+<script>
+    //解析Markdown
+    $$('#topicContent').html(marked($$('#topicContent').html()));
+
+    var Main = new mtfMain();
+    var post = new mtfPost({
+        commentUrl: '{:url("api/getCommentList")}',
+    });
+    post.getCommentList('{$topicData.tid}');
+    post.postComment('{$topicData.tid}');
+    $$('#share').on('click', () => {
+        Main.shareTopic('#share', {
+            url: '{:url("forum/topic/index",["tid"=>$topicData.tid])}',
+            subject: '{$topicData.subject}',
+        })
+    })
+    $$('#set').on('click', () => {
+        post.setTopic('{$topicData.tid}', '{$topicData.subject}');
+    })
+</script>
+{/block}

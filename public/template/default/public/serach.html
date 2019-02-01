@@ -17,13 +17,13 @@
             <div class="mdui-divider"></div>
             <div class="content">
                 {volist name="data" id="vo"}
-                <div class="mtf-topic mdui-ripple mlt-Jump" data-tid="18">
+                <div class="mtf-topic mdui-ripple mtf-Jump" data-tid="18">
                     <div class="mtf-topic-avatar">
                         <img src="https://forum.kingsr.cc/avatar/20180617/822a6cff8d502848aa041369e5f58150.png" alt="十载北林">
                     </div>
                     <div class="mtf-topic-info">
                         <div class="title">
-                            <a class="mlt-a-simple" href="{:url('topic/index/index',['tid'=>$vo.tid])}">{$vo.subject}</a>
+                            <a class="mtf-a-simple" href="{:url('topic/index/index',['tid'=>$vo.tid])}">{$vo.subject}</a>
                         </div>
                         <div class="connent mdui-list-item-one-line">{$vo.content|raw}</div>
                         <div class="info"><a class="user">{$vo.userData.username}</a> 发表于 <a class="time">{$vo.create_time}</a>

@@ -4,7 +4,6 @@ namespace app\admin\controller;
 use app\common\controller\Base as BaseController;
 use app\common\model\User;
 use Auth\Auth;
-use think\Db;
 
 class Base extends BaseController
 {
@@ -25,6 +24,6 @@ class Base extends BaseController
     public function adminView($url = '', $data = [])
     {
         $this->assign($data);
-        return view('../application/admin/template/' . $url, $data);
+        return view(config('template.view_path') . $url . '.html');
     }
 }

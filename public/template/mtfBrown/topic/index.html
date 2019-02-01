@@ -1,10 +1,10 @@
-{extend name="default/public/main"}
+{extend name="mtfBrown/public/main"}
 {block name="head"}
 <link rel="stylesheet" href="__MOD__prism/prism.css">
 <script src="__JS__qrcode.min.js"></script>
 {/block}
 {block name="muen"}
-{include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
+{include file='mtfBrown/public/topbar' /}{// 默认的topbar直接使用这一段即可}
 {/block}
 {block name="main"}
 <div class="mdui-row">
@@ -14,11 +14,11 @@
                 <div class="mtf-comment-info">
                     <div class="mtf-userinfo">
                         <div class="mtf-userinfo-avatar">
-                            <img src="{$topicData.usertopic.avatar}" alt="{$topicData.usertopic.username}" class="avatar mdui-img-rounded">
+                            <img src="{$topicData.userData.avatar}" alt="{$topicData.userData.username}" class="avatar mdui-img-rounded">
                         </div>
                         <div class="mtf-userinfo-line">
                             <div class="mtf-comment-name">{$topicData.Badge|raw}{$topicData.subject}</div>
-                            <div class="mtf-comment-motto">{$topicData.usertopic.username}</div>
+                            <div class="mtf-comment-motto">{$topicData.userData.username}</div>
                         </div>
                         <div style="float:right;font-size: 12px;color:#646464">{$topicData.time_format}</div>
                     </div>

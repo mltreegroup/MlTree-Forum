@@ -45,7 +45,7 @@ class mtfPost {
                 return;
             } else {
                 mdui.JQ.each(list.data.data, (i, val) => {
-                    html = `<div class="mtf-topic mdui-ripple mlt-Jump" data-tid="${val.tid}">
+                    html = `<div class="mtf-topic mdui-ripple mtf-Jump" data-tid="${val.tid}">
                                 <div class="mtf-topic-avatar">
                                     <img src="${val.userData.avatar}"
                                         alt="${val.userData.username}">
@@ -69,7 +69,7 @@ class mtfPost {
                 /**
                  * 添加一个跳转方法用于定义跳转
                  */
-                $('.mlt-Jump').on('click', function () {
+                $('.mtf-Jump').on('click', function () {
                     let data = $$.data(this);
                     location.href = `/Topic/${data.tid}.html`;
                 })
@@ -354,20 +354,26 @@ class mtfPost {
         }
     }
 
-    createTopic() {
+    createTopic(type) {
         var simplemde = new SimpleMDE({
             autosave: {
                 enabled: true,
-                uniqueId: "MlTreeEditor",
+                uniqueId: "MlTreeForum" + type,
                 delay: 1000,
             },
             spellChecker: false,
             forceSync: true,
+            placeholder: '开始你的创作吧',
         });
+
+        if ($$('#editor').val() !== null && type == 'Editor') {
+            let data = $$('#editor').val();
+            simplemde.value('');
+            simplemde.value(data);
+        }
         /*上传方法*/
         $$("#post").on('click', () => {
             var data = $$('form').serialize();
-            console.debug(data);
             $$.ajax({
                 method: 'POST',
                 url: '',
@@ -514,5 +520,47 @@ class mtfPost {
             }
         });
 
+    }
+
+    postAvatar(uid) {
+        if ($$('body').find('#mtf-avatar-upload').length == 0) {
+            $$('body').after('<input class="mdui-hidden" type="file" name="avatar" id="mtf-avatar-upload">');
+            $$('#mtf-avatar-upload').on('change', function () {
+                uploadFile();
+            })
+        };
+        $$('#mtf-avatar-upload').trigger('click');
+
+        function uploadFile() {
+            var myform = new FormData();
+            let files = document.querySelector("#mtf-avatar-upload").files[0];
+            console.log();
+
+            myform.append('avatar', files);
+            myform.append('uid', uid);
+            $$.ajax({
+                method: 'POST',
+                url: '/forum/expand/uploadAvatar.html',
+                data: myform,
+                dataType: 'json',
+                contentType: false,
+                success: function (res) {
+                    if (res.code == 0) {
+                        mdui.snackbar({
+                            message: res.msg,
+                            position: 'right-top',
+                            onClosed: () => {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        mdui.snackbar({
+                            message: res.msg,
+                            position: 'right-top',
+                        });
+                    }
+                }
+            })
+        }
     }
 }

@@ -1,0 +1,48 @@
+{extend name="mtfBrown/public/main"}
+{block name="muen"}
+{include file='mtfBrown/public/topbar' /}{// 默认的topbar直接使用这一段即可}
+{/block}
+{block name="main"}
+<div class="mdui-row">
+    <div class="mdui-col-xs-12 mdui-col-sm-8">
+        <div class="mtf-panel mdui-shadow-1 mdui-card mdui-m-b-5">
+            <div class="mtf-panel-content">
+                <div id="app-listTop">
+                    <header class="mdui-subheader">
+                        置顶
+                    </header>
+                    <div class="mdui-divider"></div>
+                    <div class="mtf-topics" id="tops">
+
+                    </div>
+                </div>
+                <div class="mdui-divider"></div>
+                <div id="app-listCommon">
+                    <header class="mdui-subheader">
+                        所有帖子
+                    </header>
+                    <div class="mdui-divider"></div>
+                    <div class="mtf-topics" id="topicList">
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {include file='mtfBrown/public/tool-right' /}
+</div>
+
+{/block}
+
+{block name="js"}
+<script src="__JS__post.mtf.js"></script>
+<script>
+    var post = new mtfPost({
+        topicListUrl: '{:url("api/getTopicList")}',
+    })
+
+    post.getTopicList('#topicList', 0);
+    post.getTopicList('#tops', 0, 'tops')
+</script>
+{/block}

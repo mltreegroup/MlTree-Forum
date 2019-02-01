@@ -2,9 +2,8 @@
 namespace app\admin\controller;
 
 use app\admin\controller\Base;
-use think\facade\App;
 use app\admin\model\Update;
-
+use think\facade\App;
 
 class Index extends Base
 {
@@ -28,8 +27,8 @@ class Index extends Base
             '用户的IP地址' => $_SERVER['REMOTE_ADDR'],
             '剩余空间' => round((disk_free_space(".") / (1024 * 1024)), 2) . 'M',
         );
-        
-        return $this->adminView('index/index',[
+
+        return $this->adminView('index/index', [
             'serverinfo' => $info,
             'updateList' => Update::getUpdateList()->list,
         ]);

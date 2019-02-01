@@ -227,12 +227,12 @@ class Topic extends Model
         }
         $user = new User;
         $topic['time_format'] = time_format($topic['create_time']);
-        $topic['usertopic'] = $user->where('uid', $topic['uid'])->field('username,avatar')->find();
+        $topic['userData'] = $user->where('uid', $topic['uid'])->field('username,avatar')->find();
         $topic['forumName'] = Db::name('forum')->where('fid', $topic['fid'])->field('name')->find()['name'];
         $topic['Badge'] = outBadge($topic);
         
         $topic->views += 1;
-        $topic->save();
+        $topic->isAutoWriteTimestamp(false)->save();
 
         return [true,$topic];
     }

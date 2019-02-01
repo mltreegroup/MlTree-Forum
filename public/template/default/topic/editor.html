@@ -12,7 +12,6 @@
         <div class="mdui-card mdui-m-t-1 mdui-m-b-5">
             <form>
                 <div class="mdui-m-y-1 mdui-m-l-1">
-                    <label class="mdui-textfield-label">所属板块</label>
                     <select lay-ignore name="fid" class="mdui-select" mdui-select="{position: 'bottom'}" required>
                         {volist name="forum" id="vo"}
                         <option value="{$vo.fid}">{$vo.name}</option>
@@ -23,16 +22,17 @@
 
                 <div class="mdui-textfield mdui-m-b-1 mdui-m-l-1">
                     <label class="mdui-textfield-label">标题</label>
-                    <input name="subject" class="mdui-textfield-input" type="text" placeholder="title" max="60"
-                        required />
+                    <input name="subject" class="mdui-textfield-input" value="{$topicData.subject}" type="text"
+                        placeholder="title" max="60" required />
                 </div>
 
-                <textarea class="OwO-text" id="editor" name="content" required></textarea> {:token()}
+                <textarea class="OwO-text" id="editor" name="content" required>{$topicData.content|raw}</textarea>
+                {:token()}
                 <div class="OwO mdui-m-l-1"></div>
-                <input type="hidden" name="sign" value="{$attaSign}">
+                <input type="hidden" name="sign" value="{$topicData.sign}">
                 <div class="mdui-m-a-1">
                     <button id="post" type="submit" class="mdui-btn mdui-color-theme mdui-ripple"><i class="mdui-icon mdui-icon-left material-icons">send</i>
-                        创建</button>
+                        修改</button>
                 </div>
             </form>
 
@@ -45,9 +45,10 @@
 <script src="__MOD__editor/simplemde.min.js"></script>
 <script src="__MOD__OwO/OwO.js"></script>
 <script src="__JS__post.mtf.js"></script>
+
 <script>
     var post = new mtfPost();
-    var editor = post.createTopic();
+    var editor = post.createTopic('Editor');
 
     var OwO = new OwO({
         logo: 'OωO表情',

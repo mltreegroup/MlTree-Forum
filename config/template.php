@@ -20,7 +20,7 @@ return [
     // 默认模板渲染规则 1 解析为小写+下划线 2 全部转换小写 3 保持操作方法
     'auto_rule' => 1,
     // 模板路径
-    'view_path' => Env::get('root_path') . 'template/',
+    'view_path' => Env::get('root_path').'public/template/',
     // 模板后缀
     'view_suffix' => 'html',
     // 模板文件名分隔符
@@ -41,5 +41,6 @@ return [
         '__CSS__' => '/static/css/',
         '__IMG__' => '/static/images/',
         '__JQ__' => '/static/js/jquery-3.3.1.min.js',
+        '__TPL__' => '/template/',
     ],
 ];

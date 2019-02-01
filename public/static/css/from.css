@@ -6,7 +6,7 @@
     left: 0;
     top:0;
 }
-.mlt-login{
+.mtf-login{
     margin-top: 10%;
     margin-bottom: 10%;
 }
@@ -14,13 +14,13 @@
     position: relative;
     bottom:0;
 }
-.mlt-btn{
+.mtf-btn{
     display: block;
     color:#2196f3;
     text-decoration: none;
     margin-top:2%
 }
 
-.mlt-btn:hover{
+.mtf-btn:hover{
     text-decoration: underline;
 }

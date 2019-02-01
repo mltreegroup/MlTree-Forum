@@ -17,7 +17,7 @@ var mtfContent = new Vue({
     }
 })
 
-// 定义mltMain主函数类
+// 定义mtfMain主函数类
 class mtfMain {
     constructor() {
         this.isShare = false;
@@ -44,30 +44,38 @@ class mtfMain {
         var Url = {
             qq: `https://connect.qq.com/widget/shareqq/index.html?url=${data.url}&title=${data.subject}&source=${data.siteTitle} by MlTreeForum&summary=${data.content}`,
             weibo: `http://service.weibo.com/share/share.php?url=${data.url}&sharesource=weibo&title=${data.subject}&pic=${data.picurl}&appkey=`,
-            wechat: `<div class="mdui-dialog">
-            <div class="mdui-dialog-content">
-                <div id="wechat-qrcode"></div>
-            </div>
-          </div>`
         };
-
         if (!this.isShare) {
-            var html = `<ul class="mdui-menu mlt-share" id="mlt_share" style="z-index:200508">
+            var html = `<ul class="mdui-menu mtf-share" id="mlt_share" style="z-index:200508">
             <li class="mdui-menu-item">
                 <a href="${Url.qq}" class="mdui-ripple" id="share_qq"><i class="mdui-text-color-blue mdui-menu-item-icon mdui-icon iconfont icon-qq"></i> QQ分享</a>
             </li>
             <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple" id="share_wechat" mdui-dialog="{target: '#wechat-qrcode'}"><i class="mdui-text-color-green mdui-menu-item-icon mdui-icon iconfont icon-wechat"></i> 微信分享</a>
+                <a href="javascript:;" class="mdui-ripple" id="share_wechat" mdui-dialog="{target: '#wechat-panel'}"><i class="mdui-text-color-green mdui-menu-item-icon mdui-icon iconfont icon-wechat"></i> 微信分享</a>
             </li>
-            ${Url.wechat}
             <li class="mdui-menu-item">
                 <a href="${Url.weibo}" class="mdui-rippleo" id="share_weibo"><i class="mdui-text-color-red mdui-menu-item-icon mdui-icon iconfont icon-weibo"></i> 微博分享</a>
             </li>
             </ul>`;
+            var wechat_panel = `
+            <div class="mdui-dialog" id="wechat-panel">
+            <div class="mdui-dialog-content" style="text-align:center">
+                <div class="mdui-dialog-title">分享到微信</div>
+                <div id="wechat-qrcode" class="mdui-center" style="width:260px"></div>
+                <div>
+                    <p>微信扫一扫，点击页面右上角进行分享</p>
+                </div>
+            </div>
+            </div>
+            `;
             $$(dom).after(html);
+            $$('body').after(wechat_panel);
             new QRCode(document.getElementById("wechat-qrcode"), data.url);
             this.isShare = true;
         }
+        $$('#share_wechat').on('click', function () {
+
+        });
 
         var inst = new mdui.Menu(dom, '#mlt_share', {
             position: 'top'
@@ -78,7 +86,7 @@ class mtfMain {
 
     /**
      * Base64编码
-     * @param {str} str 
+     * @param {str} str e
      */
     toBase64(str) {
         return window.btoa(unescape(encodeURIComponent(str)));
@@ -115,11 +123,10 @@ class mtfMain {
 /**
  * 添加一个跳转方法用于定义跳转
  */
-$$('.mlt-Jump').on('click', function () {
+$$('.mtf-Jump').on('click', function () {
     let data = $$.data(this);
     location.href = `/Topic/${data.tid}.html`;
 });
-
 
 /**
  * 获取时间戳

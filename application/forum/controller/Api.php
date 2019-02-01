@@ -8,15 +8,24 @@ use app\forum\controller\Base;
 
 class Api extends Base
 {
+    /**
+     * ApiControllerIndex，输出APILIST
+     */
     public function index()
     {
         return json(['code' => 0, 'apilist' => '', 'time' => time()]);
     }
 
+    /**
+     * GETTOPICLIST,获取帖子列表
+     * @param int $page 输出的页数，由1开始
+     * @param string $type 输出的类型，common|essence
+     * @return array 
+     */
     public function getTopicList()
     {
         $topic = new Topic;
-        if (\request()->isPost()) {
+        if (request()->isPost()) {
             $data = $topic->TopicList(input('post.page'), input('post.type'));
             return outRes(0, ['data' => $data[0], 'pages' => $data[1]], null, 'data');
         }
@@ -24,9 +33,14 @@ class Api extends Base
         return outRes(0, ['data' => $data[0], 'pages' => $data[1]], null, 'data');
     }
 
+    /**
+     * GETTOPICDATA,获取帖子详细信息
+     * @param int $tid 帖子的TID
+     * @return array
+     */
     public function getTopicData($tid)
     {
-        $topic = new topic;
+        $topic = new Topic;
         $res = $topic->getTopic($tid);
 
         if (!$res[0]) {
@@ -35,6 +49,12 @@ class Api extends Base
         return outRes(0, $res[1], null, 'data');
     }
 
+    /**
+     * GETCOMMENTLIST,获取指定帖子的评论数据
+     * @param int $tid 欲获取的帖子
+     * @param int $page 页码
+     * @return array
+     */
     public function getCommentList($tid = 0, $page = 1)
     {
         $comment = new Comment;
@@ -48,11 +68,19 @@ class Api extends Base
         return outRes(0, 'NULL', null, 'data');
     }
 
+    /**
+     * API鉴权
+     */
     public function auth()
     {
 
     }
 
+    /**
+     * POSTCOMMENT,提交评论
+     * @param int $tid 评论的帖子ID
+     * @param string $content 
+     */
     public function postComment()
     {
         if (!User::isLogin()) {

@@ -1,9 +1,9 @@
 <?php
 namespace app\forum\controller;
 
-use app\common\model\User;
 use app\common\model\Mail;
 use app\common\model\Upload;
+use app\common\model\User;
 use app\forum\controller\Base;
 
 class Expand extends Base
@@ -25,7 +25,22 @@ class Expand extends Base
 
     public function uploadAvatar()
     {
+        $file = request()->file('avatar');
+        if (empty($file)) {
+            return outRes(-1, '上传失败,文件为空.');
+        }
 
+        $info = $file->move(getRootPath() . 'public/avatar/');
+
+        if ($info) {
+            dump($info);
+            $path = $info->getSaveName();
+            $user = new User;
+            $user->save(['avatar' => '/avatar/' . $path], ['uid' => input('post.uid')]);
+            return json(array('code' => 0, 'url' => '/avatar/' . $path, 'msg' => '上传成功！', 'file' => $file->getinfo()['name']));
+        } else {
+            return json(array('code' => 1, 'msg' => '上传失败'));
+        }
     }
 
     public function rss()
@@ -42,7 +57,7 @@ class Expand extends Base
         $code = createStr(32);
         $mail = new Mail;
         $mail->SendForgetCode($user, $code);
-        session('forget.Email',$mail);
+        session('forget.Email', $mail);
         session('forget.Time', time() + 30);
         session('forget.Code', $code);
         return outRes(0, '验证码已发送');

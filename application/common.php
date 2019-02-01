@@ -12,6 +12,7 @@
 // 应用公共文件
 require __DIR__ . '/../vendor/autoload.php';
 use Auth\Auth;
+use think\facade\Env;
 
 function createStr($length)
 {
@@ -186,4 +187,12 @@ function outBadge($data)
     }
 
     return $value;
+}
+
+/**
+ * 取运行根目录
+ */
+function getRootPath()
+{
+    return Env::get('root_path');
 }

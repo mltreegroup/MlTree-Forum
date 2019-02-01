@@ -13,7 +13,7 @@ class User extends Base
     {
         $user = new userModel();
         if ($uid == 0 && empty(session('uid'))) {
-            return $this->error('用户不存在！', 'index\index\index');
+            return $this->error('用户不存在！', 'index/index/index');
         }
         $userTopicList = userModel::getTopicList(session('uid'));
         if (!userModel::isLogin(cookie('userKey')) || $uid != session('uid') && $uid != 0) {
@@ -23,7 +23,7 @@ class User extends Base
             if (!$userInfo) {
                 return $this->error('用户不存在');
             }
-            return $this->mtfView('user\index', '用户信息',
+            return $this->mtfView('user/index', '用户信息',
                 [
                     'type' => 'Visitor',
                     'userInfo' => $userInfo,
@@ -31,7 +31,7 @@ class User extends Base
             );
         }
 
-        return $this->mtfView('user\index', '用户信息', [
+        return $this->mtfView('user/index', '用户信息', [
             'type' => 'Self',
             'userTopic' => $userTopicList,
         ]);

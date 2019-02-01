@@ -1,0 +1,75 @@
+{extend name="default/public/main"}
+{block name="head"}
+<link rel="stylesheet" href="__CSS__from.css">
+{/block}
+{block name="muen"}
+{include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
+{/block}
+{block name="main"}
+<div class="row mdui-color-theme">
+</div>
+<div class="mdui-row">
+    <div class="mdui-col-xs-10 mdui-col-md-4 mtf-login mdui-col-offset-xs-1 mdui-col-offset-md-4">
+        <div class="mdui-card mdui-shadow-1">
+            <div class="mdui-card-primary mdui-color-theme-600">
+                <div class="mdui-card-primary-title"><i class="mdui-icon material-icons">send</i> 登录</div>
+                <div class="mdui-card-primary-subtitle">Login</div>
+            </div>
+
+            <div class="mdui-card-content">
+                <form action="" method="post" onsubmit=''>
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <label class="mdui-textfield-label">Email</label>
+                        <input class="mdui-textfield-input" id="email" name="email" type="email" required />
+                        <div class="mdui-textfield-error">邮箱不能为空</div>
+                    </div>
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <label class="mdui-textfield-label">Password</label>
+                        <input class="mdui-textfield-input" name="password" type="password" required />
+                        <div class="mdui-textfield-error">密码不能为空</div>
+                    </div>
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <label class="mdui-textfield-label">Code</label>
+                        <input class="mdui-textfield-input" name="captcha" type="text" required />
+                        <div class="mdui-textfield-error">验证码不能为空</div>
+                        <img id="code" src="{:captcha_src()}" alt="captcha" onClick="this.src=this.src+'?'+Math.random()" />
+                    </div>
+                    <button class="mdui-btn mdui-color-theme mdui-btn-raised mdui-m-t-1 mdui-ripple" id="mtf-submit"
+                        type="submit">登录</button>
+                    <a class="mtf-btn" href="{:url('forum/User/Reg')}">创建一个账户</a>
+                    <a class="mtf-btn" href="{:url('forum/User/forgetPwd')}">忘记密码？</a>
+                    <a class="
+                        mtf-btn" href="javascript:;" mdui-menu="{target: '#moreLogin',position:'top'}">社会登录</a>
+                    <ul class="mdui-menu" id="moreLogin">
+                        <li class="mdui-menu-item">
+                            <a href="javascript:;" class="mdui-ripple">
+                                <i class="mdui-menu-item-icon mdui-icon iconfont icon-qq"></i> QQ
+                            </a>
+                        </li>
+                        <!-- <li class="mdui-menu-item">
+                            <a href="javascript:;" class="mdui-ripple">
+                                <i class="mdui-menu-item-icon mdui-icon iconfont icon-wecaht"></i> 微信
+                            </a>
+                        </li> -->
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__JS__post.mtf.js"></script>
+<script>
+    var post = new mtfPost();
+    var main = new mtfMain();
+
+
+    $$('#mtf-submit').on('click', () => {
+        var data = $$('form').serialize();
+        post.Login('{:url("forum/user/login")}');
+        return false;
+    })
+</script>
+{/block}

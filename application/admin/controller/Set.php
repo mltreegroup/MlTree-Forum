@@ -38,7 +38,7 @@ class Set extends Base
     {
         $reg = Option::getValues('reg');
         $base = Option::getValues('base');
-        if (Request::method() == 'POST') {
+        if (request()->isPost()) {
             input('post.siteStatus') == '1' ? $data['siteStatus'] = 1 : $data['siteStatus'] = 0;
             input('post.regStatus') == '1' ? $data['regStatus'] = 1 : $data['regStatus'] = 0;
             input('post.full') == '1' ? $data['full'] = 1 : $data['full'] = 0;
@@ -67,41 +67,25 @@ class Set extends Base
 
     public function baseTheme()
     {
-        $primaryList = [ // 允许使用的主题色
-            '姨妈红' => 'red',
-            '少女粉' => 'pink',
-            '基佬紫' => 'purple',
-            '胖次蓝' => 'blue',
-            '早苗绿' => 'green',
-            '伊藤橙' => 'orange',
-            '呆毛黄' => 'yellow',
-            '远坂棕' => 'brown',
-            '靛' => 'indigo',
-            '青' => 'cyan',
-            '水鸭' => 'teal',
-            '性冷淡' => 'grey',
-        ];
-        $accentList = [ // 允许使用的强调色
-            '姨妈红' => 'red',
-            '少女粉' => 'pink',
-            '基佬紫' => 'purple',
-            '胖次蓝' => 'blue',
-            '早苗绿' => 'green',
-            '伊藤橙' => 'orange',
-            '呆毛黄' => 'yellow',
-            '靛' => 'indigo',
-            '青' => 'cyan',
-        ];
-        $layoutList = [ // 允许使用的模式
-            '日间模式' => 'light',
-            '夜间模式' => 'black',
-        ];
-        if (request()->isPost()) {
-            $data = input('post.', '', 'htmlspecialchars');
-            $data = input('post.', '', 'htmlentities');
-            if (!input('?post.discolour')) {
-                $data['discolour'] = 'false';
+        $dir = get_dir("public/template/", true); //获取模板文件下的数组信息
+        foreach ($dir as $key => $value) {
+            $tplInfo = json_decode(file_get_contents($value['abs'] . "info.json"), true);
+            if ($value['rel'] == Option::getValue("template")) {
+                $start = true;
+            } else {
+                $start = false;
             }
+
+            $templateList[] = [
+                'info' => $tplInfo,
+                'start' => $start,
+                'img' => $value['abs'] . "breviary.png",
+            ];
+        }
+
+        if (request()->isPost()) {
+            $data = input('post.');
+            $data['template'] = $data['sign'] . "/";
             $res = $this->validate($data, 'app\admin\validate\Set.baseTheme');
             if (true !== $res) {
                 return json(['code' => -1, 'msg' => $res]);
@@ -110,9 +94,7 @@ class Set extends Base
             return json(['code' => '0', 'msg' => '更新成功', 'time' => time()]);
         }
         return $this->adminView('set/baseTheme', [
-            'primaryList' => $primaryList,
-            'accentList' => $accentList,
-            'layoutList' => $layoutList,
+            'templateList' => $templateList,
         ]);
     }
 

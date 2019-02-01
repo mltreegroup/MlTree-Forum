@@ -1,4 +1,4 @@
-<div class="mdui-col-sm-4" id="">
+<div class="mdui-hidden-sm-down mdui-col-md-4">
     <div class="mdui-card mdui-m-b-1">
         <div class="mdui-card-primary">
             <div class="mdui-card-primary-title">公告</div>
@@ -24,7 +24,7 @@
             {volist name="links" id="vo"}
             <div class="mdui-chip">
                 <img class="mdui-chip-icon" src="{$vo.picurl|default='__IMG__/link.jpg'}" />
-                <a class="mdui-chip-title mlt-a-simple" href="{$vo.url}" target="_blank">{$vo.title}</a>
+                <a class="mdui-chip-title mtf-a-simple" href="{$vo.url}" target="_blank">{$vo.title}</a>
             </div>
             {/volist}
         </div>

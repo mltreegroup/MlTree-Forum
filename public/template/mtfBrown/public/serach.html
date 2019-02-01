@@ -1,0 +1,46 @@
+{extend name="mtfBrown/public/main"}
+{block name="muen"}
+{include file='mtfBrown/public/topbar' /}{// 默认的topbar直接使用这一段即可}
+{/block}
+{block name="main"}
+<div class="mdui-row">
+    <div class="mdui-col-xs-12 mdui-col-md-8 mdui-col-offset-md-2 mdui-m-b-5">
+        <div class="mdui-card">
+            <form action="" method="get">
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <i class="mdui-icon material-icons">search</i>
+                    <label class="mdui-textfield-label">搜索</label>
+                    <input type="text" value="{$kw}" name="kw" class="mdui-textfield-input"></input>
+                </div>
+            </form>
+
+            <div class="mdui-divider"></div>
+            <div class="content">
+                {volist name="data" id="vo"}
+                <div class="mtf-topic mdui-ripple mtf-Jump" data-tid="18">
+                    <div class="mtf-topic-avatar">
+                        <img src="https://forum.kingsr.cc/avatar/20180617/822a6cff8d502848aa041369e5f58150.png" alt="十载北林">
+                    </div>
+                    <div class="mtf-topic-info">
+                        <div class="title">
+                            <a class="mtf-a-simple" href="{:url('topic/index/index',['tid'=>$vo.tid])}">{$vo.subject}</a>
+                        </div>
+                        <div class="connent mdui-list-item-one-line">{$vo.content|raw}</div>
+                        <div class="info"><a class="user">{$vo.userData.username}</a> 发表于 <a class="time">{$vo.create_time}</a>
+                            <span>{$vo.comment}个回复</span>
+                            <span>{$vo.views}次查看</span>
+                        </div>
+                    </div>
+                </div>
+                {/volist}
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script>
+    mdui.mutation();
+</script>
+{/block}

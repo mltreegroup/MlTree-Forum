@@ -1,15 +1,15 @@
-{extend name="default/public/main"}
+{extend name="mtfBrown/public/main"}
 {block name="head"}
 <link rel="stylesheet" href="__CSS__from.css">
 {/block}
 {block name="muen"}
-{include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
+{include file='mtfBrown/public/topbar' /}{// 默认的topbar直接使用这一段即可}
 {/block}
 {block name="main"}
 <div class="row mdui-color-deep-orange">
 </div>
 <div class="mdui-row">
-    <div class="mdui-col-xs-10 mdui-col-md-4 mlt-login mdui-col-offset-xs-1 mdui-col-offset-md-4">
+    <div class="mdui-col-xs-10 mdui-col-md-4 mtf-login mdui-col-offset-xs-1 mdui-col-offset-md-4">
         <div class="mdui-card mdui-shadow-1">
             <div class="mdui-card-primary mdui-color-deep-orange-600">
                 <div class="mdui-card-primary-title"><i class="mdui-icon material-icons">lock</i> 找回密码</div>
@@ -41,10 +41,10 @@
                     </div>
                     <button class="mdui-btn mdui-color-amber mdui-btn-raised mdui-m-t-1 mdui-ripple" id="mtf-submit"
                         type="submit">重置</button>
-                    <a class="mlt-btn mdui-text-color-amber" href="{:url('forum/User/Reg')}">创建一个账户</a>
-                    <a class="mlt-btn mdui-text-color-amber" href="{:url('forum/User/Login')}">登录账号</a>
+                    <a class="mtf-btn mdui-text-color-amber" href="{:url('forum/User/Reg')}">创建一个账户</a>
+                    <a class="mtf-btn mdui-text-color-amber" href="{:url('forum/User/Login')}">登录账号</a>
                     <a class="
-                        mlt-btn mdui-text-color-amber" href="javascript:;" mdui-menu="{target: '#moreLogin',position:'top'}">社会登录</a>
+                        mtf-btn mdui-text-color-amber" href="javascript:;" mdui-menu="{target: '#moreLogin',position:'top'}">社会登录</a>
                     <ul class="mdui-menu" id="moreLogin">
                         <li class="mdui-menu-item">
                             <a href="javascript:;" class="mdui-ripple">

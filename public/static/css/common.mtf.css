@@ -13,7 +13,7 @@ body{
     }
 }
 /* 公共通用样式*/
-.mlt-a-simple
+.mtf-a-simple
 {
     text-decoration: none;
     color:black;
@@ -164,7 +164,7 @@ textarea{
     margin-right: 5px;
 }
 /*自定义页脚样式*/
-.mlt-footer {
+.mtf-footer {
     /*页脚整体外观*/
     line-height: 40px;
     background: #f2f2f2;
@@ -172,11 +172,11 @@ textarea{
     font-size: 10pt;
     color: #222;
 }
-.mlt-footer a{
+.mtf-footer a{
     color:black;
     text-decoration: none;
 }
-.mlt-footer p, .mlt-footer .link{
+.mtf-footer p, .mtf-footer .link{
     /*页脚链接和文字*/
     margin-left: 30px;
     color: #666;
@@ -187,18 +187,18 @@ textarea{
     margin-right: 30px;
     text-decoration: none;
 }
-.mlt-footer>a:visited {
+.mtf-footer>a:visited {
     color: #609;
 }
 /* share列表样式 */
-.mlt-share img{
+.mtf-share img{
     width: 32px;
     height: 32px;
     float: left;
 }
 
 /*用户界面外观*/
-.mlt-user-info{
+.mtf-user-info{
     position: absolute;
     right: 0;
     bottom: 0;
@@ -206,13 +206,13 @@ textarea{
     padding: 24px 16px 16px;
     color: #fff;
   }
-  .mlt-user-info .mlt-avatar-box{
+  .mtf-user-info .mtf-avatar-box{
     position: relative;
     float: left;
     margin-right: 16px;
     height: 60px;
   }
-  .mlt-user-info .mlt-avatar-box .mlt-avatar-upload{
+  .mtf-user-info .mtf-avatar-box .mtf-avatar-upload{
     display:none;
     overflow: hidden;
     height: 48px;
@@ -222,10 +222,10 @@ textarea{
     top:50%;
     transform: translate(-50%,-50%);
   }
-  .mlt-user-info .mlt-avatar-box:hover .mlt-avatar-upload{
+  .mtf-user-info .mtf-avatar-box:hover .mtf-avatar-upload{
     display: block;
   }
-  .mlt-user-info .mlt-avatar-box img{
+  .mtf-user-info .mtf-avatar-box img{
     width: 56px;
     height:56px;
     border-radius: 50%;
@@ -235,16 +235,16 @@ textarea{
     -ms-user-select: none;
     user-select: none;
   }
-  .mlt-user-info .mlt-user-data,.mlt-user-info .mlt-user-username{
+  .mtf-user-info .mtf-user-data,.mtf-user-info .mtf-user-username{
     margin-left: 76px;
   }
-  .mlt-user-info .mlt-user-username{
+  .mtf-user-info .mtf-user-username{
     font-size:30px;
     display: block;
     line-height: 36px;
     opacity: 1;
   }
-  .mlt-user-info .mlt-user-data{
+  .mtf-user-info .mtf-user-data{
     position: relative;
     opacity: 1;
     line-height: 24px;
@@ -255,19 +255,19 @@ textarea{
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .mlt-user-info .mlt-user-data a{
+  .mtf-user-info .mtf-user-data a{
     color: #fff;
     text-decoration: none;
   }
-  .mlt-user-info .mlt-user-data a:hover{
+  .mtf-user-info .mtf-user-data a:hover{
     border-bottom: 1px solid hsla(0,0%,100%,.7);
   }
-  .mlt-user-info .mlt-user-control{
+  .mtf-user-info .mtf-user-control{
     position: absolute;
     right: 152px;
     bottom: 28px;
   }
-  .mlt-user-info #avatar_new{
+  .mtf-user-info #avatar_new{
     display: block;
     width: 48px;
     min-width:48px;

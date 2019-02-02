@@ -37,7 +37,7 @@
 
 **请求URL**
 
- - `Api\getTopicList`
+ - `Api/getTopicList`
 
 **请求方式**
 
@@ -107,7 +107,7 @@
 
 **请求URL**
 
- - `Api\getTopicData\tid\{$tid}`
+ - `Api/getTopicData/tid/{$tid}`
 
 **请求方式**
 
@@ -273,7 +273,7 @@
 
 **请求URL**
 
- - `Api\getCommentList`
+ - `Api/getCommentList`
 
 **请求方式**
 
@@ -319,28 +319,38 @@
 
 **请求URL**
 
- - `Api\auth`
+ - `Api/auth/name/{$name}/uid/{$uid}`
 
 **请求方式**
 
- - `POST`
+ - `GET`
 
 **请求参数**
 
 | 参数名 | 类型 | 必选 | 默认值 | 说明 |
 | ------|-------|-----|-----|-----|
-| tid | Int | 是 | NULL | 评论帖子ID |
-| replyCid | Int | 否 | NULL | 回复的评论ID |
-| content | String | 是 | NULL | 评论内容 |
+| name | String | 是 | NULL | 鉴权项目 |
+| uid | Int | 是 | NULL | 被鉴权人ID |
 
 **返回示例**
+
+正确示例
 
 ```json
 {
     "code": 0,
-    "msg": "评论成功",
-    "url": "",
-    "time": 1548928945
+    "msg": true,
+    "time": 1549081481
+}
+```
+
+错误示例
+
+```json
+{
+    "code": 105010,
+    "msg": "无权限",
+    "time": 1549081752
 }
 ```
 
@@ -348,10 +358,10 @@
 
 |参数名|类型|说明|
 | ----- |:-----:| ----- |
-| msg | String | 成功提示信息 |
-| url | String | 跳转URL |
+| msg | Bool | 鉴权结果 |
 
  **备注** 
 
-- 成功后应将URL跳转至返回值
+- 该功能仅在已登录账号且账号具有`admin`权限的情况下可使用
+- `true`为具有权限，`false`为不具有权限
 - 更多返回错误代码请看首页的错误代码描述

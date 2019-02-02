@@ -163,7 +163,7 @@ class mtfPost {
                         </div>
                         <div class="mtf-comment-footer">
                             <div class="mtf-comment-muen">
-                                <button title="Reply" data-cid="18" data-username="${val.username}" data-uid="8" class="mdui-btn mdui-btn-dense mdui-color-theme mdui-ripple"><i
+                                <button title="Reply" data-cid="18" data-username="${val.username}" data-uid="8" class="mdui-btn mdui-btn-dense mdui-color-theme mdui-ripple Reply-comment"><i
                                         class="mdui-icon material-icons">reply</i> 回复</button>
                             </div>
                         </div>
@@ -175,6 +175,10 @@ class mtfPost {
                 commentPage += 1;
             }
             status = true;
+
+            $$('.Reply-comment').on('click', function () {
+                
+            });
         };
 
         getData();
@@ -207,12 +211,11 @@ class mtfPost {
         }
 
         $(window).scroll(() => {
-            console.log('OK,onScroll');
-            console.log(status);
             if (getScrollTop() + getClientHeight() + 50 > getScrollHeight() && status) {
                 getData();
             }
-        })
+        });
+
     }
 
     Register(url = null) {

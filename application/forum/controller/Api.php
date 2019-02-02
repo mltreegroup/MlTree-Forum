@@ -20,7 +20,7 @@ class Api extends Base
      * GETTOPICLIST,获取帖子列表
      * @param int $page 输出的页数，由1开始
      * @param string $type 输出的类型，common|essence
-     * @return array 
+     * @return array
      */
     public function getTopicList()
     {
@@ -70,21 +70,29 @@ class Api extends Base
 
     /**
      * API鉴权
+     * @param string $name 鉴权项目可用,分隔
+     * @param int $uid 欲鉴权UID
+     * @return bool
      */
-    public function auth()
+    public function auth($name, $uid)
     {
-
+        if (!User::isLogin()) {
+            return \outRes(105010, '无权限');
+        } elseif (!\fastAuth('admin', session('uid'))) {
+            return \outRes(105010, '无权限');
+        }
+        return outRes(0, fastAuth($name, $uid));
     }
 
     /**
      * POSTCOMMENT,提交评论
      * @param int $tid 评论的帖子ID
-     * @param string $content 
+     * @param string $content
      */
     public function postComment()
     {
         if (!User::isLogin()) {
-            return outRes(10201,'无权限或未登录');
+            return outRes(10201, '无权限或未登录');
         }
 
         $info = input('post.');

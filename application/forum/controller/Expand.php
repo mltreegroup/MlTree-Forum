@@ -15,7 +15,7 @@ class Expand extends Base
 
     public function uploadFile()
     {
-        $file = \request()->file('file');
+        $file = request()->file('file');
         $info = $file->move('../uploads');
         if ($info) {
             $upload = new Upload;
@@ -33,7 +33,6 @@ class Expand extends Base
         $info = $file->move(getRootPath() . 'public/avatar/');
 
         if ($info) {
-            dump($info);
             $path = $info->getSaveName();
             $user = new User;
             $user->save(['avatar' => '/avatar/' . $path], ['uid' => input('post.uid')]);

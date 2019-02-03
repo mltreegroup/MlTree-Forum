@@ -1,6 +1,6 @@
 <?php
 //分页配置
 return [
-    'type'     => 'Mdui',
+    'type'     => 'paging\Mdui',
     'var_page' => 'page',
 ];

@@ -1,11 +1,11 @@
 <?php
 namespace app\admin\controller;
 
-use app\common\controller\Base as BaseController;
+use think\Controller;
 use app\common\model\User;
 use Auth\Auth;
 
-class Base extends BaseController
+class Base extends Controller
 {
     protected function initialize()
     {

@@ -1,6 +1,6 @@
 {extend name="mtfBrown/public/main"}
 {block name="head"}
-<link rel="stylesheet" href="__MOD__editor/editor.css">
+<link rel="stylesheet" href="__MOD__editor/simplemde.min.css">
 <link rel="stylesheet" href="__MOD__OwO/OwO.min.css">
 {/block}
 {block name="muen"}
@@ -22,12 +22,13 @@
 
                 <div class="mdui-textfield mdui-m-b-1 mdui-m-l-1">
                     <label class="mdui-textfield-label">标题</label>
-                    <input name="subject" class="mdui-textfield-input" value="{$topicData.subject}" type="text" placeholder="title" max="60"
-                        required />
+                    <input name="subject" class="mdui-textfield-input" value="{$topicData.subject}" type="text"
+                        placeholder="title" max="60" required />
                 </div>
 
-                <textarea class="OwO-text" id="editor" name="content" required>{$topicData.content|raw}</textarea> {:token()}
-                <div class="OwO"></div>
+                <textarea class="OwO-text" id="editor" name="content" required>{$topicData.content|raw}</textarea>
+                {:token()}
+                <div class="OwO mdui-m-l-1"></div>
                 <input type="hidden" name="sign" value="{$topicData.sign}">
                 <div class="mdui-m-a-1">
                     <button id="post" type="submit" class="mdui-btn mdui-color-theme mdui-ripple"><i class="mdui-icon mdui-icon-left material-icons">send</i>
@@ -41,26 +42,23 @@
 {/block}
 
 {block name="js"}
-<script src="__MOD__editor/editor.js"></script>
-<script src="__MOD__editor/marked.js"></script>
-<script src="__MOD__OwO/OwO.min.js"></script>
+<script src="__MOD__editor/simplemde.min.js"></script>
+<script src="__MOD__OwO/OwO.js"></script>
+<script src="__JS__post.mtf.js"></script>
 
 <script>
-    var editor = new Editor();
-    editor.render();
-    editor.codemirror.setValue('hahahah');
+    var post = new mtfPost();
+    var editor = post.createTopic('Editor');
+
     var OwO = new OwO({
-            logo: 'OωO表情',
-            container: document.getElementsByClassName('OwO')[0],
-            target: document.getElementsByClassName('OwO-text')[0],
-            api: '__MOD__OwO/OwO.json',
-            position: 'up',
-            width: '100%',
-            maxHeight: '250px'
-        });
-    /*上传方法*/
-    $$("#post").on('click', () => {
-        
-    })
+        logo: 'OωO表情',
+        container: document.getElementsByClassName('OwO')[0],
+        target: document.getElementsByClassName('OwO-text')[0],
+        api: '__MOD__OwO/OwO.json',
+        position: 'up',
+        width: '100%',
+        maxHeight: '250px',
+        innId: editor,
+    });
 </script>
 {/block}

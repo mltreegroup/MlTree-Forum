@@ -173,6 +173,7 @@
 {/block}
 
 {block name="js"}
+<script src="__JS__post.mtf.js"></script>
 <script>
     $$('#mottoPost').on('click', function () {
         var data = $$('#motto').serialize();
@@ -223,5 +224,11 @@
         });
         return false;
     });
+
+    $$('#avatar_new').on('click',function(){
+        var post = new mtfPost();
+        post.postAvatar('{:session("uid")}');
+    });
+
 </script>
 {/block}

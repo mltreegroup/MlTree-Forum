@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-01-29 01:39:44
+Date: 2019-02-03 15:41:52
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -162,7 +162,7 @@ CREATE TABLE `mf_message` (
   `status` int(1) unsigned zerofill NOT NULL DEFAULT '0' COMMENT '是否已阅0未阅1已阅',
   `time` int(11) NOT NULL,
   PRIMARY KEY (`mid`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mf_message
@@ -244,7 +244,7 @@ CREATE TABLE `mf_topic` (
   PRIMARY KEY (`tid`),
   KEY `fid` (`fid`,`tid`),
   KEY `uid` (`uid`,`userip`)
-) ENGINE=InnoDB AUTO_INCREMENT=3973 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mf_topic
@@ -284,3 +284,5 @@ CREATE TABLE `mf_user` (
 -- ----------------------------
 -- Records of mf_user
 -- ----------------------------
+INSERT INTO `{database}`.`mf_user` VALUES ('1', '1', '{email}', '{username}', '{password}', '', NULL, '', '', '0', '0', '0', '0', '0', '0', '', '', '0', '0', NULL, NULL);
+SELECT * FROM mf_user WHERE uid = 1

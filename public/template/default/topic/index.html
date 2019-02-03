@@ -30,8 +30,9 @@
                                 分享</button>
                             <button class="mdui-btn mdui-ripple reply" data-subject="{$topicData.subject}"><i class="mdui-icon material-icons">comment</i>
                                 评论</button>
-
+                            {if fastAuth('admin',session('uid'))}
                             <button class="mdui-btn mdui-ripple mdui-color-theme-accent mdui-float-right" id="set">设置</button>
+                            {/if}
                         </div>
                     </div>
                 </div>

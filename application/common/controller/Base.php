@@ -7,6 +7,17 @@ use app\common\model\Option;
 class Base extends Controller
 {
     /**
+     * 初始化
+     */
+    protected function initialize()
+    {
+        //判断程序是否安装
+        if(!isInstall()){
+            return $this->redirect('install\index\index');
+        }
+    }
+
+    /**
      * 改装模板输出方式，使其适用于模板切换，以及一些模板的赋值
      * @param string $tpl 模板路径，从'template/'开始定位
      * @param string $plate 要输出的topbar标题

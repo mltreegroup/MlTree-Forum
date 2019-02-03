@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>安装 - MlTree Forum</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="MlTree Forum PHP 开源 轻论坛 轻社区 Material Design Thinkphp" />
+    <meta name="description" content="本站是 MlTree Forum 论坛社区产品的官方交流站点。MlTree Forum是一款由Thinkphp构建、Material Design风格的轻论坛。" />
+    <meta name="author" content="北林">
+
+    <link rel="stylesheet" href="__CSS__mdui.min.css">
+    <link rel="stylesheet" href="__CSS__common.mtf.css">
+    <link rel="shortcut icon" href="//at.alicdn.com/t/font_921451_z1ctc9bc3j.css" type="image/x-icon">
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/mdui.min.js"></script>
+</head>
+
+<body class="mdui-theme-primary-indigo mdui-theme-accent-pink">
+
+    <div class="mdui-typo mdui-container-fluid">
+        <form action="" method="POST">
+            <div class="mdui-card mdui-col-xs-12 mdui-col-sm-6 mdui-col-offset-sm-3">
+                <div class="mdui-card-header">
+                    <img class="mdui-card-header-avatar" src="__IMG__/LOGO.png" />
+                    <div class="mdui-card-header-title">安装MlTree Forum</div>
+                    <div class="mdui-card-header-subtitle">Install</div>
+                </div>
+                <div class="mdui-card-content">
+                    <span>请注意,数据库如果连接错误，则不会提示任何报错。</span>
+                    <h4>数据库配置</h4>
+                    <div class="mdui-textfield">
+                        <label class="mdui-textfield-label">数据库地址</label>
+                        <input class="mdui-textfield-input" value="localhost" required name="hostname" type="text" />
+                        <div class="mdui-textfield-helper">默认请填写localhost</div>
+                    </div>
+                    <div class="mdui-textfield">
+                        <label class="mdui-textfield-label">数据库端口</label>
+                        <input class="mdui-textfield-input" name="hostport" type="text" />
+                        <div class="mdui-textfield-helper">默认为3306可不填</div>
+                    </div>
+                    <div class="mdui-textfield">
+                        <label class="mdui-textfield-label">数据表前缀</label>
+                        <input class="mdui-textfield-input" name="prefix" type="text" value="mf_" />
+                        <div class="mdui-textfield-helper">默认为 mf_</div>
+                    </div>
+                    <div class="mdui-textfield">
+                        <label class="mdui-textfield-label">数据库名</label>
+                        <input class="mdui-textfield-input" name="database" type="text" required />
+                    </div>
+                    <div class="mdui-textfield">
+                        <label class="mdui-textfield-label">数据库用户名</label>
+                        <input class="mdui-textfield-input" name="datausername" type="text" required />
+                    </div>
+                    <div class="mdui-textfield">
+                        <label class="mdui-textfield-label">数据库密码</label>
+                        <input class="mdui-textfield-input" name="datapassword" type="text" required />
+                    </div>
+                    <h4>创始人信息</h4>
+                    <div class="mdui-textfield">
+                        <label class="mdui-textfield-label">用户名</label>
+                        <input class="mdui-textfield-input" name="username" type="text" required />
+                    </div>
+                    <div class="mdui-textfield">
+                        <label class="mdui-textfield-label">邮箱</label>
+                        <input class="mdui-textfield-input" name="email" type="email" required />
+                    </div>
+                    <div class="mdui-textfield">
+                        <label class="mdui-textfield-label">密码</label>
+                        <input class="mdui-textfield-input" name="password" type="text" required />
+                    </div>
+
+                </div>
+                <div class="mdui-card-actions">
+                    <button class="mdui-btn mdui-ripple mdui-text-color-red" type="reset">重新填写</button>
+                    <button class="mdui-btn mdui-ripple" type="submit">确定</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <footer class="mlt-footer">
+        <p>Powered by
+            <a href="https://forum.mltree.top" target="_blank"> MlTree Forum</a> | All Rights Reserved © MlTree Forum |
+            <script type="text/javascript" src="https://api.kingsr.cc/api/hitokoto/hitencode"></script>
+            <script>
+                hitokoto()
+            </script>
+        </p>
+        <!--安装界面写个卵备案号-->
+    </footer>
+    <script>
+        mdui.mutation();
+        var $$ = mdui.JQ;
+
+        mdui.dialog({
+            title: "安装须知", //注：原弹窗有错别字
+            content: "此程序的版权所有归MlTree团队。开源版本不涉及任何售后服务。<br>程序的最终解释权归MlTree团队所有。",
+            history: false,
+            buttons: [{
+                text: "了解",
+                close: true
+            }]
+        });
+    </script>
+</body>
+
+</html>

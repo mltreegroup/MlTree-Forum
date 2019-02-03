@@ -15,15 +15,14 @@ class Base extends BaseController
      */
     protected function initialize()
     {
-        // if (!isInstall()) {
-        //     return $this->redirect('install\index\index');
-        // }
+        if(!isInstall()){
+            return $this->redirect('install\index\index');
+        }
         $data = Db::name('links')->order('sold')->select();
         if (User::isLogin(cookie('userKey'))) {
             $user = new User;
             $this->assign('memberData', $user->getInfor(\session('uid')));
         }
-        //$this->error('aaa');
         $msgObj = new Message;
         $msg = $msgObj->getMessageList(session('uid'), 0);
         $this->assign('msg', ['unread' => count($msg['data'])]);

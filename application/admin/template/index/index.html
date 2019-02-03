@@ -49,7 +49,7 @@
 </div>
 <div class="mdui-row mdui-typo">
     <div class="mdui-col-xs-12">
-        <h3><i class="mdui-icon material-icons">fiber_new</i>订阅推送</h3>
+        <h3><i class="mdui-icon material-icons">fiber_new</i> 订阅推送</h3>
         <table class="mdui-table" style="max-height: 300px;">
             <thead>
                 <tr>
@@ -62,17 +62,10 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- <tr>
-                    <td>1</td>
-                    <td>【版本更新】推送MlTree Forumv1.0.1</td>
-                    
-                    <td>2018.06.23</td>
-                    <td><a href=""><i class="mdui-icon material-icons">link</i></a></td>
-                </tr> -->
                 {volist name="updateList" id="vo"}
                 <tr>
                     <td>{$i}</td>
-                    <td>【版本更新】推送MlTree Forum Ver{$vo->ver}</td>
+                    <td>{$vo->title}</td>
                     <td>{$vo->illustrate}</td>
                     <td>{$vo->assess}</td>
                     <td>{$vo->time}</td>

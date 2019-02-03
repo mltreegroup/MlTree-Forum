@@ -1,11 +1,11 @@
 <?php
 namespace app\forum\controller;
 
+use app\common\model\Mail;
 use app\common\model\Message;
 use app\common\model\User as userModel;
 use app\forum\controller\Base;
 use connect\qqconnect\QC;
-use app\common\model\Mail;
 
 class User extends Base
 {
@@ -156,10 +156,10 @@ class User extends Base
         $user->code = $code;
         $user->status = 0;
         $user->save();
-        session('ActiveTime',$time);
+        session('ActiveTime', $time);
 
         $mail = new Mail;
-        $mail->SendActiveLink($user,$code,$time);
+        $mail->SendActiveLink($user, $code, $time);
         return $this->success('激活邮件已经发送，请注意查看邮箱');
     }
 

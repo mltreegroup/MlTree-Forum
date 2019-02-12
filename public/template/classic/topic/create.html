@@ -1,0 +1,63 @@
+{extend name="default/public/main"}
+{block name="head"}
+<link rel="stylesheet" href="__MOD__editor/simplemde.min.css">
+<link rel="stylesheet" href="__MOD__OwO/OwO.min.css">
+{/block}
+{block name="muen"}
+{include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
+{/block}
+{block name="main"}
+<div class="mdui-row">
+    <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2">
+        <div class="mdui-card mdui-m-t-1 mdui-m-b-5">
+            <form>
+                <div class="mdui-m-y-1 mdui-m-l-1">
+                    <label class="mdui-textfield-label">所属板块</label>
+                    <select lay-ignore name="fid" class="mdui-select" mdui-select="{position: 'bottom'}" required>
+                        {volist name="forum" id="vo"}
+                        <option value="{$vo.fid}">{$vo.name}</option>
+                        {/volist}
+                    </select>
+                </div>
+
+
+                <div class="mdui-textfield mdui-m-b-1 mdui-m-l-1">
+                    <label class="mdui-textfield-label">标题</label>
+                    <input name="subject" class="mdui-textfield-input" type="text" placeholder="title" max="60"
+                        required />
+                </div>
+
+                <textarea class="OwO-text" id="editor" name="content" required></textarea> {:token()}
+                <div class="OwO mdui-m-l-1"></div>
+                <input type="hidden" name="sign" value="{$attaSign}">
+                <div class="mdui-m-a-1">
+                    <button id="post" type="submit" class="mdui-btn mdui-color-theme mdui-ripple"><i class="mdui-icon mdui-icon-left material-icons">send</i>
+                        创建</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script src="__MOD__editor/simplemde.min.js"></script>
+<script src="__MOD__OwO/OwO.js"></script>
+<script src="__JS__post.mtf.js"></script>
+<script>
+    var post = new mtfPost();
+    var editor = post.createTopic('Create');
+
+    var OwO = new OwO({
+        logo: 'OωO表情',
+        container: document.getElementsByClassName('OwO')[0],
+        target: document.getElementsByClassName('OwO-text')[0],
+        api: '__MOD__OwO/OwO.json',
+        position: 'up',
+        width: '100%',
+        maxHeight: '250px',
+        innId: editor,
+    });
+</script>
+{/block}

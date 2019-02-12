@@ -13,18 +13,96 @@
 
     <link rel="stylesheet" href="__CSS__mdui.min.css">
     <link rel="stylesheet" href="__CSS__common.mtf.css">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_921451_l2h0dxwfcti.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_921451_z1ctc9bc3j.css">
     <script src="__JS__vue.min.js"></script>
     <script src="__JS__mdui.min.js"></script>
     <script src="__JS__jquery.min.js"></script>
+    <script>
+        try{
+            ActiveXObject;
+            mdui.snackbar("您正在使用Internet Explorer，为了更好的浏览体验，请更换更现代化的浏览器");
+            console.warn("You're probably using Internet Explorer. To protect your life, please use a more modern browser.");
+        }catch(e){
+            console.info("Congratulations! You're probably not using Internet Explorer! That will incrase your browsing experience.");
+        }
+    </script>
     {block name="head"}{/block}
 </head>
 
-<body class="mdui-theme-primary-blue mdui-theme-accent-pink mdui-appbar-with-toolbar">
-    <header id="app-muen" class="mdui-appbar mdui-appbar-fixed mdui-appbar-scroll-hide" v-cloak>
-        {block name="muen"}{/block}
+<body class="mdui-theme-primary-green mdui-theme-accent-blue mdui-appbar-with-toolbar">
+    <header id="app-menu" class="mdui-appbar mdui-shadow-0 mdui-appbar-fixed" v-cloak>
+        {block name="menu"}{/block}
     </header>
-    <div id="app-content" class="mdui-container" v-cloak>
+    <div class="mdui-drawer mdui-drawer-close mdui-drawer-full-height mdui-color-white" id="d-drawer">
+            <!--背景在CSS里设置好了-->
+            <header class="drawer-user-info">
+                {if empty(session('uid'))}
+                <img class="drawer-user-info__avatar" src="__IMG__/tree_128x128.png" alt="未登录"/>
+                <nav class="drawer-user-info__subtitle">
+                    <span class="nickname">未登录</span>
+                    <span class="email">登录即可解锁更多姿势
+                        <button class="dropdown mdui-btn mdui-btn-icon mdui-ripple" mdui-menu="{target:'#user-operations',align:'right'}"><i class="mdui-icon material-icons">arrow_drop_down</i></button>
+                        <ul class="mdui-menu" id="user-operations">
+                            <li class="mdui-menu-item">
+                                <a href="{:url('forum/User/Login')}" class="mdui-ripple">
+                                    <i class="mdui-menu-icon mdui-icon material-icons">input</i>登录
+                                </a>
+                            </li>
+                            <li class="mdui-menu-item">
+                                <a href="{:url('forum/User/Reg')}" class="mdui-ripple">
+                                    <i class="mdui-menu-icon mdui-icon material-icons">create</i>注册
+                                </a>
+                            </li>
+                        </ul>
+                    </span>
+                </nav>
+                {else}
+                <img class="drawer-user-info__avatar" src="{$memberData.avatar}" alt="{$memberData.username}" />
+                <nav class="drawer-user-info__subtitle">
+                    <span class="nickname">{$memberData.username}</span>
+                    <span class="email">
+                        {$memberData.email}
+                        <button class="dropdown mdui-btn mdui-btn-icon mdui-ripple" mdui-menu="{target:'#user-operations',align:'right'}"><i class="mdui-icon material-icons">arrow_drop_down</i></button>
+                        <ul class="mdui-menu" id="user-operations">
+                            <li class="mdui-menu-item">
+                                <a href="{:url('forum/user/index')}" class="mdui-ripple">
+                                    <i class="mdui-menu-icon mdui-icon material-icons">account_box</i>用户主页
+                                </a>
+                            </li>
+                            <li class="mdui-menu-item">
+                                <a href="{:url('forum/user/logout')}" class="mdui-ripple">
+                                    <i class="mdui-menu-icon mdui-icon material-icons">close</i>退出登录
+                                </a>
+                            </li>
+                        </ul>
+                    </span>
+                </nav>
+                {/if}
+                <div class="mdui-divider"></div>
+            </header>
+            <ul class="mdui-list">
+                <li class="mdui-subheader">友情链接</li>
+                {volist name="links" id="link"}
+                <li class="mdui-list-item mdui-ripple">
+                    <i class="mdui-list-item-avatar mdui-icon material-icons">
+                        {if $link.picurl}
+                        <img src="{$link.picurl}" alt="友情链接"/>
+                        {else}
+                        open_in_new
+                        {/if}
+                    </i>
+                    <a href="{$link.url}" target="_blank" class="mdui-list-item-content">{$link.title}</a>
+                </li>
+                {/volist}
+                <li class="mdui-subheader">支持</li>
+                <li class="mdui-list-item mdui-ripple">
+                    <i class="mdui-list-item-icon mdui-icon material-icons">open_in_new</i>
+                    <a href="https://github.com/mltreegroup/mltree-forum" target="_blank" class="mdui-list-item-content">MlTree Forum</a>
+                </li>
+            </ul>
+        </div>
+    <div class="appbar-expanded-background mdui-color-theme"></div>
+    <div id="app-content" class="main-content-stream" v-cloak>
         {block name="main"}{/block}
     </div>
     {include file='default/public/footer' /}

@@ -1,63 +1,47 @@
 {extend name="default/public/main"}
 {block name="head"}
-<link rel="stylesheet" href="__MOD__editor/simplemde.min.css">
-<link rel="stylesheet" href="__MOD__OwO/OwO.min.css">
 {/block}
-{block name="muen"}
+{block name="menu"}
 {include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
 {/block}
 {block name="main"}
-<div class="mdui-row">
-    <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2">
-        <div class="mdui-card mdui-m-t-1 mdui-m-b-5">
-            <form>
-                <div class="mdui-m-y-1 mdui-m-l-1">
-                    <label class="mdui-textfield-label">所属板块</label>
-                    <select lay-ignore name="fid" class="mdui-select" mdui-select="{position: 'bottom'}" required>
-                        {volist name="forum" id="vo"}
-                        <option value="{$vo.fid}">{$vo.name}</option>
-                        {/volist}
-                    </select>
-                </div>
 
-
-                <div class="mdui-textfield mdui-m-b-1 mdui-m-l-1">
-                    <label class="mdui-textfield-label">标题</label>
-                    <input name="subject" class="mdui-textfield-input" type="text" placeholder="title" max="60"
-                        required />
-                </div>
-
-                <textarea class="OwO-text" id="editor" name="content" required></textarea> {:token()}
-                <div class="OwO mdui-m-l-1"></div>
-                <input type="hidden" name="sign" value="{$attaSign}">
-                <div class="mdui-m-a-1">
-                    <button id="post" type="submit" class="mdui-btn mdui-color-theme mdui-ripple"><i class="mdui-icon mdui-icon-left material-icons">send</i>
-                        创建</button>
-                </div>
-            </form>
-
+<!--发帖页面不好写，真的不好写！！！-->
+<!--改改原来的吧-->
+<!--还是再写一个吧，耦合当前的UI风格-->
+<form>
+    {:token()}
+    <input type="hidden" name="sign" value="{$attaSign}">
+    <header class="mdui-card">
+        <div class="mdui-col-sm-2 mdui-col-xs-12">
+            <select lay-ignore class="mdui-select" mdui-select name="fid" required>
+                <option selected disabled>板块</option>
+                {volist name="forum" id="vo"}
+                <option value="{$vo.fid}">{$vo.name}</option>
+                {/volist}
+            </select>
         </div>
-    </div>
-</div>
+        <div class="mdui-col-sm-10 mdui-col-xs-12 mdui-textfield mdui-textfield-floating-label">
+            <label class="mdui-textfield-label">标题</label>
+            <input name="subject" class="mdui-textfield-input" type="text" max="60" required />
+        </div>
+    </header>
+    <div class="mainstream-division"></div>
+    <main class="mdui-card">
+        <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-12">
+            <label class="mdui-textfield-label">内容</label>
+            <textarea class="mdui-textfield-input" name="content" required></textarea>
+        </div>
+    </main>
+    <div class="mainstream-division"></div>
+    <button class="mdui-fab mdui-fab-fixed mdui-color-theme-accent mdui-ripple" type="submit"><i class="mdui-icon material-icons">done</i></button>
+</form>
 {/block}
 
 {block name="js"}
-<script src="__MOD__editor/simplemde.min.js"></script>
-<script src="__MOD__OwO/OwO.js"></script>
 <script src="__JS__post.mtf.js"></script>
 <script>
     var post = new mtfPost();
-    var editor = post.createTopic('Create');
-
-    var OwO = new OwO({
-        logo: 'OωO表情',
-        container: document.getElementsByClassName('OwO')[0],
-        target: document.getElementsByClassName('OwO-text')[0],
-        api: '__MOD__OwO/OwO.json',
-        position: 'up',
-        width: '100%',
-        maxHeight: '250px',
-        innId: editor,
-    });
+    var editor = post.createTopic();
 </script>
 {/block}

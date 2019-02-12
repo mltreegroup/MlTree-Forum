@@ -11,55 +11,50 @@
 
 // 应用公共文件
 require __DIR__ . '/../vendor/autoload.php';
-use Auth\Auth;
-use think\facade\Env;
 
-function createStr($length)
+function createStr($length=64)
 {
-    $str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; //62个字符
-    $strlen = 62;
-    while ($length > $strlen) {
-        $str .= $str;
-        $strlen += 62;
+    $string = '';
+    while (($len = strlen($string)) < $length) {
+        $size = $length - $len;
+        $bytes = random_bytes($size);
+        $string .= substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $size);
     }
-    $str = str_shuffle($str);
-    return substr($str, 0, $length);
+    return $string;
 }
-
-//输出人性化时间
-function time_format($time)
-{
-    if (gettype($time) === 'integer') {
-        $time = date("Y-m-d H:i:s", $time);
-    }
-    $publish_timestamp = strtotime($time);
-    $now = date("Y-m-d H:i:s");
-    $now_timestamp = strtotime($now);
-    $lag = ceil(($now_timestamp - $publish_timestamp) / 60);
-    $format_time = $lag . "分钟前";
-    if ($lag >= 30) {
-        switch ($lag) {
-            case 30:
-                $format_time = "半小时前";
-                break;
-            case $lag > 30 && $lag < 60:
-                $format_time = $lag . "分钟前";
-                break;
-            case $lag >= 60 && $lag < 120:
-                $format_time = "一小时前";
-                break;
-            case ceil($lag / 60) < 24:
-                $format_time = (ceil($lag / 60) - 1) . "小时前";
-                break;
-            case ceil($lag / 60) > 24 && ceil($lag / 60) < 48:
-                $format_time = "昨天" . date("H:i", $publish_timestamp);
-                break;
-            case ceil($lag / 60) > 48:
-                $format_time = date("Y-m-d H:i", $publish_timestamp);
-                break;
-        }
-    }
-    return $format_time;
+/**
+ * 输出相对时间函数的改进版本。
+ * @param $time 被转换的时间戳
+ * @param $disable_relative_time 禁用相对时间
+ */
+function time_format($time,$disable_relative_time=false){
+    if(gettype($time)!=='number') $time = strtotime($time);//输入的时间竟然不一定是数字
+    $now = time();
+    $result = "";
+    $units = [
+        //时间单位
+        'now'=>'刚刚',
+        'sec'=>'秒',//因为是中文所以不用区分单复数
+        'min'=>'分',
+        'hrs'=>'时',
+        'day'=>'天',
+        'mon'=>'月',
+        'ago_later'=>['前','后']
+    ];
+    $difference = abs($now-$time);
+    //太久远或者强制禁用则返回绝对日期
+    if($disable_relative_time||$difference>2678400) return date('Y/m/d H:i',$time);
+    if($difference<=10) 
+        return $units['now'];//误差不可避免
+    else if($difference<60)
+        $result .= $difference.$units['sec'];
+    else if($difference<3600)
+        $result .= (int)($difference/60).$units['min'];
+    else if($difference<86400)
+        $result .= (int)($difference/3600).$units['hrs'];
+    else
+        $result .= (int)($difference/86400).$units['day'];
+    return $result.$units['ago_later'][(bool)($now<$time)];
 }
 
 /**
@@ -151,113 +146,4 @@ function replyRegular($str)
         return [$arr[0], $arr[1], $arr[2], $html];
     }
     return 'error';
-}
-
-/**
- * 快速检查权限，无需实例化
- * @param  string|array  $name     需要验证的规则列表，支持逗号分隔的权限规则或索引数组
- * @param  integer  $uid      认证用户ID
- * @param  string   $relation 如果为 'or' 表示满足任一条规则即通过验证;如果为 'and' 则表示需满足所有规则才能通过验证
- * @param  string   $mode     执行check的模式
- * @param  integer  $type     规则类型
- * @return boolean           通过验证返回true;失败返回false
- */
-function fastAuth($name, $uid, $relation = 'or', $mode = 'url', $type = 1)
-{
-    $auth = new Auth;
-    return $auth->check($name, $uid, $relation, $mode, $type);
-}
-
-/**
- * 输出帖子的徽章标识
- * @param array $data 帖子查询出的结果，包含top,essence,closed等信息
- * @return string $value 徽章字符串
- */
-function outBadge($data)
-{
-    $value = '';
-    if ($data['tops'] == 1) {
-        $value = '<i class="mdui-icon iconfont icon-zhiding mdui-color-indigo-accent mtf-icon-size" title="置顶"></i> ';
-    }
-    if ($data['essence'] == 1) {
-        $value = $value . '<i class="mdui-icon iconfont icon-jinghua1 mdui-color-orange-accent mtf-icon-size" title="精华"></i> ';
-    }
-    if ($data['closed'] == 1) {
-        $value = $value . '<i class="mdui-icon iconfont icon-hebingxingzhuang mdui-color-red-a700 mtf-icon-size" title="关闭"></i> ';
-    }
-
-    return $value;
-}
-
-/**
- * 取运行根目录
- */
-function getRootPath()
-{
-    return Env::get('root_path');
-}
-
-/**
- * CURL_GET
- * @param $url
- * @return mixed
- */
-
-function curlGet($url, $ssl = true)
-{
-    // 1. 初始化
-    $ch = curl_init();
-    // 2. 设置选项，包括URL
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    if (!$ssl) {
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    }
-    // 3. 执行并获取HTML文档内容
-    $output = curl_exec($ch);
-    if ($output === false) {
-        echo "CURL Error:" . curl_error($ch);
-    }
-    // 4. 释放curl句柄
-    curl_close($ch);
-    return $output;
-}
-
-/**
- * CURL_POST
- * @param $url
- * @param $postData
- * @return mixed
- */
-function curlPost($url, $postData = null, $ssl = true)
-{
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-    if (!$ssl) {
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    }
-    $ch_arr = array(CURLOPT_TIMEOUT => 3, CURLOPT_RETURNTRANSFER => 1);
-    curl_setopt_array($ch, $ch_arr);
-    $output = curl_exec($ch);
-    curl_close($ch);
-    return $output;
-}
-
-/**
- * 用于检测是否已安装 由pulic/install/install.lock决定
- * @return bool
- */
-function isInstall()
-{
-    if (file_exists(getRootPath() . 'public/install/install.lock')) {
-        return true;
-    } else {
-        return false;
-    }
 }

@@ -2,10 +2,10 @@ class mtfPost {
     constructor(option = {}) {
         this.topicListUrl = option.topicListUrl;
         this.commentUrl = option.commentUrl;
-        this.topicPage = 0;
-        this.topicPages = 0;
-        this.commentPage = 0;
-        this.commentPages = 0;
+        this.topicPage = 1;
+        this.topicPages = 1;
+        this.commentPage = 1;
+        this.commentPages = 1;
     }
 
     getTopicList(dom, fid, type = "common") {
@@ -34,45 +34,40 @@ class mtfPost {
 
         function insertList(list, type) {
             var html = '';
-            if (topicPage == topicPages) {
-                if ($$('#tops').find('.end').length == 0 && type == 'tops') {
-                    $('#tops').append('<div class="end">没有更多了</div>');
-                }
-                if ($$('#topicList').find('.end').length == 0 && type == 'common') {
-                    $('#topicList').append('<div class="end">没有更多了</div>');
-                }
-
+            $(dom).find('div.mdui-progress').remove();
+            if (topicPage > topicPages) {
                 return;
             } else {
                 mdui.JQ.each(list.data.data, (i, val) => {
-                    html = `<div class="mtf-topic mdui-ripple mtf-Jump" data-tid="${val.tid}">
-                                <div class="mtf-topic-avatar">
-                                    <img src="${val.userData.avatar}"
-                                        alt="${val.userData.username}">
-                                </div>
-                                <div class="mtf-topic-info">
-                                    <div class="title">
-                                    ${val.Badge} <a href="/Topic/${val.tid}.html">${val.subject.substr(0, 50)}</a>
-                                    </div>
-                                    <div class="connent mdui-list-item-one-line">${val.content}</div>
-                                    <div class="info"><a href="/Member/${val.uid}.html" class="user">${val.userData.username}</a> 发表于 <a class="time">${val.create_time}</a>
-                                        <span>${val.comment}个回复</span>
-                                        <span>${val.views}次查看</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mdui-divider"></div>`;
-                    $(dom).append(html);
-                    console.log(val.Badge);
+                    html = $('<li class="mdui-list-item mdui-ripple"></li>')
+                    .attr('data-tid',val.tid)
+                    .on('click',function(){
+                        window.location.href = `/Topic/${$$.data(this).tid}.html`;
+                    })
+                    .append(
+                        $('<div class="mdui-list-item-avatar"></div>')
+                        .append(
+                            $('<img />')
+                            .attr('src',val.userData.avatar)
+                            .attr('alt',val.userData.username)
+                        )
+                    )
+                    .append(
+                        $('<div class="mdui-list-item-content"></div>')
+                        .append(
+                            $('<a class="mdui-list-item-title"></a>').attr('href',`/Topic/${val.tid}.html`).text(val.subject)
+                        )
+                        .append(
+                            $('<div class="mdui-list-item-text mdui-list-item-one-line"></div>')
+                            .append(
+                                $('<span class="mdui-text-color-theme-text"></span>').text(val.userData.username)
+                            )
+                            .append(` · ${val.create_time} · ${val.comment}回复 · ${val.views}阅读`)
+                        )
+                    );
+                    $(dom).append(html).append('<li class="mdui-divider-inset mdui-m-y-0"></li>');
                 });
                 topicPage += 1;
-                /**
-                 * 添加一个跳转方法用于定义跳转
-                 */
-                $('.mtf-Jump').on('click', function () {
-                    let data = $$.data(this);
-                    location.href = `/Topic/${data.tid}.html`;
-                })
             }
             status = true;
             return;
@@ -139,46 +134,40 @@ class mtfPost {
 
         function insertList(data) {
             var html = '';
-            if (commentPage == commentPages && $$('#commentList').find('.end').length == 0) {
-                $('#commentList').append('<div class="end">没有更多了</div>');
+            $('.replies').find('div.mdui-progress').remove();
+            if (commentPage > commentPages && $$('#replies').find('.end').length == 0) {
+                //$('#commentList').append('<div class="end">没有更多了</div>');
                 return;
             } else {
                 mdui.JQ.each(data.data.data, (i, val) => {
-                    html = `<div class="mdui-card mtf-comment mdui-ripple" id="mtf-commentid-${val.cid}">
-                    <div class="mtf-comment-info">
-                        <div class="mtf-userinfo">
-                            <div class="mtf-userinfo-avatar">
-                                <img src="${val.avatar}" alt="${val.username}"
-                                    class="avatar mdui-img-rounded">
-                            </div>
-                            <div class="mtf-userinfo-line">
-                                <div class="mtf-comment-name">${val.username}</div>
-                                <div class="mtf-comment-motto">${val.motto}</div>
-                            </div>
-                            <div style="float:right;font-size: 12px;color:#646464">${val.create_time}</div>
-                        </div>
-    
-                        <div class="mtf-comment-content mdui-typo">
-                            ${val.content}
-                        </div>
-                        <div class="mtf-comment-footer">
-                            <div class="mtf-comment-muen">
-                                <button title="Reply" data-cid="18" data-username="${val.username}" data-uid="8" class="mdui-btn mdui-btn-dense mdui-color-theme mdui-ripple Reply-comment"><i
-                                        class="mdui-icon material-icons">reply</i> 回复</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-                    $('#commentList').append(html);
+                html = $('<div class="mdui-card"></div>')
+                .append(
+                    $('<div class="mdui-card-primary"></div>').append($('<date class="mdui-primary-subtitle mdui-float-right"></date>').text(val.create_time))
+                )
+                .append(
+                    $('<header class="mdui-card-header"></header>')
+                    .append('<img class="mdui-card-header-avatar" />').attr('src',val.avatar).attr('src',val.username)
+                    .append($('<div class="mdui-card-header-title"></div>').text(val.username))
+                    .append($('<div class="mdui-card-header-subtitle"></div>').text(val.motto))
+                )
+                .append(
+                    $('<main class="mdui-card-content mdui-typo"></main>').html(val.content)
+                )
+                .append(
+                    $('<footer class="mdui-card-actions"></footer>')
+                    .append(
+                        $('<button class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">reply</i></button>')
+                        .attr('data-cid','18')//这里原来就是写死的，不过想想还是留条活路吧
+                        .attr('data-uid','8')
+                        .attr('data-username',val.username)
+                    )
+                );
+                $('#replies').append(html).append('<div class="mainstream-division"></div>');
 
                 });
                 commentPage += 1;
             }
             status = true;
-
-            $$('.Reply-comment').on('click', function () {
-                
-            });
         };
 
         getData();
@@ -211,11 +200,12 @@ class mtfPost {
         }
 
         $(window).scroll(() => {
+            console.log('OK,onScroll');
+            console.log(status);
             if (getScrollTop() + getClientHeight() + 50 > getScrollHeight() && status) {
                 getData();
             }
-        });
-
+        })
     }
 
     Register(url = null) {
@@ -315,7 +305,6 @@ class mtfPost {
     getForgetCode(dom) {
         let time = 60;
         $$(dom).on('click', function () {
-            let sign;
             $$.ajax({
                 method: 'GET',
                 url: '/forum/expand/getFotgetMailCode.html',
@@ -356,27 +345,26 @@ class mtfPost {
             }, 1000);
         }
     }
-
-    createTopic(type) {
-        var simplemde = new SimpleMDE({
-            autosave: {
-                enabled: true,
-                uniqueId: "MlTreeForum" + type,
-                delay: 1000,
+    /**
+     * Rewrited function to request email verification code to recover password.
+     */
+    sendPasswordRecoveryCode(email,onSent){
+        $$.ajax({
+            method:'GET',
+            url:'/forum/expand/getFotgetMailCode.html', //Declaration: This incorrect spell isn't made by me.
+            data:{
+                mail: email//Mail===the real mail.
             },
-            spellChecker: false,
-            forceSync: true,
-            placeholder: '开始你的创作吧',
+            dataType:'json',
+            complete:onSent//Whatever succeed or fail, just call the function.
         });
+    }
 
-        if ($$('#editor').val() !== null && type == 'Editor') {
-            let data = $$('#editor').val();
-            simplemde.value('');
-            simplemde.value(data);
-        }
+    createTopic() {
         /*上传方法*/
-        $$("#post").on('click', () => {
+        $$("form").on('submit', () => {
             var data = $$('form').serialize();
+            //console.debug(data);//Not applicable to Chrome.
             $$.ajax({
                 method: 'POST',
                 url: '',
@@ -387,11 +375,7 @@ class mtfPost {
                     if (res.code == 0) {
                         mdui.snackbar({
                             message: res.msg,
-                            position: 'top',
-                            onClosed: function () {
-                                simplemde.value('');
-                                location.href = res.url;
-                            }
+                            position: 'top'
                         });
                     } else {
                         mdui.snackbar({
@@ -408,7 +392,7 @@ class mtfPost {
         })
 
 
-        return simplemde;
+        //return simplemde;
     }
 
     postComment(tid) {
@@ -416,26 +400,40 @@ class mtfPost {
          * 回复框载入
          */
         $$('.reply').on('click', function () {
+            if(document.querySelector('.bottom-dialog')) return $$('.bottom-dialog').addClass('expand');//Prevent duplicated dialog.
             let data = $$(this).data();
-            let html = `
-    <div class="mdui-dialog" id="replypanel">
-    <div class="mdui-dialog-title">回复【${data.subject}】</div>
-    <div class="mdui-dialog-content">
-    <textarea name="content" id="mtf-comment-content" class="textarea-fixed" rows="10" cols="50"></textarea>
-    </div>
-    <div class="mdui-dialog-actions">
-    <button class="mdui-btn mdui-ripple mtf-post-comment">评论</button>
-    </div>
-    </div>
-    `
-            $$(this).after(html);
-            var inst = new mdui.Dialog('#replypanel', {
-                history: false,
-            });
-            inst.toggle();
-
+            let replyBox = $$('<div class="bottom-dialog mdui-shadow-2"></div>')
+            .append(
+                $$('<header></header>')
+                .append(
+                    $$('<div class="mdui-textfield mdui-col-xs-10"></div>')
+                    .append($$('<input class="mdui-textfield-input" disabled />').val(`回复帖子 ${data.subject}`))
+                )
+                .append(
+                    $$('<button class="mdui-btn mdui-btn-icon mdui-ripple mdui-float-right" id="dialog-close"></button>')
+                    .on('click',function(){
+                        $$('.bottom-dialog').toggleClass('expand')
+                    })
+                    .append($$('<i class="mdui-icon material-icons">add</i>'))
+                )
+            )
+            .append(
+                $$('<main></main>')
+                .append(
+                    $$('<div class="mdui-textfield mdui-textfield-floating-label"></div>')
+                    .append($$('<label class="mdui-textfield-label">内容</label>'))
+                    .append($$('<textarea class="mdui-textfield-input" id="mtf-reply-content"></textarea>'))
+                )
+            )
+            .append(
+                $$('<footer></footer>')
+                .append($$('<button class="mdui-btn mdui-text-color-theme-accent mdui-float-right mdui-ripple mtf-post-comment">回复</button>'))
+            )
+            $$('body').append(replyBox);
+            setTimeout(function(){replyBox.addClass('expand-half expand')},10);
             $$('.mtf-post-comment').on('click', function () {
-                var content = $$('#mtf-comment-content').val();
+                console.log('OK');
+                var content = $$('#mtf-reply-content').val();
                 post(content);
             })
         });
@@ -450,14 +448,14 @@ class mtfPost {
                     time: time(),
                 },
                 dataType: 'json',
-                success: function (res) {
+                complete: xhr =>{
+                    if(xhr.status!==200) return mdui.snackbar('Unknown error has occurred. Check your internet connection or contact the developer to solve.');
+                    let res = JSON.parse(xhr.responseText);
                     if (res.code == 0) {
+                        $$('.bottom-dialog').remove();//Destruct dialog.
                         mdui.snackbar({
                             message: res.msg,
-                            position: 'top',
-                            onClosed: function () {
-                                location.href = res.url;
-                            }
+                            position: 'top'
                         });
                     } else {
                         mdui.snackbar({
@@ -470,100 +468,5 @@ class mtfPost {
         }
 
 
-    }
-
-    setTopic(tid, subject) {
-        var html = `<form id="setForm">
-        <div class="mtf-block">
-            <label class="mdui-textfield-label">欲操作项目(二次操作为取消)</label>
-            <select name="type" class="mdui-select" mdui-select>
-                <option value="top">置顶</option>
-                <option value="essence">精华</option>
-                <option value="closed">关闭</option>
-            </select>
-        </div>
-        <div class="mtf-block">
-            <label class="mdui-checkbox">
-                <input name="msg" type="checkbox" />
-                <i class="mdui-checkbox-icon"></i>
-                是否通知作者
-            </label>
-        </div>
-        <input type="hidden" name="tid" value="${tid}">
-    </form>`;
-
-        mdui.dialog({
-            title: `设置帖子【${subject}】`,
-            content: html,
-            buttons: [{
-                    text: '取消'
-                },
-                {
-                    text: '确认',
-                    onClick: function (inst) {
-                        let data = $$('#setForm').serialize();
-                        $$.ajax({
-                            method: 'POST',
-                            data: data,
-                            url: '/forum/topic/set.html',
-                            dataType: 'json',
-                            success: function (res) {
-                                mdui.snackbar({
-                                    message: res.msg,
-                                    position: 'right-top',
-                                });
-                            }
-                        });
-                    }
-                }
-            ],
-            onOpen: function () {
-                //开始时执行一次初始化
-                mdui.mutation();
-            }
-        });
-
-    }
-
-    postAvatar(uid) {
-        if ($$('body').find('#mtf-avatar-upload').length == 0) {
-            $$('body').after('<input class="mdui-hidden" type="file" name="avatar" id="mtf-avatar-upload">');
-            $$('#mtf-avatar-upload').on('change', function () {
-                uploadFile();
-            })
-        };
-        $$('#mtf-avatar-upload').trigger('click');
-
-        function uploadFile() {
-            var myform = new FormData();
-            let files = document.querySelector("#mtf-avatar-upload").files[0];
-            console.log();
-
-            myform.append('avatar', files);
-            myform.append('uid', uid);
-            $$.ajax({
-                method: 'POST',
-                url: '/forum/expand/uploadAvatar.html',
-                data: myform,
-                dataType: 'json',
-                contentType: false,
-                success: function (res) {
-                    if (res.code == 0) {
-                        mdui.snackbar({
-                            message: res.msg,
-                            position: 'right-top',
-                            onClosed: () => {
-                                location.reload();
-                            }
-                        });
-                    } else {
-                        mdui.snackbar({
-                            message: res.msg,
-                            position: 'right-top',
-                        });
-                    }
-                }
-            })
-        }
     }
 }

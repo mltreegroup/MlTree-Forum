@@ -3,63 +3,40 @@
 <link rel="stylesheet" href="__MOD__prism/prism.css">
 <script src="__JS__qrcode.min.js"></script>
 {/block}
-{block name="muen"}
+{block name="menu"}
 {include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
 {/block}
 {block name="main"}
-<div class="mdui-row">
-    <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2">
-        <div class="mdui-card mdui-m-t-1">
-            <div id="reply-content-18" style="margin-bottom:0px;" class="mdui-card mtf-comment">
-                <div class="mtf-comment-info">
-                    <div class="mtf-userinfo">
-                        <div class="mtf-userinfo-avatar">
-                            <img src="{$topicData.userData.avatar}" alt="{$topicData.userData.username}" class="avatar mdui-img-rounded">
-                        </div>
-                        <div class="mtf-userinfo-line">
-                            <div class="mtf-comment-name">{$topicData.Badge|raw}{$topicData.subject}</div>
-                            <div class="mtf-comment-motto">{$topicData.userData.username}</div>
-                        </div>
-                        <div style="float:right;font-size: 12px;color:#646464">{$topicData.time_format}</div>
-                    </div>
-
-                    <div id="topicContent" class="mtf-comment-content mdui-typo">{$topicData.content|raw}</div>
-                    <div class="mtf-comment-footer">
-                        <div class="mtf-btn-group">
-                            <button class="mdui-btn mdui-ripple" id="share"><i class="mdui-icon material-icons">share</i>
-                                分享</button>
-                            <button class="mdui-btn mdui-ripple reply" data-subject="{$topicData.subject}"><i class="mdui-icon material-icons">comment</i>
-                                评论</button>
-                            {if fastAuth('admin',session('uid'))}
-                            <button class="mdui-btn mdui-ripple mdui-color-theme-accent mdui-float-right" id="set">设置</button>
-                            {/if}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<article class="mdui-card">
+    <div class="mdui-card-primary">
+        <div class="mdui-card-primary-title">{$topicData.subject}</div>
+        <div class="mdui-card-primary-subtitle">{$topicData.time_format} · {$topicData.views}阅读</div>
     </div>
-</div>
-
-<div class="mdui-row mdui-m-y-1">
-    <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2">
-        <h2 class="mdui-m-l-5">共{$topicData.comment}个回复</h2>
-        <div class="mdui-shadow-1 mtf-comments" id="commentList">
-        </div>
-    </div>
-</div>
-
-
-
+    <div class="mdui-divider"></div>
+    <header class="mdui-card-header">
+        <img class="mdui-card-header-avatar" alt="{$topicData.usertopic.username}" src="{$topicData.usertopic.avatar}" />
+        <div class="mdui-card-header-title">{$topicData.usertopic.username}</div>
+        <div class="mdui-card-header-subtitle">{$topicData.usertopic.motto}</div>
+    </header>
+    <main class="mdui-card-content mdui-typo" id="discussion-content">
+        {$topicData.content|raw}
+    </main>
+    <footer class="mdui-card-actions">
+        <button class="mdui-btn mdui-btn-icon mdui-ripple" id="share"><i class="mdui-icon material-icons">share</i></button>
+    </footer>
+</article>
+<div class="mainstream-division"></div>
+<div id="replies"></div>
 {/block}
 
 {block name="js"}
+<button class="mdui-fab mdui-fab-fixed reply mdui-ripple mdui-color-theme" data-subject="{$topicData.subject}"><i class="mdui-icon material-icons">reply</i></button>
 <script src="__JS__marked.min.js"></script>
 <script src="__JS__post.mtf.js"></script>
 <script src="__MOD__prism/prism.js"></script>
 <script>
     //解析Markdown
-    $$('#topicContent').html(marked($$('#topicContent').html()));
+    $$('#discussion-content').html(marked($$('#discussion-content').html()));
 
     var Main = new mtfMain();
     var post = new mtfPost({
@@ -69,12 +46,9 @@
     post.postComment('{$topicData.tid}');
     $$('#share').on('click', () => {
         Main.shareTopic('#share', {
-            url: '{:url("forum/topic/index",["tid"=>$topicData.tid])}',
+            url:'{:url("forum/topic/index",["tid"=>$topicData.tid])}',
             subject: '{$topicData.subject}',
         })
-    })
-    $$('#set').on('click', () => {
-        post.setTopic('{$topicData.tid}', '{$topicData.subject}');
     })
 </script>
 {/block}

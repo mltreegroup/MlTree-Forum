@@ -1,48 +1,43 @@
 {extend name="default/public/main"}
-{block name="muen"}
+{block name="menu"}
 {include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
 {/block}
 {block name="main"}
-<div class="mdui-row">
-    <div class="mdui-col-xs-12 mdui-col-sm-8">
-        <div class="mtf-panel mdui-shadow-1 mdui-card mdui-m-b-5">
-            <div class="mtf-panel-content">
-                <div id="app-listTop">
-                    <header class="mdui-subheader">
-                        置顶
-                    </header>
-                    <div class="mdui-divider"></div>
-                    <div class="mtf-topics" id="tops">
-
-                    </div>
-                </div>
-                <div class="mdui-divider"></div>
-                <div id="app-listCommon">
-                    <header class="mdui-subheader">
-                        所有帖子
-                    </header>
-                    <div class="mdui-divider"></div>
-                    <div class="mtf-topics" id="topicList">
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
+<aside class="mdui-card">
+    <div class="mdui-card-primary">
+        <div class="mdui-card-primary-title">公告</div>
+        <div class="mdui-card-primary-subtitle">Announcement</div>
     </div>
-    {include file='default/public/tool-right' /}
+    <div class="mdui-card-content">因为开发者未找到接口显示公告，所以不予显示。</div>
+</aside>
+<div class="mainstream-division"></div>
+<div class="mdui-card">
+    <ul class="mdui-list" id="stickied-posts">
+        <div class="mdui-progress">
+            <div class="mdui-progress-indeterminate"></div>
+        </div>
+    </ul>
 </div>
-
+<div class="mainstream-division"></div>
+<div class="mdui-card">
+    <ul class="mdui-list" id="all-posts">
+        <div class="mdui-progress">
+            <div class="mdui-progress-indeterminate"></div>
+        </div>
+    </ul>
+</div>
 {/block}
 
 {block name="js"}
+<button class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme" id="post-creator"><i class="mdui-icon material-icons">create</i></button>
 <script src="__JS__post.mtf.js"></script>
 <script>
     var post = new mtfPost({
         topicListUrl: '{:url("api/getTopicList")}',
     })
 
-    post.getTopicList('#topicList', 0);
-    post.getTopicList('#tops', 0, 'tops')
+    post.getTopicList('#all-posts', 0);
+    post.getTopicList('#stickied-posts', 0, 'tops');
+    $('#post-creator').click(()=>window.location.href='{:url("forum/topic/create")}');
 </script>
 {/block}

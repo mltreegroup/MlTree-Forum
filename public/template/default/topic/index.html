@@ -33,6 +33,13 @@
                             {if fastAuth('admin',session('uid'))}
                             <button class="mdui-btn mdui-ripple mdui-color-theme-accent mdui-float-right" id="set">设置</button>
                             {/if}
+                            <div class="mdui-btn-group mdui-float-tight">
+                                {if fastAuth('update',session('uid'))}
+                                <a href="{:url('forum/topic/editor',['tid'=>$topicData.tid])}" class="mdui-btn">编辑</a>{/if}
+                                {if fastAuth('delete',session('uid'))}
+                                <a class="mdui-btn">删除</a>
+                                {/if}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -71,10 +78,10 @@
         Main.shareTopic('#share', {
             url: '{:url("forum/topic/index",["tid"=>$topicData.tid])}',
             subject: '{$topicData.subject}',
-        })
-    })
+        });
+    });
     $$('#set').on('click', () => {
         post.setTopic('{$topicData.tid}', '{$topicData.subject}');
-    })
+    });
 </script>
 {/block}

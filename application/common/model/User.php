@@ -242,6 +242,8 @@ class User extends Model
             'comments' => $this->userObj->comments,
             'create_date' => $this->userObj->create_date,
             'login_date' => $this->userObj->login_date,
+            'status' => $this->userObj->status,
+            'statusText' => $this->userObj->statusText,
         ];
     }
 

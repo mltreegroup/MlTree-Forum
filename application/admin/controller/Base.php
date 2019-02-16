@@ -24,6 +24,6 @@ class Base extends Controller
     public function adminView($url = '', $data = [])
     {
         $this->assign($data);
-        return view(config('template.view_path') . $url . '.html');
+        return view($url);
     }
 }

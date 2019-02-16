@@ -162,11 +162,8 @@ class mtfPost {
                                 .attr('data-uid', val.uid)
                                 .attr('data-username', val.username)
                                 .on('click', function () {
-                                    $$('.reply').trigger('click', {
-                                        cid: val.cid,
-                                        uid: val.uid,
-                                        username: val.username
-                                    });
+                                    $$('.reply').trigger('click');
+                                    $$('input[name="title"]').val(`回复至 ${val.username}`);
                                     $$('#mtf-reply-content').val(`{@${val.uid}/${val.cid}}`);
                                     mdui.mutation(); //刷新一下页面的组件值
                                 })
@@ -405,17 +402,15 @@ class mtfPost {
         /**
          * 回复框载入
          */
-        $$('.reply').on('click', function (elem, param) {
-            if (document.querySelector('.bottom-dialog')) return $$('.bottom-dialog').addClass('expand'); //Prevent duplicated dialog.
-            let data = $$(this).data();
-            let title = '';
-            param.username == null ? title = `回复帖子 ${data.subject}` : title = `回复用户 ${param.username}`;
+        $$('.reply').on('click', function () {
+                let data = $$(this).data();
+                if (document.querySelector('.bottom-dialog')) return $$('.bottom-dialog').addClass('expand'), $$('#mtf-reply-content').val(''), $$('input[name="title"]').val(`回复至 ${data.subject}`); //Prevent duplicated dialog.
             let replyBox = $$('<div class="bottom-dialog mdui-shadow-2"></div>')
                 .append(
                     $$('<header></header>')
                     .append(
                         $$('<div class="mdui-textfield mdui-col-xs-10"></div>')
-                        .append($$('<input class="mdui-textfield-input" disabled />').val(title))
+                        .append($$('<input name="title" class="mdui-textfield-input" disabled />').val(`回复至 ${data.subject}`))
                     )
                     .append(
                         $$('<button class="mdui-btn mdui-btn-icon mdui-ripple mdui-float-right" id="dialog-close"></button>')
@@ -437,45 +432,43 @@ class mtfPost {
                     $$('<footer></footer>')
                     .append($$('<button class="mdui-btn mdui-text-color-theme-accent mdui-float-right mdui-ripple mtf-post-comment">回复</button>'))
                 )
-            $$('body').append(replyBox);
-            setTimeout(function () {
+            $$('body').append(replyBox); setTimeout(function () {
                 replyBox.addClass('expand-half expand')
-            }, 10);
-            $$('.mtf-post-comment').on('click', function () {
+            }, 10); $$('.mtf-post-comment').on('click', function () {
                 var content = $$('#mtf-reply-content').val();
                 post(content);
             });
         });
 
-        function post(content) {
-            $$.ajax({
-                method: 'POST',
-                url: '/Api/postComment.html',
-                data: {
-                    content: content,
-                    tid: tid,
-                    time: time(),
-                },
-                dataType: 'json',
-                complete: xhr => {
-                    if (xhr.status !== 200) return mdui.snackbar('Unknown error has occurred. Check your internet connection or contact the developer to solve.');
-                    let res = JSON.parse(xhr.responseText);
-                    if (res.code == 0) {
-                        $$('.bottom-dialog').remove(); //Destruct dialog.
-                        mdui.snackbar({
-                            message: res.msg,
-                            position: 'top'
-                        });
-                    } else {
-                        mdui.snackbar({
-                            message: res.msg,
-                            position: 'top',
-                        });
-                    }
+    function post(content) {
+        $$.ajax({
+            method: 'POST',
+            url: '/Api/postComment.html',
+            data: {
+                content: content,
+                tid: tid,
+                time: time(),
+            },
+            dataType: 'json',
+            complete: xhr => {
+                if (xhr.status !== 200) return mdui.snackbar('Unknown error has occurred. Check your internet connection or contact the developer to solve.');
+                let res = JSON.parse(xhr.responseText);
+                if (res.code == 0) {
+                    $$('.bottom-dialog').remove(); //Destruct dialog.
+                    mdui.snackbar({
+                        message: res.msg,
+                        position: 'top'
+                    });
+                } else {
+                    mdui.snackbar({
+                        message: res.msg,
+                        position: 'top',
+                    });
                 }
-            })
-        }
-
-
+            }
+        })
     }
+
+
+}
 }

@@ -1,27 +1,8 @@
 <div class="mdui-toolbar mdui-color-theme">
-    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a>
-    <a href="/" class="mdui-typo-headline mdui-hidden-xs">{$site.siteTitle}</a>
-    <a href="" class="mdui-typo-title">{if !empty($site.palte)}{$site.palte|raw}{else}Forum{/if}</a>
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target:'#d-drawer',overlay:true,swipe:true}"><i
+            class="mdui-icon material-icons">menu</i></a>
+    <a href="/" class="mdui-typo-title mdui-hidden-xs">{$site.siteTitle}</a>
+    <!--<a href="" class="mdui-typo-title">{if !empty($site.palte)}{$site.palte|raw}{else}Forum{/if}</a>-->
     <div class="mdui-toolbar-spacer"></div>
-    {if empty(session('uid'))}
-    <a href="{:url('forum/User/Login')}" class="mdui-btn mdui-btn-icon mdui-ripple" mdui-tooltip="{content: '登录'}"><i
-            class="mdui-icon material-icons">person</i></a>
-    <a href="{:url('forum/User/Reg')}" class="mdui-btn mdui-btn-icon mdui-ripple" mdui-tooltip="{content: '注册'}"><i
-            class="mdui-icon material-icons">person_add</i></a>
-    {else}
-    <a href="{:url('forum/user/index')}" class="mdui-ripple mdui-hidden-xs">
-        <img src="{$memberData.avatar}" style="margin-top:15px;;float: left;" class="mdui-img-rounded"
-            width="32" alt="{$memberData.username}">{$memberData.username}
-    </a>
-    <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#mtf-muen'}"><i class="mdui-icon material-icons">more_vert</i></a>
-    <ul class="mdui-menu" id="mtf-muen">
-        <li class="mdui-menu-item">
-            <a href="{:url('forum/user/index')}" class="mdui-ripple">用户中心</a>
-        </li>
-        <li class="mdui-divider"></li>
-        <li class="mdui-menu-item">
-            <a href="{:url('forum/user/logout')}" class="mdui-ripple">登出</a>
-        </li>
-    </ul>
-    {/if}
+    <a href="{:url('forum/index/Search')}" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">search</i></a>
 </div>

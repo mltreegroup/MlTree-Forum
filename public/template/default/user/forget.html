@@ -2,80 +2,105 @@
 {block name="head"}
 <link rel="stylesheet" href="__CSS__from.css">
 {/block}
-{block name="muen"}
-{include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
+{block name="menu"}
+{// 重置密码不需要应用栏}
 {/block}
 {block name="main"}
-<div class="row mdui-color-deep-orange">
-</div>
-<div class="mdui-row">
-    <div class="mdui-col-xs-10 mdui-col-md-4 mtf-login mdui-col-offset-xs-1 mdui-col-offset-md-4">
-        <div class="mdui-card mdui-shadow-1">
-            <div class="mdui-card-primary mdui-color-deep-orange-600">
-                <div class="mdui-card-primary-title"><i class="mdui-icon material-icons">lock</i> 找回密码</div>
-                <div class="mdui-card-primary-subtitle">Forget</div>
-            </div>
-
-            <div class="mdui-card-content">
-                <form action="" method="post" onsubmit=''>
-                    <div class="mdui-textfield mdui-textfield-floating-label">
-                        <label class="mdui-textfield-label">Email</label>
-                        <input class="mdui-textfield-input" name="email" type="email" required />
-                        <div class="mdui-textfield-error">邮箱不能为空</div>
-                    </div>
-                    <div class="mdui-textfield mdui-textfield-floating-label">
-                        <label class="mdui-textfield-label">Email Code</label>
-                        <input class="mdui-textfield-input" name="code" type="text" required />
-                        <div class="mdui-textfield-error">验证码不能为空</div>
-                        <button id="getForgetCode" type="button" class="mdui-btn mdui-color-theme-accent mdui-m-t-1 mdui-float-right">获取验证码</button>
-                    </div>
-                    <div class="mdui-textfield mdui-textfield-floating-label mdui-hidden mtf-newpwd-div">
-                        <label class="mdui-textfield-label">New Password</label>
-                        <input class="mdui-textfield-input" name="password" type="password" required />
-                        <div class="mdui-textfield-error">新密码不能为空</div>
-                    </div>
-                    <div class="mdui-textfield mdui-textfield-floating-label mdui-hidden mtf-newpwd-div">
-                        <label class="mdui-textfield-label">Confirm New Password</label>
-                        <input class="mdui-textfield-input" name="repassword" type="password" required />
-                        <div class="mdui-textfield-error">新密码不能为空</div>
-                    </div>
-                    <button class="mdui-btn mdui-color-amber mdui-btn-raised mdui-m-t-1 mdui-ripple" id="mtf-submit"
-                        type="submit">重置</button>
-                    <a class="mtf-btn mdui-text-color-amber" href="{:url('forum/User/Reg')}">创建一个账户</a>
-                    <a class="mtf-btn mdui-text-color-amber" href="{:url('forum/User/Login')}">登录账号</a>
-                    <a class="
-                        mtf-btn mdui-text-color-amber" href="javascript:;" mdui-menu="{target: '#moreLogin',position:'top'}">社会登录</a>
-                    <ul class="mdui-menu" id="moreLogin">
-                        <li class="mdui-menu-item">
-                            <a href="javascript:;" class="mdui-ripple">
-                                <i class="mdui-menu-item-icon mdui-icon iconfont icon-qq"></i> QQ
-                            </a>
-                        </li>
-                        <!-- <li class="mdui-menu-item">
-                            <a href="javascript:;" class="mdui-ripple">
-                                <i class="mdui-menu-item-icon mdui-icon iconfont icon-wecaht"></i> 微信
-                            </a>
-                        </li> -->
-                    </ul>
-                </form>
-            </div>
-        </div>
+<form class="central-card mdui-shadow-2" method="POST">
+    <div class="mdui-progress fix mdui-hidden" id="progress">
+        <div class="mdui-progress-indeterminate"></div>
     </div>
-</div>
+    <header>
+        <h1>找回你的密码</h1>
+        <h2 id="helper-text">输入你的电子邮箱地址</h2>
+    </header>
+    <!--Very sorry I am mindless to name the ID.-->
+    <main id="step-1" class="">
+        <figure class="mdui-center">
+            <img class="mdui-center" src="__IMG__/password-recovery-email-code.gif" />
+        </figure>
+        <div class="mdui-textfield mdui-textfield-floating-label">
+            <label class="mdui-textfield-label">电子邮箱地址</label>
+            <input class="mdui-textfield-input" name="email" type="email" required />
+            <div class="mdui-textfield-error">电子邮箱地址是必须的</div>
+        </div>
+        <div><button id="next-step" class="mdui-btn mdui-float-right mdui-color-blue-accent mdui-ripple">发送验证码</button></div>
+    </main>
+    <main id="step-2" class="mdui-hidden">
+        <div class="mdui-textfield mdui-textfield-floating-label">
+            <label class="mdui-textfield-label">电子邮箱验证码</label>
+            <input class="mdui-textfield-input" name="code" required />
+            <div class="mdui-textfield-error">电子邮箱验证码是必须的</div>
+        </div>
+        <div class="mdui-textfield mdui-textfield-floating-label">
+            <label class="mdui-textfield-label">密码</label>
+            <input class="mdui-textfield-input" type="password" name="password" required />
+            <div class="mdui-textfield-error">密码是必须的</div>
+        </div>
+        <div class="mdui-textfield mdui-textfield-floating-label">
+            <label class="mdui-textfield-label">确认</label>
+            <input class="mdui-textfield-input" type="password" name="repassword" required />
+            <div class="mdui-textfield-error">确认是必须的</div>
+        </div>
+        <div>
+            <button id="resend-email" type="button" class="mdui-btn mdui-text-color-blue-accent mdui-ripple">没有收到验证码？</button>
+            <button type="submit" class="mdui-btn mdui-float-right mdui-color-blue-accent mdui-ripple">重置密码</button>
+        </div>
+    </main>
+</form>
 {/block}
 
 {block name="js"}
 <script src="__JS__post.mtf.js"></script>
 <script>
-    $$('.mdui-toolbar').toggleClass('mdui-color-theme');
-    $$('.mdui-toolbar').toggleClass('mdui-color-deep-orange');
-
     var post = new mtfPost();
     post.getForgetCode('#getForgetCode');
-    $$('#mtf-submit').on('click', () => {
+    $$('form').on('submit', () => {
         var data = $$('form').serialize();
-        post.ForgetPwd('{:url("forum/user/forgetPwd")}');
+        post.ForgetPwd('{:url("forum/user/forgetPwd")}'); //I have no ideas to change this section of code.
         return false;
     })
+    $$('.appbar-expanded-background').remove(); //恢复密码不需要双色背景
+    $$('#next-step').on('click', function () {
+        //UI response.
+        $$('#progress').removeClass('mdui-hidden');
+        $$(this).attr('disabled', 'disabled');
+        //Check specified form.
+        if (!$$('[name="email"]').val().trim().length)
+            return;
+        post.sendPasswordRecoveryCode($$('[name="email"]').val().trim(), function (xhr) {
+            if (xhr.status !== 200) {
+                //UI response.
+                $$('#progress').removeClass('mdui-hidden');
+                $$('#next-step').removeAttr('disabled');
+                mdui.snackbar(
+                    'Unknown error has occurred. Please check your Internet connection. Or contact developer to solve.'
+                );
+                return;
+            }
+            let response;
+            try {
+                response = JSON.parse(xhr.responseText);
+            } catch (e) {
+                $$('#progress').removeClass('mdui-hidden');
+                $$('#next-step').removeAttr('disabled');
+                mdui.snackbar('Error resolving response. Please contact developer to solve.');
+                return;
+            }
+            if (response.code === 0) {
+                $$('#step-1').addClass('mdui-hidden');
+                $$('#step-2').removeClass('mdui-hidden');
+            }
+            $$('#progress').addClass('mdui-hidden');
+            $$('#next-step').removeAttr('disabled');
+            mdui.snackbar(response.msg);
+        });
+    });
+    $$('#resend-email').on('click', function () {
+        post.sendPasswordRecoveryCode(($$('[name="email"]').val().trim(), xhr => xhr.status === 200 ? mdui.snackbar(
+            JSON.parse(xhr.responseText).msg) : mdui.snackbar(
+            'Unknown error has occurred. Please check your Internet connection. Or contact developer to solve.'
+        )));
+    });
 </script>
 {/block}

@@ -110,9 +110,9 @@ class Topic extends Model
         foreach ($topicData as $key => $value) {
             $value['content'] = strip_tags(htmlspecialchars_decode($value['content']));
             $value['time_format'] = time_format($value['create_time']);
-            $value['userData'] = $user->where('uid', $value['uid'])->field('username,avatar')->find();
+            $value['userData'] = $user->where('uid', $value['uid'])->field('username,avatar,motto')->find();
             $value['forumName'] = Db::name('forum')->where('fid', $value['fid'])->field('name')->find()['name'];
-            $value['Badge'] = outBadge($value);
+            //$value['Badge'] = outBadge($value);
         }
         return [$topicData, $pages];
     }
@@ -227,12 +227,11 @@ class Topic extends Model
         }
         $user = new User;
         $topic['time_format'] = time_format($topic['create_time']);
-        $topic['userData'] = $user->where('uid', $topic['uid'])->field('username,avatar')->find();
+        $topic['usertopic'] = $user->where('uid', $topic['uid'])->field('username,avatar,motto')->find();
         $topic['forumName'] = Db::name('forum')->where('fid', $topic['fid'])->field('name')->find()['name'];
-        $topic['Badge'] = outBadge($topic);
-        
+
         $topic->views += 1;
-        $topic->isAutoWriteTimestamp(false)->save();
+        $topic->save();
 
         return [true,$topic];
     }

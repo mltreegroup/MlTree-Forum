@@ -3,7 +3,7 @@ namespace app\forum\controller;
 
 use app\common\model\Mail;
 use app\common\model\Message;
-use app\common\model\User as userModel;
+use app\common\model\User as UserModel;
 use app\forum\controller\Base;
 use connect\qqconnect\QC;
 
@@ -11,15 +11,14 @@ class User extends Base
 {
     public function index($uid = 0)
     {
-        $user = new userModel();
+        $user = new UserModel();
         if ($uid == 0 && empty(session('uid'))) {
             return $this->error('用户不存在！', 'index/index/index');
         }
-        $userTopicList = userModel::getTopicList(session('uid'));
-        if (!userModel::isLogin(cookie('userKey')) || $uid != session('uid') && $uid != 0) {
-            $user = new userModel;
+        if (!UserModel::isLogin(cookie('userKey')) || $uid != session('uid') && $uid != 0) {
+            $user = new UserModel;
             $userInfo = $user->getInfor($uid);
-            $userTopicList = userModel::getTopicList($uid);
+            $userTopicList = UserModel::getTopicList($uid);
             if (!$userInfo) {
                 return $this->error('用户不存在');
             }
@@ -27,24 +26,28 @@ class User extends Base
                 [
                     'type' => 'Visitor',
                     'userInfo' => $userInfo,
-                    'userTopic' => $userTopicList]
+                    'userTopic' => $userTopicList,
+                ]
             );
+        } else { //增加，减少查询次数
+            $userInfo = $user->getInfor(session('uid'));
+            $userTopicList = UserModel::getTopicList(session('uid'));
         }
-
         return $this->mtfView('user/index', '用户信息', [
             'type' => 'Self',
+            'userInfo' => $userInfo,
             'userTopic' => $userTopicList,
         ]);
     }
 
     public function reg()
     {
-        if (userModel::isLogin()) {
+        if (UserModel::isLogin()) {
             return redirect('index');
         }
         if (request()->isPost()) {
             $data = input('post.', '', 'strip_tags,htmlspecialchars');
-            $res = userModel::register($data);
+            $res = UserModel::register($data);
             if ($res[0]) {
                 return outRes(0, '注册成功！正在前往登录界面', url('forum/user/login'));
             } else {
@@ -57,12 +60,12 @@ class User extends Base
 
     public function login()
     {
-        if (userModel::isLogin()) {
+        if (UserModel::isLogin()) {
             return redirect('index');
         }
         if (request()->isPost()) {
             $data = input('post.', '', 'strip_tags,htmlspecialchars');
-            $res = userModel::login($data);
+            $res = UserModel::login($data);
             if ($res[0]) {
                 return outRes(0, '登录成功！欢迎回来……', url('forum/user/index'));
             } else {
@@ -74,8 +77,8 @@ class User extends Base
 
     public function logout()
     {
-        if (userModel::isLogin()) {
-            userModel::logout();
+        if (UserModel::isLogin()) {
+            UserModel::logout();
             return $this->success('退出成功！');
         } else {
             return $this->error('当前无需退出呢！');
@@ -93,9 +96,9 @@ class User extends Base
             if ($data['password'] !== $data['repassword']) {
                 return (outRes(-1, '两次密码不一致'));
             }
-            $res = userModel::resetPas(session('uid'), $data['oldpassword'], $data['password']);
+            $res = UserModel::resetPas(session('uid'), $data['oldpassword'], $data['password']);
             if ($res[0]) {
-                userModel::logout();
+                UserModel::logout();
                 return (outRes(0, $res[1], url('index/user/login')));
             } else {
                 return (outRes(-1, $res[1]));
@@ -105,7 +108,7 @@ class User extends Base
 
     public function forgetPwd()
     {
-        if (userModel::isLogin()) {
+        if (UserModel::isLogin()) {
             return redirect('forum/user/index');
         }
         if (request()->isPost()) {
@@ -117,7 +120,7 @@ class User extends Base
             if ($data['password'] !== $data['repassword']) {
                 return outRes(-1, '两次密码不一致');
             }
-            $res = userModel::forgetPas($data);
+            $res = UserModel::forgetPas($data);
             if ($res[0]) {
                 return outRes(0, $res[1], url('forum/user/login'));
             } else {
@@ -129,7 +132,7 @@ class User extends Base
 
     public function Active($uid, $code, $time)
     {
-        $res = userModel::activateUser($uid, $code, $time);
+        $res = UserModel::activateUser($uid, $code, $time);
         if ($res[0]) {
             return $this->success($res[1], url('forum/user/login'));
         } else {
@@ -143,7 +146,7 @@ class User extends Base
     public function reActive($email)
     {
         $email = base64_decode($email);
-        $user = userModel::getByEmail($email);
+        $user = UserModel::getByEmail($email);
         if (empty($user)) {
             return $this->error('账号不存在或错误。');
         } elseif (empty($user->code) && $user->status != 0) {
@@ -165,11 +168,11 @@ class User extends Base
 
     public function set()
     {
-        if (!userModel::isLogin()) {
+        if (!UserModel::isLogin()) {
             return redirect('index/user/login');
         }
         if (request()->isPost()) {
-            userModel::where('uid', session('uid'))->update(['motto' => input('post.motto')]);
+            UserModel::where('uid', session('uid'))->update(['motto' => input('post.motto')]);
             return outRes(0, '修改个人信息成功');
         }
     }
@@ -177,7 +180,7 @@ class User extends Base
     public function Message()
     {
         $this->assign('option', $this->siteOption('消息盒子'));
-        if (!userModel::isLogin()) {
+        if (!UserModel::isLogin()) {
             return redirect('index/user/login');
         }
         $msgObj = new Message;
@@ -201,7 +204,7 @@ class User extends Base
         $qc = new QC();
         $qc->qq_callback(); // access_token
         $qc->get_openid(); // openid
-        $userInfo = userModel::where('qqconnectId', session('openid'))->find();
+        $userInfo = UserModel::where('qqconnectId', session('openid'))->find();
         if (!empty($userInfo)) {
 
             session('uid', $userInfo->uid);
@@ -231,7 +234,7 @@ class User extends Base
         if ($type == '1') {
             if (!empty(input('post.'))) {
                 $data = input('post.', '', 'strip_tags,htmlspecialchars');
-                $info = userModel::where('email', $data['email'])->find();
+                $info = UserModel::where('email', $data['email'])->find();
                 if (empty($info)) {
                     return outRes(-1, '用户不存在或错误');
                 } else {

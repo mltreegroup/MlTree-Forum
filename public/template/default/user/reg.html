@@ -2,70 +2,64 @@
 {block name="head"}
 <link rel="stylesheet" href="__CSS__from.css">
 {/block}
-{block name="muen"}
-{include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
+{block name="menu"}
+{// 注册不需要appbar}
 {/block}
 {block name="main"}
-<div class="row mdui-color-orange">
-</div>
-<div class="mdui-row">
-    <div class="mdui-col-xs-10 mdui-col-md-4 mtf-login mdui-col-offset-xs-1 mdui-col-offset-md-4">
-        <div class="mdui-card mdui-shadow-1">
-            <div class="mdui-card-primary mdui-color-red">
-                <div class="mdui-card-primary-title"><i class="mdui-icon material-icons">send</i> 注册</div>
-                <div class="mdui-card-primary-subtitle">Register</div>
-            </div>
-
-            <div class="mdui-card-content">
-                <form action="" method="post">
-                    <div class="mdui-textfield mdui-textfield-floating-label">
-                        <label class="mdui-textfield-label">Email</label>
-                        <input class="mdui-textfield-input" name="email"ype="email" required/>
-                        <div class="mdui-textfield-error">邮箱不能为空</div>
-                    </div>
-                    <div class="mdui-textfield mdui-textfield-floating-label">
-                        <label class="mdui-textfield-label">Nick Name</label>
-                        <input class="mdui-textfield-input" name="username" type="text" required/>
-                        <div class="mdui-textfield-error">昵称不能为空</div>
-                    </div>
-                    <div class="mdui-textfield mdui-textfield-floating-label">
-                        <label class="mdui-textfield-label">Password</label>
-                        <input class="mdui-textfield-input" name="password" type="password" required/>
-                        <div class="mdui-textfield-error">密码不能为空</div>
-                    </div>
-                    <div class="mdui-textfield mdui-textfield-floating-label">
-                        <label class="mdui-textfield-label">Confirm Password</label>
-                        <input class="mdui-textfield-input" name="repassword" type="password" required/>
-                        <div class="mdui-textfield-error">确认密码不能为空</div>
-                    </div>
-                    
-                    <div class="mdui-textfield mdui-textfield-floating-label">
-                        <label class="mdui-textfield-label">Code</label>
-                        <input class="mdui-textfield-input" name="captcha" type="text" required />
-                        <div class="mdui-textfield-error">验证码不能为空</div>
-                        <img id="code" src="{:captcha_src()}" alt="captcha" onClick="this.src=this.src+'?'+Math.random()"/>
-                    </div>
-                    <button id="mtf-submit" class="mdui-btn mdui-color-orange mdui-btn-raised mdui-m-t-1 mdui-ripple" type="submit">注册</button>
-                    <a class="mtf-btn mdui-text-color-orange" href="{:url('forum/User/Login')}">已有账号？登录</a>
-                    <a class="mtf-btn mdui-text-color-orange" href="{:url('forum/User/forgetPwd')}">忘记密码？</a>
-                    <a class="mtf-btn mdui-text-color-orange" href="javascript:;" mdui-menu="{target: '#moreLogin',position:'top'}">社会化登录</a>
-                    <ul class="mdui-menu" id="moreLogin">
-                        <li class="mdui-menu-item">
-                            <a href="javascript:;" class="mdui-ripple">
-                                <i class="mdui-menu-item-icon mdui-icon iconfont icon-qq"></i> QQ
-                            </a>
-                        </li>
-                        <!-- <li class="mdui-menu-item">
-                            <a href="javascript:;" class="mdui-ripple">
-                                <i class="mdui-menu-item-icon mdui-icon iconfont icon-wecaht"></i> 微信
-                            </a>
-                        </li> -->
-                    </ul>
-                </form>
-            </div>
+<form class="central-card mdui-shadow-2" method="POST">
+    <header>
+        <h1>创建您的{$site.siteTitle}账号</h1>
+    </header>
+    <main>
+        <div class="mdui-textfield mdui-textfield-floating-label">
+            <label class="mdui-textfield-label">电子邮箱地址</label>
+            <input class="mdui-textfield-input" type="email" name="email" required />
+            <div class="mdui-textfield-error">电子邮箱是必须的，而且必须合法</div>
         </div>
-    </div>
-</div>
+        <div class="mdui-textfield mdui-textfield-floating-label">
+            <label class="mdui-textfield-label">用户名</label>
+            <input class="mdui-textfield-input" type="text" name="username" required />
+            <div class="mdui-textfield-error">用户名是必须的</div>
+        </div>
+        <section class="mdui-row">
+            <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">密码</label>
+                <input class="mdui-textfield-input" type="password" name="password" required />
+                <div class="mdui-textfield-error">密码是必须的</div>
+            </div>
+            <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">确认</label>
+                <input class="mdui-textfield-input" type="password" name="repassword" required />
+                <!--这种不合理的命名我也很无奈-->
+                <div class="mdui-textfield-error">确认是必须的</div>
+            </div>
+        </section>
+        <p class="hints">密码想用啥就用啥，独特即安全</p>
+        <p class="hints">但后台规定，密码必须在3位到30位之间</p>
+        <section class="mdui-row">
+            <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">验证码</label>
+                <input class="mdui-textfield-input" name="captcha" required />
+                <div class="mdui-textfield-error">验证码是必须的，我也很无奈啊╮(╯▽╰)╭</div>
+            </div>
+            <div class="mdui-col-xs-12 mdui-col-sm-4">
+                <img src="{:captcha_src()}" class="mdui-img-fluid" alt="验证码" onClick="this.src=this.src+'?'+Math.random()"/>
+            </div>
+        </section>
+        <div>
+            <a href="{:url('forum/user/login')}" class="mdui-btn mdui-ripple mdui-text-color-blue-accent">登录现有账号</a>
+            <button class="mdui-float-right mdui-btn mdui-color-blue-accent mdui-ripple" type="submit">完成注册</button>
+        </div>
+    </main>
+    <aside>
+        <div class="mdui-valign">
+            <figure>
+                <img src="__IMG__/register_introduction.svg" alt="一张SVG" width="244" height="244" />
+                <figcaption>只需一个账号，您便可以使用{$site.siteTitle}的所有产品和服务。</figcaption>
+            </figure>
+        </div>
+    </aside>
+</form>
 {/block}
 
 {block name="js"}
@@ -81,5 +75,8 @@
         post.Register('{:url("forum/user/reg")}');
         return false;
     })
+    //注册不需要多色背景
+    $$('.appbar-expanded-background').remove();
+    $$('body').addClass('page-register'); //注册页面标识（没这个我写样式都麻烦）
 </script>
 {/block}

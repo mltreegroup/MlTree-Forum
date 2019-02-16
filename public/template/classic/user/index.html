@@ -1,0 +1,234 @@
+{extend name="default/public/main"}
+{block name="muen"}
+{include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
+{/block}
+{block name="main"}
+<div class="row">
+    {eq name="type" value="Self"}
+    <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
+        <div class="mdui-card">
+            <div class="mdui-card-media">
+                <div style="height:200px;width:100%;background-image: url(__IMG__bg.jpg);background-size: cover"></div>
+                <div class="mtf-user-info">
+                    <div class="mtf-avatar-box">
+                        <div class="mtf-avatar-upload">
+                            <button id="avatar_new" title="上传新头像" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">photo_camera</i></button>
+                        </div>
+                        <img src="{$memberData.avatar}" alt="{$memberData.username}的头像" id="avatar_preview" />
+                    </div>
+                    <div class="mtf-user-username">
+                        {$memberData.username}
+                    </div>
+                    <div class="mtf-user-data">
+                        <span>{$memberData.motto|default="这家伙很懒，什么也没留下"}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mdui-card-content">
+                <div class="mdui-tab" mdui-tab>
+                    <a href="#topic" class="mdui-ripple">主题</a>
+                    <a href="#information" class="mdui-ripple">资料</a>
+                    <a href="#password" class="mdui-ripple">安全</a>
+                </div>
+                <div id="topic">
+                    <ul class="mdui-list">
+                        {volist name="userTopic" id="vo"}
+                        <li class="mdui-list-item mdui-ripple">
+                            <div class="mdui-list-item-avatar">
+                                <img src="{$vo.memberData.avatar}" alt="{$vo.memberData.username}" title="{$vo.memberData.username}">
+                            </div>
+                            <div class="mdui-list-item-content">
+                                <a class="mdui-list-item-title" href="{:url('forum/topic/index',['tid'=>$vo.tid])}">{$vo.subject}</a>
+                                <div class="mdui-list-item-text mdui-list-item-one-line">{$vo.content|raw}</div>
+                                <div class="mdui-list-item-text">
+                                    <a class="mdui-list-item-title" href="{:url('forum/user/index',['uid'=>$vo.uid])}">{$vo.memberData.username}</a>
+                                    <span title="{$vo.create_time}"> {$vo.time_format}</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mdui-divider-inset mdui-m-y-0"></li>
+                        {/volist}
+                    </ul>
+                    {$userTopic|raw}
+
+                </div>
+                <div id="information">
+                    <div>
+                        <ul>
+                            <li>用户组：{$memberData.groupData.groupName}</li>
+                            <li>上一次登录时间：{$memberData.login_date|time_format}</li>
+                        </ul>
+                    </div>
+                    <form id="motto">
+                        <div class="mdui-textfield mdui-textfield-floating-label">
+                            <i class="mdui-icon material-icons">info</i>
+                            <label class="mdui-textfield-label">签名</label>
+                            <input name="motto" class="mdui-textfield-input" type="text" value="{$memberData.motto|default='这家伙很懒，什么也没留下'}" />
+                        </div>
+                        <div class="mdui-textfield mdui-textfield-floating-label">
+                            <button id="mottoPost" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme">发布签名</button>
+                        </div>
+                    </form>
+
+                </div>
+                <div id="password">
+                    <form id="Pwd">
+                        <div class="mdui-textfield mdui-textfield-floating-label">
+                            <i class="mdui-icon material-icons">https</i>
+                            <label class="mdui-textfield-label">旧密码</label>
+                            <input name="oldpassword" class="mdui-textfield-input" type="password" required />
+                            <div class="mdui-textfield-error">旧密码不能为空</div>
+                        </div>
+                        <div class="mdui-textfield mdui-textfield-floating-label">
+                            <i class="mdui-icon material-icons">https</i>
+                            <label class="mdui-textfield-label">新密码</label>
+                            <input name="password" class="mdui-textfield-input" type="password" required />
+                            <div class="mdui-textfield-error">新密码不能为空</div>
+                        </div>
+                        <div class="mdui-textfield mdui-textfield-floating-label">
+                            <i class="mdui-icon material-icons">https</i>
+                            <label class="mdui-textfield-label">确认新密码</label>
+                            <input name="repassword" class="mdui-textfield-input" type="password" required />
+                            {:token()}
+                            <div class="mdui-textfield-error">和新密码不同</div>
+                        </div>
+                        <div class="mdui-textfield mdui-textfield-floating-label">
+                            <button id="PwdPost" type="submit" class="mdui-btn mdui-btn-block mdui-ripple mdui-color-theme">确认修改</button>
+                        </div>
+                    </form>
+
+                    <hr />
+                    <div class="mdui-typo">
+                        <h4>QQ互联状态:</h4>
+                        <code>{$memberData.qqconnectStatus}</code>
+                        <blockquote>Tips: 登录时选择QQ登录即可绑定</blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {else/}
+    <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2 mdui-m-y-1">
+        <div class="mdui-card">
+            <div class="mdui-card-media">
+                <div style="height:200px;width:100%;background-image: url(__IMG__bg.jpg);background-size: cover"></div>
+                <div class="mtf-user-info">
+                    <div class="mtf-avatar-box">
+                        <img src="{$userInfo.avatar}" alt="{$userInfo.username}的头像" id="avatar_preview" />
+                    </div>
+                    <div class="mtf-user-username">
+                        {$userInfo.username}
+                    </div>
+                    <div class="mtf-user-data">
+                        <span>{$userInfo.motto|default="这家伙很懒，什么也没留下"}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mdui-card-content">
+                <div class="mdui-tab" mdui-tab>
+                    <a href="#topic" class="mdui-ripple">主题</a>
+                    <a href="#information" class="mdui-ripple">资料</a>
+                </div>
+                <div id="topic">
+                    <ul class="mdui-list">
+                        {volist name="userTopic" id="vo"}
+                        <li class="mdui-list-item mdui-ripple">
+                            <div class="mdui-list-item-avatar">
+                                <img src="{$vo.memberData.avatar}" alt="{$vo.memberData.username}" title="{$vo.memberData.username}">
+                            </div>
+                            <div class="mdui-list-item-content">
+                                <a class="mdui-list-item-title" href="{:url('forum/topic/index',['tid'=>$vo.tid])}">{$vo.subject}</a>
+                                <div class="mdui-list-item-text mdui-list-item-one-line">{$vo.content|raw}</div>
+                                <div class="mdui-list-item-text">
+                                    <a class="mdui-list-item-title" href="{:url('forum/user/index',['uid'=>$vo.uid])}">{$vo.memberData.username}</a>
+                                    <span title="{$vo.create_time}"> {$vo.time_format}</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mdui-divider-inset mdui-m-y-0"></li>
+                        {/volist}
+                    </ul>
+                    {$userTopic|raw}
+                </div>
+                <div id="information">
+                    <div>
+                        <ul>
+                            <li>用户组：{$userInfo.groupData.groupName}</li>
+                            <li>上一次登录时间：{$userInfo.login_date|time_format}</li>
+                        </ul>
+                    </div>
+                    <div class="mdui-textfield mdui-textfield-floating-label">
+                        <i class="mdui-icon material-icons">info</i>
+                        <label class="mdui-textfield-label">签名</label>
+                        <input name="motto" class="mdui-textfield-input" type="text" value="{$userInfo.motto|default='这家伙很懒，什么也没留下'}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/eq}
+</div>
+{/block}
+
+{block name="js"}
+<script src="__JS__post.mtf.js"></script>
+<script>
+    $$('#mottoPost').on('click', function () {
+        var data = $$('#motto').serialize();
+        $$.ajax({
+            method: 'POST',
+            url: '{:url("set")}',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar({
+                        message: res.msg,
+                        position: 'top',
+                    })
+                } else {
+                    mdui.snackbar({
+                        message: res.msg,
+                        position: 'top',
+                    })
+                }
+            }
+        });
+        return false;
+    });
+    $$('#PwdPost').on('click', function () {
+        var data = $$('#Pwd').serialize();
+        $$.ajax({
+            method: 'post',
+            url: '{:url("ResetPwd")}',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar({
+                        message: res.msg,
+                        position: 'top',
+                        onClosed: function () {
+                            window.location.href = res.url;
+                        },
+                    })
+                } else {
+                    mdui.snackbar({
+                        message: res.msg,
+                        position: 'top',
+                    })
+                }
+            },
+        });
+        return false;
+    });
+
+    $$('#avatar_new').on('click',function(){
+        var post = new mtfPost();
+        post.postAvatar('{:session("uid")}');
+    });
+
+</script>
+{/block}

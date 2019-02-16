@@ -1,6 +1,6 @@
 /* 基础样式 */
 body{
-    background-color: #f1f1f1;
+    background-color:white;
 }
 @media screen and (max-width: 600px) {
     body{
@@ -13,39 +13,33 @@ body{
     }
 }
 /* 公共通用样式*/
-.mtf-a-simple
+.mlt-a-simple
 {
     text-decoration: none;
     color:black;
 }
-textarea{
+/*I dislike to see the tree.*/
+/*textarea{
     border-radius: 5px;
     width: 98%;
     margin-right: 1%;
     background-color: #f1f1f1;
     background-image: url('../images/tree_128x128.png');
     background-repeat: no-repeat;
-}
+}*/
 .textarea-fixed{
     overflow-x:visible;
     overflow-y:visible;
 }
-.mtf-block{
-    display: block;
-    margin: 10px;
-}
-.mtf-inline{
-    display: inline;
+.mtf-open{
+    cursor:pointer;
 }
 /* 定义MTF徽章样式 */
 .mtf-badge{
     padding: 5px;
     color: white;
 }
-.mtf-icon-size{
-    font-size: 14px;
-    color:white;
-}
+
 /* 定义panel样式 */
 .mtf-panel{
     width: 100%;
@@ -164,7 +158,7 @@ textarea{
     margin-right: 5px;
 }
 /*自定义页脚样式*/
-.mtf-footer {
+.mlt-footer {
     /*页脚整体外观*/
     line-height: 40px;
     background: #f2f2f2;
@@ -172,11 +166,11 @@ textarea{
     font-size: 10pt;
     color: #222;
 }
-.mtf-footer a{
+.mlt-footer a{
     color:black;
     text-decoration: none;
 }
-.mtf-footer p, .mtf-footer .link{
+.mlt-footer p, .mlt-footer .link{
     /*页脚链接和文字*/
     margin-left: 30px;
     color: #666;
@@ -187,18 +181,18 @@ textarea{
     margin-right: 30px;
     text-decoration: none;
 }
-.mtf-footer>a:visited {
+.mlt-footer>a:visited {
     color: #609;
 }
 /* share列表样式 */
-.mtf-share img{
+.mlt-share img{
     width: 32px;
     height: 32px;
     float: left;
 }
 
 /*用户界面外观*/
-.mtf-user-info{
+.mlt-user-info{
     position: absolute;
     right: 0;
     bottom: 0;
@@ -206,13 +200,13 @@ textarea{
     padding: 24px 16px 16px;
     color: #fff;
   }
-  .mtf-user-info .mtf-avatar-box{
+  .mlt-user-info .mlt-avatar-box{
     position: relative;
     float: left;
     margin-right: 16px;
     height: 60px;
   }
-  .mtf-user-info .mtf-avatar-box .mtf-avatar-upload{
+  .mlt-user-info .mlt-avatar-box .mlt-avatar-upload{
     display:none;
     overflow: hidden;
     height: 48px;
@@ -222,10 +216,10 @@ textarea{
     top:50%;
     transform: translate(-50%,-50%);
   }
-  .mtf-user-info .mtf-avatar-box:hover .mtf-avatar-upload{
+  .mlt-user-info .mlt-avatar-box:hover .mlt-avatar-upload{
     display: block;
   }
-  .mtf-user-info .mtf-avatar-box img{
+  .mlt-user-info .mlt-avatar-box img{
     width: 56px;
     height:56px;
     border-radius: 50%;
@@ -235,16 +229,16 @@ textarea{
     -ms-user-select: none;
     user-select: none;
   }
-  .mtf-user-info .mtf-user-data,.mtf-user-info .mtf-user-username{
+  .mlt-user-info .mlt-user-data,.mlt-user-info .mlt-user-username{
     margin-left: 76px;
   }
-  .mtf-user-info .mtf-user-username{
+  .mlt-user-info .mlt-user-username{
     font-size:30px;
     display: block;
     line-height: 36px;
     opacity: 1;
   }
-  .mtf-user-info .mtf-user-data{
+  .mlt-user-info .mlt-user-data{
     position: relative;
     opacity: 1;
     line-height: 24px;
@@ -255,19 +249,19 @@ textarea{
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .mtf-user-info .mtf-user-data a{
+  .mlt-user-info .mlt-user-data a{
     color: #fff;
     text-decoration: none;
   }
-  .mtf-user-info .mtf-user-data a:hover{
+  .mlt-user-info .mlt-user-data a:hover{
     border-bottom: 1px solid hsla(0,0%,100%,.7);
   }
-  .mtf-user-info .mtf-user-control{
+  .mlt-user-info .mlt-user-control{
     position: absolute;
     right: 152px;
     bottom: 28px;
   }
-  .mtf-user-info #avatar_new{
+  .mlt-user-info #avatar_new{
     display: block;
     width: 48px;
     min-width:48px;
@@ -275,7 +269,7 @@ textarea{
     background-color: rgba(0,0,0,.26)!important;
   }
   /*字体设置*/
-  *:not(code):not(pre){
+  :not(code):not(pre):not(code *):not(pre *){
     font-family: "Roboto","Noto Sans",sans-serif, Arial, "微软雅黑";
   }
   code,pre{
@@ -284,3 +278,271 @@ textarea{
   .CodeMirror, .CodeMirror-scroll {
       max-height: 500px;
   }
+/*Material Design 搜索框*/
+.search-box{
+    background:white;
+    border-radius:2px;
+    margin-left:auto;
+    margin-right:auto;
+    max-width:720px;
+    position:relative;
+    border:none;
+    box-shadow:0 2px 4px rgba(0,0,0,.2),0 -1px 0px rgba(0,0,0,.02);
+    transition:width 100ms ease-out;
+    outline:none;
+    color:#212121;
+    font-size:16px;
+    height:48px;
+    padding:12px 16px 11px 16px;
+    box-sizing:border-box;
+    width:100%;
+}
+.search-box:placeholder{
+    color:rgba(0,0,0,.54);
+}
+/*抽屉->用户资料*/
+.drawer-user-info{
+    height:116px;
+    display:block;
+    position: relative;
+    padding-left:16px;
+    padding-right:16px;
+    padding-top:16px;
+    padding-bottom:8px;
+    background-image: url('../images/bg.jpg');/*以CSS文件所在路径为准*/
+    background-size: 100%;
+}
+.drawer-user-info > .drawer-user-info__avatar{
+    height:64px;
+    width:64px;
+    /*上面这些都是量出来的*/
+    display: block;
+    border-radius:50%;
+    background:rgb(117, 117, 117);
+}
+.drawer-user-info > .drawer-user-info__subtitle{
+    height:56px;
+    display: block;
+    margin-top:4px;
+    position:relative;
+}
+.drawer-user-info > .drawer-user-info__subtitle > .nickname{
+    font-size:14px;
+    font-weight: 500;
+    color:white;
+    display:block;
+    position: absolute;
+    top:50%;
+    transform: translateY(-100%);
+    line-height:20px;
+}
+.drawer-user-info > .drawer-user-info__subtitle > .email{
+    font-size:14px;
+    font-weight: 400;
+    color:white;
+    display: block;
+    position: absolute;
+    top:50%;
+    line-height:20px;
+    width:100%;
+}
+.drawer-user-info > .drawer-user-info__subtitle > .email > .dropdown{
+    position: absolute;
+    right:0;
+    transform:translateY(-6px);
+}
+/*全局页面布局*/
+.main-content-stream{
+    max-width:686px;
+    width:96%;
+    display:block;
+    margin:0 auto;
+    margin-top:64px;
+}
+.appbar-expanded-background{
+    height:240px;
+    z-index:-1;
+    position: absolute;
+    left:0;
+    top:0;
+    border-bottom: 1px solid rgba(0,0,0,.02);
+    width:100%;
+}
+.mdui-fab{
+    opacity:1!important;
+}
+@media screen and (min-width:1024px){
+    .mdui-fab-fixed:not(.top-scrolled){
+        top:240px;
+        right:64px;
+        transform:translateY(-50%);
+        margin:0;
+        position: absolute!important;
+    }
+}
+.mainstream-division{
+    height:28px;
+    width:100%;
+}
+/*登陆注册页*/
+.central-card{
+    width:450px;
+    min-height:500px;
+    display:block;
+    background:#fff;
+    margin:0 auto;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    padding-top:48px;
+    padding-bottom:36px;
+    overflow-y:auto;
+  }
+  .central-card>header{
+    text-align:center;
+  }
+  .central-card>header>h1{
+    font-family:"Product Sans","Google Sans",sans-serif;
+    padding-bottom:0;
+    padding-top:16px;
+    font-size:24px;
+    font-weight:400;
+    line-height:1.333;
+    margin-bottom:0;
+    margin-top:0;
+  }
+  .central-card>header>h2{
+    font-size:16px;
+    letter-spacing:.1px;
+    line-height:1.5;
+    padding-bottom:0;
+    padding-top:8px;
+    margin:0;
+    font-weight:400;
+  }
+  .central-card>main{
+    font-size:15px;
+    padding:0 40px;
+  }
+  @media screen and (max-width:600px){
+    .central-card{
+      height:100%;
+      width:100%;
+      border:none;
+      padding:24px 0 36px;
+    }
+    .central-card > main {
+      padding:0 24px;
+    }
+  }
+.a_link{
+/*在哪都能用，不给条件限定了*/
+text-decoration: none;
+color:#1a73e8;
+display: inline-block;
+font-weight: 500;
+font-size: inherit;
+letter-spacing: .25px;
+}
+/*注册页面，基于登录界面改造*/
+.page-register .central-card{
+    width:auto;
+}
+.page-register .central-card > header{
+    text-align:left;
+    padding: 0 48px;
+}
+.page-register .central-card > main{
+    width:450px;
+    padding:0 48px;
+    overflow:hidden;
+    box-sizing:border-box;
+    display:inline-block;
+    height:auto;
+    min-height:500px;
+    float:left;
+}
+.page-register .central-card > main > .hints{
+    font-size:12px;
+}
+.page-register .central-card > aside{
+    float: left;
+    display: inline-block;
+    width:300px;
+    box-sizing: border-box;
+    height:100%;
+}
+.page-register .central-card > aside > figure{
+    margin: 0 4px;
+    text-align:center;
+}
+.page-register .central-card > aside  figure > img{
+    max-width: 100%;
+}
+.page-register .central-card > aside  figure > figcaption{
+    font-size:16px;
+    font-weight: 300;
+    text-align: center;
+}
+@media screen and (max-width:900px){
+    .page-register .central-card > aside{
+        display: none;
+    }
+}
+@media screen and (max-width:600px){
+  .page-register .central-card{
+    height:100%;
+    width:100%;
+    border:none;
+    padding:24px 0 36px;
+  }
+  .page-register .central-card > header{
+    padding:0 24px;
+  }
+  .page-register .central-card > main {
+    padding:0 24px;
+    width:100%;
+  }
+}
+/*Sticky progress bar on the top*/
+.central-card > .fix{
+    position:absolute;
+    top:0%;
+}
+/*Bottom dialog.*/
+.bottom-dialog{
+	transition:all .325s ease-in-out;
+	position:fixed;
+	left:50%;
+	top:100%;
+	transform:translate(-50%,0);
+	width:100%;
+	max-width:688px;
+	background:white;
+	z-index:3;
+}
+.bottom-dialog.expand{
+	transform:translate(-50%,-100%);
+}
+.bottom-dialog.expand-half:not(.expand){
+	transform:translate(-50%,-56px);
+}
+.bottom-dialog > header{
+	height:56px;
+	padding:10px;
+	padding-left:20px;
+	border-bottom:1px solid rgba(0,0,0,.26);
+}
+#dialog-close{
+	transform:translate(3px,-3px);
+	transform: rotate(45deg);
+	transition:transform .3s ease;
+}
+.bottom-dialog.expand-half:not(.expand) #dialog-close{
+	transform:rotate(0deg);
+}
+.bottom-dialog > main{
+	border-bottom:1px solid rgba(0,0,0,.26);
+	padding:20px;
+}

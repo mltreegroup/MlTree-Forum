@@ -47,7 +47,7 @@ class Expand extends Base
 
     }
 
-    public function getFotgetMailCode($mail)
+    public function getForgetMailCode($mail)
     {
         $user = User::getByEmail($mail);
         if (empty($user)) {

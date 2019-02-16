@@ -20,7 +20,7 @@ Route::rule('ForgetPwd', 'forum/user/forgetPwd');
 Route::rule('Member/[:uid]', 'forum/user/index');
 Route::rule('User/Active/[:uid]/[:code]/[:time]','forum/user/Active');
 Route::rule('User/ReActive/[:email]','forum/user/reActive');
-
+Route::rule('Search','forum/index/Search');
 return [
 
 ];

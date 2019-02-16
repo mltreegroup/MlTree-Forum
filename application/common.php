@@ -14,52 +14,59 @@ require __DIR__ . '/../vendor/autoload.php';
 use Auth\Auth;
 use think\facade\Env;
 
-function createStr($length)
+function createStr($length = 64)
 {
-    $str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; //62个字符
-    $strlen = 62;
-    while ($length > $strlen) {
-        $str .= $str;
-        $strlen += 62;
+    $string = '';
+    while (($len = strlen($string)) < $length) {
+        $size = $length - $len;
+        $bytes = random_bytes($size);
+        $string .= substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $size);
     }
-    $str = str_shuffle($str);
-    return substr($str, 0, $length);
+    return $string;
 }
-
-//输出人性化时间
-function time_format($time)
+/**
+ * 输出相对时间函数的改进版本。
+ * @param $time 被转换的时间戳
+ * @param $disable_relative_time 禁用相对时间
+ */
+function time_format($time, $disable_relative_time = false)
 {
-    if (gettype($time) === 'integer') {
-        $time = date("Y-m-d H:i:s", $time);
+    if (gettype($time) !== 'number' && gettype($time) !== 'integer') { //增加一个对整形的判断，防止错误
+        $time = strtotime($time);
     }
-    $publish_timestamp = strtotime($time);
-    $now = date("Y-m-d H:i:s");
-    $now_timestamp = strtotime($now);
-    $lag = ceil(($now_timestamp - $publish_timestamp) / 60);
-    $format_time = $lag . "分钟前";
-    if ($lag >= 30) {
-        switch ($lag) {
-            case 30:
-                $format_time = "半小时前";
-                break;
-            case $lag > 30 && $lag < 60:
-                $format_time = $lag . "分钟前";
-                break;
-            case $lag >= 60 && $lag < 120:
-                $format_time = "一小时前";
-                break;
-            case ceil($lag / 60) < 24:
-                $format_time = (ceil($lag / 60) - 1) . "小时前";
-                break;
-            case ceil($lag / 60) > 24 && ceil($lag / 60) < 48:
-                $format_time = "昨天" . date("H:i", $publish_timestamp);
-                break;
-            case ceil($lag / 60) > 48:
-                $format_time = date("Y-m-d H:i", $publish_timestamp);
-                break;
-        }
+    //输入的时间竟然不一定是数字
+    $now = time();
+    $result = "";
+    $units = [
+        //时间单位
+        'now' => '刚刚',
+        'sec' => '秒', //因为是中文所以不用区分单复数
+        'min' => '分',
+        'hrs' => '时',
+        'day' => '天',
+        'mon' => '月',
+        'ago_later' => ['前', '后'],
+    ];
+    $difference = abs($now - $time);
+    //太久远或者强制禁用则返回绝对日期
+    if ($disable_relative_time || $difference > 2678400) {
+        return date('Y/m/d H:i', $time);
     }
-    return $format_time;
+    if ($difference <= 10) {
+        return $units['now'];
+    }
+    //误差不可避免
+    else if ($difference < 60) {
+        $result .= $difference . $units['sec'];
+    } else if ($difference < 3600) {
+        $result .= (int) ($difference / 60) . $units['min'];
+    } else if ($difference < 86400) {
+        $result .= (int) ($difference / 3600) . $units['hrs'];
+    } else {
+        $result .= (int) ($difference / 86400) . $units['day'];
+    }
+
+    return $result . $units['ago_later'][(bool) ($now < $time)];
 }
 
 /**
@@ -77,13 +84,6 @@ function outRes($code = 0, $data, $url = null, $sign = 'msg')
     }
     return json(['code' => $code, $sign => $data, 'time' => $time]);
 }
-
-// function markdownEncode($text)
-// {
-//     $parser = new Parsedown;
-//     $html = $parser->text($text);
-//     return $html;
-// }
 
 /**
  * 获取当前URL
@@ -146,8 +146,8 @@ function replyRegular($str)
     $pre = '{@(\d+)/(\d+)}';
     if (preg_match($pre, $str, $arr)) {
         $user = Db::name('user')->where('uid', $arr[1])->find();
-        $html = '回复 <a href="' . url('index/user/index', ['uid' => $arr[1]]) . '">@' . $user['username'] . '</a>';
-        $html .= '：<a href="#replu-content-' . $arr[2] . '">#' . $arr[2] . '</a>';
+        $html = '回复 <a href="' . url('forum/user/index', ['uid' => $arr[1]]) . '">@' . $user['username'] . '</a>';
+        $html .= '：<a href="#reply-content-' . $arr[2] . '">#' . $arr[2] . '</a>';
         return [$arr[0], $arr[1], $arr[2], $html];
     }
     return 'error';

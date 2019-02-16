@@ -4,5 +4,6 @@
 
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
+  # 修复Apache下出现“No input file specified.”的问题，不影响Nginx使用。
+  RewriteRule ^(.*)$ index.php?/$1 [QSA,PT,L]
 </IfModule>

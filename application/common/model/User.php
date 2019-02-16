@@ -200,7 +200,7 @@ class User extends Model
             return [false, '用户不存在'];
         }
         if (session('forget.Email') !== $findData['email']) {
-            return [false,'信息错误或不存在'];
+            return [false, '信息错误或不存在'];
         }
         if (session('forget.Time') < time()) {
             return [false, '验证码已失效，请重新获取'];
@@ -228,7 +228,7 @@ class User extends Model
         if ($this->userObj == null) {
             return false;
         }
-        return [
+        $data = [
             'uid' => $this->userObj->uid,
             'avatar' => $this->userObj->avatar,
             'motto' => $this->userObj->motto,
@@ -245,6 +245,11 @@ class User extends Model
             'status' => $this->userObj->status,
             'statusText' => $this->userObj->statusText,
         ];
+        if (fastAuth('admin',session('uid'))) {
+            $data['create_ip'] = $this->userObj->create_ip;
+            $data['login_ip'] = $this->userObj->login_ip;
+        }
+        return $data;
     }
 
     public function getGroupData($gid = 0)
@@ -265,7 +270,7 @@ class User extends Model
     public static function getTopicList($uid)
     {
         $userTopicList = Db::name('topic')->where('uid', $uid)->paginate(10);
-
+        
         foreach ($userTopicList as $key => $value) {
             $value['content'] = strip_tags(htmlspecialchars_decode($value['content']));
             $value['time_format'] = time_format($value['create_time']);

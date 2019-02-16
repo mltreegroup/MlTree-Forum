@@ -5,7 +5,7 @@
             <div class="mdui-card-primary-subtitle">Announcement</div>
         </div>
 
-        <div class="mdui-card-content">欢迎来到MlTree Forum</div>
+        <div class="mdui-card-content">{$site.notice|raw}</div>
     </div>
     <a href="{:url('forum/topic/create')}" class="mdui-btn mdui-btn-block mdui-color-theme mdui-hidden-xs" title="Post"><i class="mdui-icon material-icons">send</i> 发帖</a>
     <form action="{:url('forum/index/Search')}" method="GET">

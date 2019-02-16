@@ -1,0 +1,9 @@
+{
+    "Name": "经典模板",
+    "Sign": "classic",
+    "Version": "1.0.0",
+    "Author": "MlTree(Kingsr)",
+    "Summary": "MlTreeFourm的原默认模板，遵循MD规范",
+    "About": "https://forum.kingsr.cc",
+    "Image":"/template/classic/breviary.png"
+}

@@ -149,13 +149,13 @@ class mtfPost {
                             .attr('id', `reply-content-${val.cid}`)
                             .append($('<img class="mdui-card-header-avatar" />').attr('src', val.avatar).attr('alt', val.username))
                             .append($('<div class="mdui-card-header-title"></div>').text(val.username))
-                            .append($('<div class="mdui-card-header-subtitle"></div>').text(val.motto))
+                            .append($('<div class="mdui-card-header-subtitle"></div>').text(filterXSS(val.motto)))
                             .on('click', function () {
                                 window.location.href = '/Member/' + val.uid + '.html'
                             })
                         )
                         .append(
-                            $('<main class="mdui-card-content mdui-typo"></main>').html(marked(val.content))
+                            $('<main class="mdui-card-content mdui-typo"></main>').html(filterXSS(marked(val.content)))
                         )
                         .append(
                             $('<footer class="mdui-card-actions"></footer>')

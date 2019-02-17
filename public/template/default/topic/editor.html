@@ -1,92 +1,60 @@
 {extend name="default/public/main"}
 {block name="head"}
-<link rel="stylesheet" href="__MOD__editor/editor.css">
-<link rel="stylesheet" href="__MOD__OwO/OwO.min.css">
+<link rel="stylesheet" href="__MOD__prism/prism.css">
 {/block}
 {block name="menu"}
 {include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
 {/block}
 {block name="main"}
-<div class="mdui-row">
-    <div class="mdui-col-xs-12 mdui-col-sm-8 mdui-col-offset-sm-2">
-        <div class="mdui-card mdui-m-t-1 mdui-m-b-5">
-            <form>
-                <div class="mdui-m-y-1 mdui-m-l-1">
-                    <select lay-ignore name="fid" class="mdui-select" mdui-select="{position: 'bottom'}" required>
-                        {volist name="forum" id="vo"}
-                        <option value="{$vo.fid}">{$vo.name}</option>
-                        {/volist}
-                    </select>
-                </div>
-
-
-                <div class="mdui-textfield mdui-m-b-1 mdui-m-l-1">
-                    <label class="mdui-textfield-label">标题</label>
-                    <input name="subject" class="mdui-textfield-input" value="{$topicData.subject}" type="text" placeholder="title" max="60"
-                        required />
-                </div>
-
-                <textarea class="OwO-text" id="editor" name="content" required>{$topicData.content|raw}</textarea> {:token()}
-                <div class="OwO"></div>
-                <input type="hidden" name="sign" value="{$topicData.sign}">
-                <div class="mdui-m-a-1">
-                    <button id="post" type="submit" class="mdui-btn mdui-color-theme mdui-ripple"><i class="mdui-icon mdui-icon-left material-icons">send</i>
-                        修改</button>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
 <form>
-        {:token()}
-        <input type="hidden" name="sign" value="{$attaSign|default=''}">
-        <header class="mdui-card mdui-row">
-            <div class="mdui-col-sm-2 mdui-col-xs-12">
-                <select lay-ignore class="mdui-select" mdui-select name="fid" required>
-                    {volist name="forum" id="vo"}
-                    <option value="{$vo.fid}">{$vo.name}</option>
-                    {/volist}
-                </select>
-            </div>
-            <div class="mdui-col-sm-10 mdui-col-xs-12 mdui-textfield mdui-textfield-floating-label">
-                <label class="mdui-textfield-label">标题</label>
-                <input name="subject" class="mdui-textfield-input" type="text" max="60" required />
-            </div>
-        </header>
-        <div class="mainstream-division"></div>
-        <!--这个编辑器改起来真是有困难-->
-        <main class="mdui-shadow-2"><textarea class="OwO-text" id="editor" name="content" required>{$topicData.content|raw}</textarea></main>
-        <div class="mainstream-division"></div>
-        <footer class="mdui-card">
-            <footer class="mdui-card-actions">
-                <div class="OwO mdui-m-l-1"></div>
-                <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-float-right" type="submit">发布</button>
-            </footer>
-        </footer>
-    </form>
+    {:token()}
+    <input type="hidden" name="sign" value="{$attaSign|default=''}">
+    <header class="mdui-card mdui-row mdui-p-a-1">
+        <div class="mdui-col-xs-12">
+            <label class="mdui-textfield-label">所属板块</label>
+            <select class="mdui-select" mdui-select="{position: 'bottom'}" name="fid" required>
+                {volist name="forum" id="vo"}
+                {eq name="$vo.fid" value="$topicData.tid"}<option value="{$vo.fid}" selected="true">{$vo.name}</option>{/eq}
+                <option value="{$vo.fid}">{$vo.name}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="mdui-col-xs-12 mdui-textfield mdui-textfield-floating-label">
+            <label class="mdui-textfield-label">标题</label>
+            <input name="subject" class="mdui-textfield-input" type="text" max="60" required value="{$topicData.subject}" />
+        </div>
+    </header>
+    <div class="mainstream-division"></div>
+    <main class="mdui-card mdui-row mdui-p-a-1">
+        <div class="mdui-textfield">
+            <label class="mdui-textfield-label">内容</label>
+            <textarea rows="10" class="mdui-textfield-input" id="editor" name="content" required>{$topicData.content|raw}</textarea>
+            <div class="mdui-textfield-helper"></div>
+        </div>
+        <div class="mdui-divider"></div>
+        <div class="mdui-btn-group" id="mtf-editor">
+            <button type="button" class="mdui-btn" id="mtf-editor-link"><i class="mdui-icon material-icons">link</i></button>
+            <button type="button" class="mdui-btn" id="mtf-editor-photo"><i class="mdui-icon material-icons">photo</i></button>
+            <button type="button" class="mdui-btn" id="mtf-editor-code"><i class="mdui-icon material-icons">code</i></button>
+            <button type="button" class="mdui-btn" id="mtf-editor-preview"><i class="mdui-icon material-icons">remove_red_eye</i></button>
+            <button type="button" class="mdui-btn" id="mtf-editor-info"><i class="mdui-icon material-icons">info</i></button>
+        </div>
+    </main>
+    <!-- <footer class="mdui-card-actions">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-float-right" type="submit">发送</button>
+        </footer> -->
+    <button class="mdui-fab mdui-fab-fixed mdui-color-theme-accent mdui-ripple" type="submit"><i class="mdui-icon material-icons">done</i></button>
+</form>
 {/block}
 
 {block name="js"}
-<script src="__MOD__editor/editor.js"></script>
+<script src="__MOD__editor/editor.mtf.js"></script>
 <script src="__MOD__editor/marked.js"></script>
-<script src="__MOD__OwO/OwO.min.js"></script>
-
+<script src="__MOD__prism/prism.js"></script>
+<script src="__JS__post.mtf.js"></script>
 <script>
-    var editor = new Editor();
-    editor.render();
-    var OwO = new OwO({
-            logo: 'OωO表情',
-            container: document.getElementsByClassName('OwO')[0],
-            target: document.getElementsByClassName('OwO-text')[0],
-            api: '__MOD__OwO/OwO.json',
-            position: 'up',
-            width: '100%',
-            maxHeight: '250px'
-        });
-    /*上传方法*/
-    $$("#post").on('click', () => {
-        
-    })
+    var editor = new mtfEditor('#mtf-editor');
+    var post = new mtfPost();
+    post.editorTopic();
 </script>
 {/block}

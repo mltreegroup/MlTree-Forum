@@ -21,6 +21,16 @@
     <main class="mdui-card-content mdui-typo" id="discussion-content">{$topicData.content|raw}</main>
     <footer class="mdui-card-actions">
         <button class="mdui-btn mdui-btn-icon mdui-ripple" id="share"><i class="mdui-icon material-icons">share</i></button>
+        <button class="mdui-btn mdui-btn-icon mdui-ripple mdui-float-right" mdui-menu="{target: '#setting-menu',position:'top',align:'right'}"><i
+                class="mdui-icon material-icons">settings</i></button>
+        <ul class="mdui-menu" id="setting-menu">
+            <li class="mdui-menu-item">
+                <a href="{:url('forum/topic/Editor',['tid'=>$topicData.tid])}" class="mdui-ripple">编辑主题</a>
+            </li>
+            <li class="mdui-menu-item">
+                <a href="javascript:;" id="set">设置主题</a>
+            </li>
+        </ul>
     </footer>
 </article>
 <div class="mainstream-division"></div>
@@ -28,7 +38,8 @@
 {/block}
 
 {block name="js"}
-<button class="mdui-fab mdui-fab-fixed reply mdui-ripple mdui-color-theme-accent" data-subject="{$topicData.subject}"><i class="mdui-icon material-icons">reply</i></button>
+<button class="mdui-fab mdui-fab-fixed reply mdui-ripple mdui-color-theme-accent" data-subject="{$topicData.subject}"><i
+        class="mdui-icon material-icons">reply</i></button>
 <script src="__JS__marked.min.js"></script>
 <script src="__JS__post.mtf.js"></script>
 <script src="__MOD__prism/prism.js"></script>
@@ -37,6 +48,7 @@
     $$('#discussion-content').html(marked($$('#discussion-content').html()));
 
     var Main = new mtfMain();
+    Main.arrowBack(0, true);
     var post = new mtfPost({
         commentUrl: '{:url("api/getCommentList")}',
     });
@@ -47,6 +59,9 @@
             url: '{:url("forum/topic/index",["tid"=>$topicData.tid])}',
             subject: '{$topicData.subject}',
         })
+    });
+    $$('#set').on('click', () => {
+        post.setTopic('{$topicData.tid}', '{$topicData.subject}');
     })
 </script>
 {/block}

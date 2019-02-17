@@ -30,7 +30,7 @@ class Expand extends Base
             return outRes(-1, '上传失败,文件为空.');
         }
 
-        $info = $file->move(getRootPath() . 'public/avatar/');
+        $info = $file->validate(['size' => 5242880, 'ext' => 'jpg,png,gif,jpge,webp'])->move(getRootPath() . 'public/avatar/');
 
         if ($info) {
             $path = $info->getSaveName();
@@ -38,7 +38,7 @@ class Expand extends Base
             $user->save(['avatar' => '/avatar/' . $path], ['uid' => input('post.uid')]);
             return json(array('code' => 0, 'url' => '/avatar/' . $path, 'msg' => '上传成功！', 'file' => $file->getinfo()['name']));
         } else {
-            return json(array('code' => 1, 'msg' => '上传失败'));
+            return json(array('code' => 1, 'msg' => '上传失败' . $file->getError()));
         }
     }
 

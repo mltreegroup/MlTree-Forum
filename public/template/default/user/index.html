@@ -8,9 +8,11 @@
         <img style="min-height: 200px;" src="__IMG__bg.jpg" alt="背景" />
         <div class="mlt-user-info">
             <div class="mlt-avatar-box">
+                {eq name="type" value="Self"}
                 <div class="mlt-avatar-upload">
                     <button id="avatar_new" title="上传新头像" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">photo_camera</i></button>
                 </div>
+                {/eq}
                 <img src="{$userInfo.avatar}" alt="{$userInfo.username}的头像" id="avatar_preview" />
             </div>
             <div class="mlt-user-username">
@@ -115,6 +117,7 @@
 {/block}
 
 {block name="js"}
+<script src="__JS__post.mtf.js"></script>
 <script>
     //Rewrited biography updater by DFFZMXJ
     $$('#edit-bio').on('click', function () {
@@ -160,6 +163,11 @@
             },
         });
         return false;
+    });
+    
+    $$('#avatar_new').on('click',function(){
+        let post = new mtfPost();
+        post.postAvatar('{$userInfo.uid}');
     });
 </script>
 {/block}

@@ -145,11 +145,14 @@ class mtfPost {
                             $('<div class="mdui-card-primary"></div>').append($('<date class="mdui-primary-subtitle mdui-float-right"></date>').text(val.create_time))
                         )
                         .append(
-                            $('<header class="mdui-card-header""></header>')
+                            $('<header class="mdui-card-header"></header>')
                             .attr('id', `reply-content-${val.cid}`)
-                            .append('<img class="mdui-card-header-avatar" />').attr('src', val.avatar).attr('src', val.username)
+                            .append($('<img class="mdui-card-header-avatar" />').attr('src', val.avatar).attr('alt', val.username))
                             .append($('<div class="mdui-card-header-title"></div>').text(val.username))
                             .append($('<div class="mdui-card-header-subtitle"></div>').text(val.motto))
+                            .on('click', function () {
+                                window.location.href = '/Member/' + val.uid + '.html'
+                            })
                         )
                         .append(
                             $('<main class="mdui-card-content mdui-typo"></main>').html(marked(val.content))
@@ -367,7 +370,6 @@ class mtfPost {
         /*上传方法*/
         $$("form").on('submit', () => {
             var data = $$('form').serialize();
-            //console.debug(data);//Not applicable to Chrome.
             $$.ajax({
                 method: 'POST',
                 url: '',
@@ -392,10 +394,37 @@ class mtfPost {
                 }
             });
             return false;
-        })
+        });
+    }
 
-
-        //return simplemde;
+    editorTopic() {
+        /*上传方法*/
+        $$("form").on('submit', () => {
+            var data = $$('form').serialize();
+            $$.ajax({
+                method: 'POST',
+                url: '',
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code == 0) {
+                        mdui.snackbar({
+                            message: res.msg,
+                            position: 'top',
+                            onClosed: () => {
+                                window.location.href = res.url;
+                            }
+                        });
+                    } else {
+                        mdui.snackbar({
+                            message: res.msg,
+                            position: 'top'
+                        })
+                    }
+                }
+            });
+            return false;
+        });
     }
 
     postComment(tid) {
@@ -403,8 +432,8 @@ class mtfPost {
          * 回复框载入
          */
         $$('.reply').on('click', function () {
-                let data = $$(this).data();
-                if (document.querySelector('.bottom-dialog')) return $$('.bottom-dialog').addClass('expand'), $$('#mtf-reply-content').val(''), $$('input[name="title"]').val(`回复至 ${data.subject}`); //Prevent duplicated dialog.
+            let data = $$(this).data();
+            if (document.querySelector('.bottom-dialog')) return $$('.bottom-dialog').addClass('expand'), $$('#mtf-reply-content').val(''), $$('input[name="title"]').val(`回复至 ${data.subject}`); //Prevent duplicated dialog.
             let replyBox = $$('<div class="bottom-dialog mdui-shadow-2"></div>')
                 .append(
                     $$('<header></header>')
@@ -432,43 +461,139 @@ class mtfPost {
                     $$('<footer></footer>')
                     .append($$('<button class="mdui-btn mdui-text-color-theme-accent mdui-float-right mdui-ripple mtf-post-comment">回复</button>'))
                 )
-            $$('body').append(replyBox); setTimeout(function () {
+            $$('body').append(replyBox);
+            setTimeout(function () {
                 replyBox.addClass('expand-half expand')
-            }, 10); $$('.mtf-post-comment').on('click', function () {
+            }, 10);
+            $$('.mtf-post-comment').on('click', function () {
                 var content = $$('#mtf-reply-content').val();
                 post(content);
             });
         });
 
-    function post(content) {
-        $$.ajax({
-            method: 'POST',
-            url: '/Api/postComment.html',
-            data: {
-                content: content,
-                tid: tid,
-                time: time(),
-            },
-            dataType: 'json',
-            complete: xhr => {
-                if (xhr.status !== 200) return mdui.snackbar('Unknown error has occurred. Check your internet connection or contact the developer to solve.');
-                let res = JSON.parse(xhr.responseText);
-                if (res.code == 0) {
-                    $$('.bottom-dialog').remove(); //Destruct dialog.
-                    mdui.snackbar({
-                        message: res.msg,
-                        position: 'top'
-                    });
-                } else {
-                    mdui.snackbar({
-                        message: res.msg,
-                        position: 'top',
-                    });
+        function post(content) {
+            $$.ajax({
+                method: 'POST',
+                url: '/Api/postComment.html',
+                data: {
+                    content: content,
+                    tid: tid,
+                    time: time(),
+                },
+                dataType: 'json',
+                complete: xhr => {
+                    if (xhr.status !== 200) return mdui.snackbar('Unknown error has occurred. Check your internet connection or contact the developer to solve.');
+                    let res = JSON.parse(xhr.responseText);
+                    if (res.code == 0) {
+                        $$('.bottom-dialog').remove(); //Destruct dialog.
+                        mdui.snackbar({
+                            message: res.msg,
+                            position: 'top',
+                            onClosed: () => {
+                                location.href.reload();
+                            }
+                        });
+                    } else {
+                        mdui.snackbar({
+                            message: res.msg,
+                            position: 'top',
+                        });
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 
+    postAvatar(uid) {
+        if ($$('body').find('#mtf-avatar-upload').length == 0) {
+            $$('body').after('<input class="mdui-hidden" type="file" name="avatar" id="mtf-avatar-upload">');
+            $$('#mtf-avatar-upload').on('change', function () {
+                uploadFile();
+            })
+        };
+        $$('#mtf-avatar-upload').trigger('click');
 
-}
+        function uploadFile() {
+            var myform = new FormData();
+            let files = document.querySelector("#mtf-avatar-upload").files[0];
+            myform.append('avatar', files);
+            myform.append('uid', uid);
+            $$.ajax({
+                method: 'POST',
+                url: '/forum/expand/uploadAvatar.html',
+                data: myform,
+                dataType: 'json',
+                contentType: false,
+                success: function (res) {
+                    if (res.code == 0) {
+                        mdui.snackbar({
+                            message: res.msg,
+                            position: 'right-top',
+                            onClosed: () => {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        mdui.snackbar({
+                            message: res.msg,
+                            position: 'right-top',
+                        });
+                    }
+                }
+            })
+        };
+    }
+
+    setTopic(tid, subject) {
+        var html = `<form id="setForm">
+        <div class="mtf-block">
+            <label class="mdui-textfield-label">欲操作项目(二次操作为取消)</label>
+            <select name="type" class="mdui-select" mdui-select>
+                <option value="top">置顶</option>
+                <option value="essence">精华</option>
+                <option value="closed">关闭</option>
+            </select>
+        </div>
+        <div class="mtf-block">
+            <label class="mdui-checkbox">
+                <input name="msg" type="checkbox" />
+                <i class="mdui-checkbox-icon"></i>
+                是否通知作者
+            </label>
+        </div>
+        <input type="hidden" name="tid" value="${tid}">
+    </form>`;
+
+        mdui.dialog({
+            title: `设置帖子【${subject}】`,
+            content: html,
+            buttons: [{
+                    text: '取消'
+                },
+                {
+                    text: '确认',
+                    onClick: function (inst) {
+                        let data = $$('#setForm').serialize();
+                        $$.ajax({
+                            method: 'POST',
+                            data: data,
+                            url: '/forum/topic/set.html',
+                            dataType: 'json',
+                            success: function (res) {
+                                mdui.snackbar({
+                                    message: res.msg,
+                                    position: 'right-top',
+                                });
+                            }
+                        });
+                    }
+                }
+            ],
+            onOpen: function () {
+                //开始时执行一次初始化
+                mdui.mutation();
+            }
+        });
+
+    }
 }

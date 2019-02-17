@@ -1,48 +1,56 @@
 {extend name="default/public/main"}
 {block name="head"}
+<link rel="stylesheet" href="__MOD__prism/prism.css">
 {/block}
 {block name="menu"}
 {include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
 {/block}
 {block name="main"}
-
-<!--发帖页面不好写，真的不好写！！！-->
-<!--改改原来的吧-->
-<!--还是再写一个吧，耦合当前的UI风格-->
 <form>
     {:token()}
-    <input type="hidden" name="sign" value="{$attaSign}">
-    <header class="mdui-card" style="height:auto">
-        <div class="mdui-col-sm-2 mdui-col-xs-12">
-            <select class="mdui-select" mdui-select name="fid" required>
-                <option selected disabled>板块</option>
+    <input type="hidden" name="sign" value="{$attaSign|default=''}">
+    <header class="mdui-card mdui-row mdui-p-a-1">
+        <div class="mdui-col-xs-12">
+            <label class="mdui-textfield-label">所属板块</label>
+            <select class="mdui-select" mdui-select="{position: 'bottom'}" name="fid" required>
                 {volist name="forum" id="vo"}
                 <option value="{$vo.fid}">{$vo.name}</option>
                 {/volist}
             </select>
         </div>
-        <div class="mdui-col-sm-10 mdui-col-xs-12 mdui-textfield mdui-textfield-floating-label">
+        <div class="mdui-col-xs-12 mdui-textfield mdui-textfield-floating-label">
             <label class="mdui-textfield-label">标题</label>
             <input name="subject" class="mdui-textfield-input" type="text" max="60" required />
         </div>
     </header>
     <div class="mainstream-division"></div>
-    <main class="mdui-card">
-        <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-12">
+    <main class="mdui-card mdui-row mdui-p-a-1">
+        <div class="mdui-textfield">
             <label class="mdui-textfield-label">内容</label>
-            <textarea rows="10" class="mdui-textfield-input" name="content" required></textarea>
-            <div class="mdui-textfield-helper">可使用Markdown语法，详细语法说明可以查看</div>
+            <textarea rows="10" class="mdui-textfield-input" id="editor" name="content" required></textarea>
+            <div class="mdui-textfield-helper"></div>
+        </div>
+        <div class="mdui-divider"></div>
+        <div class="mdui-btn-group" id="mtf-editor">
+            <button type="button" class="mdui-btn" id="mtf-editor-link"><i class="mdui-icon material-icons">link</i></button>
+            <button type="button" class="mdui-btn" id="mtf-editor-photo"><i class="mdui-icon material-icons">photo</i></button>
+            <button type="button" class="mdui-btn" id="mtf-editor-code"><i class="mdui-icon material-icons">code</i></button>
+            <button type="button" class="mdui-btn" id="mtf-editor-preview"><i class="mdui-icon material-icons">remove_red_eye</i></button>
+            <button type="button" class="mdui-btn" id="mtf-editor-info"><i class="mdui-icon material-icons">info</i></button>
         </div>
     </main>
-    <div class="mainstream-division"></div>
-    <button class="mdui-fab mdui-fab-fixed mdui-color-theme-accent mdui-ripple" type="submit"><i class="mdui-icon material-icons">done</i></button>
+    <button class="mdui-fab mdui-fab-fixed mdui-color-theme-accent mdui-ripple" type="submit"><i class="mdui-icon material-icons">send</i></button>
 </form>
 {/block}
 
 {block name="js"}
+<script src="__MOD__editor/editor.mtf.js"></script>
+<script src="__MOD__editor/marked.js"></script>
+<script src="__MOD__prism/prism.js"></script>
 <script src="__JS__post.mtf.js"></script>
 <script>
     var post = new mtfPost();
-    var editor = post.createTopic();
+    post.createTopic();
+    var editor = new mtfEditor('#mtf-editor');
 </script>
 {/block}

@@ -11,7 +11,10 @@ class Onactive extends Base
      */
     public function run()
     {
-        $this->appInit('helloworld');
+        $this->appInit('helloworld', [
+            'name' => 'helloworld',
+            'sign' => 'helloworld',
+        ]);
         return 'IsRun';
     }
 

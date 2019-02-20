@@ -140,7 +140,7 @@ class Set extends Base
     {
         $dir = get_dir("application/plugin/controller/", true); //获取模板文件下的数组信息
         foreach ($dir as $key => $value) {
-            $pluginInfo = require_once $value['abs'] . 'info.php';
+            $pluginInfo = require_once $value['abs'] . 'Info.php';
             $pluginList[] = [
                 'info' => $pluginInfo,
                 'start' => Plugin::isStart($pluginInfo['path']),

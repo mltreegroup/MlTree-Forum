@@ -26,7 +26,7 @@ class Plugin extends Model
      */
     public static function getAppPath($appSign)
     {
-        return \getRootPath() . 'application\\plugin\\controller\\' . $appSign . '\\';
+        return \getRootPath() . 'application/plugin/controller/' . $appSign . '/';
     }
 
     /**

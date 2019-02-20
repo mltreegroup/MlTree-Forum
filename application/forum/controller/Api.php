@@ -111,7 +111,7 @@ class Api extends Base
         }
         if (Plugin::isStart($appSign)) {
             $url = strtr($url, '_', '.');
-            $path = Plugin::getAppPath($appSign) . 'assets\\' . $url;
+            $path = Plugin::getAppPath($appSign) . 'assets/' . $url;
             if (empty(\cache($path))) {
                 $mime = \getFileMime($path);
                 if (!file_exists($path)) {

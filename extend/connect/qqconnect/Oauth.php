@@ -22,7 +22,7 @@ class Oauth{
     function __construct(){
         $this->urlUtils = new URL();
         $this->error = new ErrorCase();
-        $this->inc = config('qqconnect');
+        $this->inc = config('mtf.qqconnect');
     }
 
     public function qq_login($callbakc_url=''){
@@ -43,7 +43,6 @@ class Oauth{
             "scope" => $scope
         );
         $login_url =  $this->urlUtils->combineURL(self::GET_AUTH_CODE_URL, $keysArr);
-
         return $login_url;
     }
 
@@ -52,16 +51,16 @@ class Oauth{
         if(!session('state') || input('state') != session('state')){
             $this->error->showError("30001");
         }
-
+        
         //-------请求参数列表
         $keysArr = array(
             "grant_type" => "authorization_code",
             "client_id" => $this->inc['appid'],
             "redirect_uri" => urlencode($this->inc['callback']),
-            "client_secret" => $this->ins['appkey'],
+            "client_secret" => $this->inc['appkey'],
             "code" => input('code')
         );
-
+        
         //------构造请求access_token的url
         $token_url = $this->urlUtils->combineURL(self::GET_ACCESS_TOKEN_URL, $keysArr);
         $response = $this->urlUtils->get_contents($token_url);

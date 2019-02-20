@@ -86,7 +86,7 @@ class Plugin
      */
     public static function serachPlugin()
     {
-        $dirs = get_dir('application' . DIRECTORY_SEPARATOR . 'plugin' . DS . 'controller' . DIRECTORY_SEPARATOR, true, true);
+        $dirs = get_dir('application' . DIRECTORY_SEPARATOR . 'plugin' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR, true, true);
 
         foreach ($dirs as $key => $value) {
             if (!(rtrim($value['rel'], DIRECTORY_SEPARATOR)) && !pluginModel::isArrow(rtrim($value['rel'], DIRECTORY_SEPARATOR))) {

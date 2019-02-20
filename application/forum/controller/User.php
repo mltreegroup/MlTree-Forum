@@ -5,7 +5,7 @@ use app\common\model\Mail;
 use app\common\model\Message;
 use app\common\model\User as UserModel;
 use app\forum\controller\Base;
-use connect\qqconnect\QC;
+use \connect\qqconnect\QC;
 
 class User extends Base
 {

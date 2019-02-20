@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'version' => '1.0.2.20190220_Alpha',
+    
     /**
      * QQ互联登录配置
      */

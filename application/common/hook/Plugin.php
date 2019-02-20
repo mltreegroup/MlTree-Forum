@@ -86,10 +86,10 @@ class Plugin
      */
     public static function serachPlugin()
     {
-        $dirs = get_dir('application\\plugin\\controller\\', true, true);
+        $dirs = get_dir('application' . DIRECTORY_SEPARATOR . 'plugin' . DS . 'controller' . DIRECTORY_SEPARATOR, true, true);
 
         foreach ($dirs as $key => $value) {
-            if (!(rtrim($value['rel'], '\\')) && !pluginModel::isArrow(rtrim($value['rel'], '\\'))) {
+            if (!(rtrim($value['rel'], DIRECTORY_SEPARATOR)) && !pluginModel::isArrow(rtrim($value['rel'], DIRECTORY_SEPARATOR))) {
                 return;
             }
             require_once $value['abs'] . 'Bootstrap.php';
@@ -103,7 +103,7 @@ class Plugin
                     //dump($ec->getMethods()); //获取方法\
                     foreach ($ec->getMethods() as $key => $func) {
                         $savePlugin[$func->name][] = [
-                            'name' => rtrim($value['rel'], '\\'),
+                            'name' => rtrim($value['rel'], DIRECTORY_SEPARATOR),
                             'fileName' => $value['abs'] . 'Bootstrap.php',
                             'class' => $val,
                             'func' => $func->name,

@@ -308,21 +308,21 @@ function get_dir($path, $abs = false, $dir = true)
                 if (is_dir($path . $value)) {
                     if ($abs) {
                         $files[] = [
-                            "abs" => $path . $value . "\\",
-                            "rel" => $value . "\\",
+                            "abs" => $path . $value . DIRECTORY_SEPARATOR,
+                            "rel" => $value . DIRECTORY_SEPARATOR,
                         ];
                     } else {
-                        $files[] = $value . "\\";
+                        $files[] = $value . DIRECTORY_SEPARATOR;
                     }
                 }
             } else {
                 if ($abs) {
                     $files[] = [
-                        "abs" => $path . $value . "\\",
-                        "rel" => $value . "\\",
+                        "abs" => $path . $value . DIRECTORY_SEPARATOR,
+                        "rel" => $value . DIRECTORY_SEPARATOR,
                     ];
                 } else {
-                    $files[] = $value . "\\";
+                    $files[] = $value . DIRECTORY_SEPARATOR;
                 }
             }
 

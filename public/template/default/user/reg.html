@@ -43,7 +43,7 @@
                 <div class="mdui-textfield-error">验证码是必须的，我也很无奈啊╮(╯▽╰)╭</div>
             </div>
             <div class="mdui-col-xs-12 mdui-col-sm-4">
-                <img src="{:captcha_src()}" class="mdui-img-fluid" alt="验证码" onClick="this.src=this.src+'?'+Math.random()"/>
+                <img src="{:captcha_src()}" class="mdui-img-fluid" alt="验证码" onClick="this.src=this.src+'?'+Math.random()" />
             </div>
         </section>
         <div>
@@ -59,6 +59,10 @@
             </figure>
         </div>
     </aside>
+    <footer style="margin-top:10px;">
+        <div class="mdui-subheader">社会化登录</div>
+        <a href="{:url('forum/user/qqLogin')}" class="mdui-m-l-1"> <i class="mdui-icon iconfont icon-qq mdui-text-color-blue"></i></a>
+    </footer>
 </form>
 {/block}
 

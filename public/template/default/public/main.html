@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="__CSS__common.mtf.css">
     <link rel="stylesheet" href="//at.alicdn.com/t/font_921451_71ru10cgdm4.css">
     <script src="__JS__xss.min.js"></script>
-    <script src="__JS__vue.min.js"></script>
     <script src="__JS__mdui.min.js"></script>
     <script src="__JS__jquery.min.js"></script>
     <script>
@@ -34,7 +33,7 @@
 </head>
 
 <body class="mdui-theme-primary-green mdui-theme-accent-blue mdui-appbar-with-toolbar">
-    <header id="app-menu" class="mdui-appbar mdui-shadow-0 mdui-appbar-fixed" v-cloak>
+    <header id="app-menu" class="mdui-appbar mdui-shadow-0 mdui-appbar-fixed">
         {block name="menu"}{/block}
     </header>
     <div class="mdui-drawer mdui-drawer-close mdui-drawer-full-height mdui-color-white" id="d-drawer">
@@ -109,12 +108,13 @@
         </ul>
     </div>
     <div class="appbar-expanded-background mdui-color-theme"></div>
-    <div id="app-content" class="main-content-stream" v-cloak>
+    <div id="app-content" class="main-content-stream">
         {block name="main"}{/block}
     </div>
     {include file='default/public/footer' /}
     {block name="footer"}{/block}
     <script src="__JS__main.mtf.js"></script>
+    {tag:pluginjs /}
     {block name="js"}{/block}
 </body>
 

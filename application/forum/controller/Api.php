@@ -2,6 +2,7 @@
 namespace app\forum\controller;
 
 use app\common\model\Comment;
+use app\common\model\Plugin;
 use app\common\model\Topic;
 use app\common\model\User;
 use app\forum\controller\Base;
@@ -98,5 +99,35 @@ class Api extends Base
         $info = input('post.');
         $comment = new Comment;
         return $comment->add($info);
+    }
+
+    /**
+     * 获取插件静态资源地址
+     */
+    public function pluginAssets($appSign = null, $url = null)
+    {
+        if (empty($appSign) && empty($url)) {
+            return;
+        }
+        if (Plugin::isStart($appSign)) {
+            $url = strtr($url, '_', '.');
+            $path = Plugin::getAppPath($appSign) . 'assets\\' . $url;
+            if (empty(\cache($path))) {
+                $mime = \getFileMime($path);
+                if (!file_exists($path)) {
+                    return;
+                }
+                $content = \file_get_contents($path);
+
+                $response = response()->contentType($mime);
+                $response = $response->data($content);
+                \cache($path, $response);
+
+            } else {
+                $response = \cache($path);
+            }
+
+            return $response;
+        }
     }
 }

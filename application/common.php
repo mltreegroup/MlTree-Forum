@@ -261,3 +261,72 @@ function isInstall()
         return false;
     }
 }
+
+/**
+ * 获取插件访问URL
+ */
+function pluginUrl($appSign, $path, $data = [])
+{
+    \think\facade\Route::any($appSign . '/' . $path, 'plugin/' . $appSign . '.' . $path);
+    return url('/plugin/' . $appSign . '.' . $path, $data);
+}
+
+/**
+ * 获取插件静态资源URL
+ */
+function pluginAssetsUrl($appSign, $url)
+{
+    return url('forum/api/pluginAssets', ['appSign' => $appSign, 'url' => $url]);
+}
+
+/**
+ * 文件类型检测
+ * @param string $url 文件绝对路径
+ */
+function getFileMime($url = '')
+{
+    $finfo = finfo_open(FILEINFO_MIME);
+    $mime = finfo_file($finfo, $url);
+    finfo_close($finfo);
+    return $mime;
+}
+
+/**
+ * 获取指定目录下的子目录
+ * @param string $path 相对于根目录的目录路径
+ * @param bool $abs 是否生成绝对路径
+ * @param bool $dir 是否只包含目录
+ * @return array $files 子目录数组
+ */
+function get_dir($path, $abs = false, $dir = true)
+{
+    $path = getRootPath() . $path;
+    $dirs = scandir($path);
+    foreach ($dirs as $key => $value) {
+        if ($value !== "." && $value !== "..") {
+            if ($dir) {
+                if (is_dir($path . $value)) {
+                    if ($abs) {
+                        $files[] = [
+                            "abs" => $path . $value . "\\",
+                            "rel" => $value . "\\",
+                        ];
+                    } else {
+                        $files[] = $value . "\\";
+                    }
+                }
+            } else {
+                if ($abs) {
+                    $files[] = [
+                        "abs" => $path . $value . "\\",
+                        "rel" => $value . "\\",
+                    ];
+                } else {
+                    $files[] = $value . "\\";
+                }
+            }
+
+        }
+    }
+    return $files;
+}

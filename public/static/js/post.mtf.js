@@ -351,6 +351,7 @@ class mtfPost {
             }, 1000);
         }
     }
+    
     /**
      * Rewrited function to request email verification code to recover password.
      */

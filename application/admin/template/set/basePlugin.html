@@ -1,0 +1,116 @@
+{extend name="public/main"}
+{block name="head"}{/block}
+{block name="muen"}
+{include file='public/topbar' /}
+{/block}
+{block name="main"}
+<div class="mdui-m-a-1 mdui-typo">
+    <h1 class="mdui-m-l-3">插件管理
+        <small>Plugin</small>
+    </h1>
+
+    <div class="mdui-m-l-3">
+        <div class="mdui-row">
+            {volist name="pluginList" id="vo"}
+            <div class="mdui-col-xs-12 mdui-col-md-4 mdui-m-t-1">
+                <div class="mdui-card">
+                    <div class="mdui-card-media">
+                        <img src="{:pluginAssetsUrl($vo.info.path,'Logo_png')}" alt="{$vo.info.name}" />
+                    </div>
+
+                    <div class="mdui-card-primary">
+                        <div class="mdui-card-primary-title">{$vo.info.name}</div>
+                        <div class="mdui-card-primary-subtitle">{$vo.info.path}</div>
+                    </div>
+
+                    <div class="mdui-card-content">
+                        <code>Version:{$vo.info.version}</code>
+                        <p>{$vo.info.description}</p>
+                    </div>
+
+                    <div class="mdui-card-actions">
+                        {if $vo.start}
+                        <button class="mdui-btn mdui-ripple mdui-color-theme mtf-plugin-unstart" data-sign="{$vo.info.path}">停用</button>
+                        {else}
+                        <button class="mdui-btn mdui-ripple mdui-color-theme-accent mtf-plugin-start" data-sign="{$vo.info.path}">启用</button>
+                        {/if}
+                        <button class="mdui-btn mdui-ripple mtf-open" data-url="{:pluginUrl($vo.info.path,'option/index')}"
+                            data-target="_blank">设置</button>
+                        <button class="mdui-btn mdui-ripple mtf-open" data-url="{$vo.info.about}" data-target="_blank">详细信息</button>
+                    </div>
+                </div>
+            </div>
+            {/volist}
+        </div>
+    </div>
+</div>
+
+{/block} {block name="js"}
+<script>
+    $$('#sys').addClass('mdui-collapse-item-open');
+    $$('#basePlugin').addClass('mdui-list-item-active');
+
+    $$('.mtf-plugin-unstart').on('click', function () {
+        let data = $$(this).data();
+        $$.ajax({
+            method: 'POST',
+            url: '',
+            data: {
+                start: false,
+                sign: data.sign,
+            },
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar({
+                        message: res.msg,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    });
+                } else {
+                    mdui.snackbar({
+                        message: res.msg,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    });
+                }
+            },
+        });
+    });
+
+    $$('.mtf-plugin-start').on('click', function () {
+        let data = $$(this).data();
+        $$.ajax({
+            method: 'POST',
+            url: '',
+            data: {
+                start: true,
+                sign: data.sign,
+            },
+            dataType: 'json',
+            success: function (res) {
+                if (res.code == 0) {
+                    mdui.snackbar({
+                        message: res.msg,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    });
+                } else {
+                    mdui.snackbar({
+                        message: res.msg,
+                        position: 'top',
+                        onClosed: function () {
+                            location.reload();
+                        }
+                    });
+                }
+            },
+        });
+    });
+</script> {/block}

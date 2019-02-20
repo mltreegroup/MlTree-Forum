@@ -3,19 +3,20 @@ var $$ = mdui.JQ;
 mdui.mutation()
 
 // 定义Vue函数
-var mtfMenu = new Vue({
-    el: '#app-menu',
-    data: {
+// 2019/02/08 暂时移除Vue
+// var mtfMenu = new Vue({
+//     el: '#app-menu',
+//     data: {
 
-    }
-});
+//     }
+// });
 
-var mtfContent = new Vue({
-    el: '#app-content',
-    data: {
-        msg: 'Hello MTF!'
-    }
-})
+// var mtfContent = new Vue({
+//     el: '#app-content',
+//     data: {
+//         msg: 'Hello MTF!'
+//     }
+// })
 
 // 定义mltMain主函数类
 class mtfMain {

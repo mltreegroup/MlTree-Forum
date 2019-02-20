@@ -15,7 +15,7 @@ class Topic extends Base
         if ($tid == 0) {
             return redirect(url('forum\index\index'));
         }
-
+        \app\common\hook\Plugin::call('topicIndex', $tid);
         $topic = new TopicModel;
         $res = $topic->getTopic($tid);
         if (!$res[0]) {

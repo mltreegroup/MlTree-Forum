@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hello World!</title>
+</head>
+
+<body>
+    <h1>这就是一个示例插件</h1>
+    <div>
+        <p>这个插件并没有什么参数，一切的输出都是这个样子。</p>
+        <p>这个插件的作用就是给大家举个栗子。</p>
+        <p>在这里，你能使用所有的ThinkPHP函数，渲染输出任何东西。就是这样~</p>
+        <p>比如这个就是渲染的：<code>{$msg}</code></p>
+        <p>同时，你也能使用例如 <code>{literal}{:pluginAssetsUrl($sign, $url)}{/literal}</code> 来加载静态资源，例如下面这张图片</p>
+        <p> <img src="{:pluginAssetsUrl('helloworld','Logo_png')}" alt="示例图标" width="128"></p>
+        <p>注意，为了防止后缀转换，要将 <code>.</code> 替换为 <code>_</code><br>所以上面的图片是这样访问的<code>{literal}{:pluginAssetsUrl('helloworld','Logo_png')}{/literal}</code></p>
+        <p>使用 <code>{literal}{:pluginUrl($sign, $path, $data)}{/literal}</code>来访问插件内的地址，例如下面这个链接</p>
+        <p> <a href="{:pluginUrl('helloworld','index/index')}">{:pluginUrl('helloworld','index/index')}</a></p>
+        <p>当插件没有按常规进行注册时，系统将会报错同时阻止访问。</p>
+        <p>为什么不能自动识别sign？我懒了，交给你了~</p>
+    </div>
+</body>
+
+</html>

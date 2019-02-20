@@ -7,6 +7,7 @@ use app\common\model\Group;
 use app\common\model\Mail;
 use app\common\model\msg;
 use app\common\model\Option;
+use app\common\model\Plugin;
 use app\common\model\Topic;
 use think\Db;
 use think\facade\Request;
@@ -132,6 +133,37 @@ class Set extends Base
         return $this->adminView('set/baseMail', [
             'mail' => $mail,
             'template' => $template,
+        ]);
+    }
+
+    public function basePlugin()
+    {
+        $dir = get_dir("application/plugin/controller/", true); //获取模板文件下的数组信息
+        foreach ($dir as $key => $value) {
+            $pluginInfo = require_once $value['abs'] . 'info.php';
+            $pluginList[] = [
+                'info' => $pluginInfo,
+                'start' => Plugin::isStart($pluginInfo['path']),
+                'path' => $value['abs'],
+            ];
+        }
+
+        if (request()->isPost()) {
+            $data = input('post.');
+            if ($data['start'] == 'true') {
+                Plugin::where('sign', $data['sign'])->update(['status' => 1]);
+                Plugin::runPluginStart($data['sign']);
+                return \outRes(0, '启用成功');
+            } else {
+                Plugin::where('sign', $data['sign'])->update(['status' => 0]);
+                Plugin::runPluginCancel($data['sign']);
+                Plugin::Uninit($data['sign']);
+                return \outRes(0, '关闭成功');
+            }
+        }
+
+        return $this->adminView('set/basePlugin', [
+            'pluginList' => $pluginList,
         ]);
     }
 

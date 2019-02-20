@@ -1,8 +1,9 @@
 <?php
 namespace app\common\controller;
 
-use think\Controller;
 use app\common\model\Option;
+use app\common\model\Plugin;
+use think\Controller;
 
 class Base extends Controller
 {
@@ -12,7 +13,7 @@ class Base extends Controller
     protected function initialize()
     {
         //判断程序是否安装
-        if(!isInstall()){
+        if (!isInstall()) {
             return $this->redirect('install\index\index');
         }
     }
@@ -30,6 +31,10 @@ class Base extends Controller
         !empty($plate) ? $siteData['mainTitle'] = $plate . ' - ' . $siteData['siteTitle'] : $siteData['mainTitle'] = $siteData['siteTitle'];
         $siteData['palte'] = $plate;
         $tpl = $siteData['template'] . $tpl;
+
+        $pList = Plugin::getPluginList(true, true);
+        $this->assign('plugin', $pList);
+        
         $this->assign('site', $siteData);
         $this->assign($option);
         return $this->fetch($tpl);

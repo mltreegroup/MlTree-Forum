@@ -9,7 +9,7 @@
 <form>
     {:token()}
     <input type="hidden" name="sign" value="{$attaSign|default=''}">
-    <header class="mdui-card mdui-row mdui-p-a-1">
+    <header class="mdui-card mdui-row mdui-p-a-1" style="overflow:initial;">
         <div class="mdui-col-xs-12">
             <label class="mdui-textfield-label">所属板块</label>
             <select class="mdui-select" mdui-select="{position: 'bottom'}" name="fid" required>
@@ -32,7 +32,7 @@
             <div class="mdui-textfield-helper"></div>
         </div>
         <div class="mdui-divider"></div>
-        <div class="mdui-btn-group" id="mtf-editor">
+        <div class="mdui-btn-group" id="mtf-editor-btn">
             <button type="button" class="mdui-btn" id="mtf-editor-link"><i class="mdui-icon material-icons">link</i></button>
             <button type="button" class="mdui-btn" id="mtf-editor-photo"><i class="mdui-icon material-icons">photo</i></button>
             <button type="button" class="mdui-btn" id="mtf-editor-code"><i class="mdui-icon material-icons">code</i></button>
@@ -40,9 +40,6 @@
             <button type="button" class="mdui-btn" id="mtf-editor-info"><i class="mdui-icon material-icons">info</i></button>
         </div>
     </main>
-    <!-- <footer class="mdui-card-actions">
-            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-float-right" type="submit">发送</button>
-        </footer> -->
     <button class="mdui-fab mdui-fab-fixed mdui-color-theme-accent mdui-ripple" type="submit"><i class="mdui-icon material-icons">done</i></button>
 </form>
 {/block}
@@ -53,8 +50,10 @@
 <script src="__MOD__prism/prism.js"></script>
 <script src="__JS__post.mtf.js"></script>
 <script>
-    var editor = new mtfEditor('#mtf-editor');
     var post = new mtfPost();
     post.editorTopic();
+    var editor = new mtfEditor('#mtf-editor-btn', {
+        key: '{$attaSign|default="editor"}'
+    });
 </script>
 {/block}

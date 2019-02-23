@@ -5,10 +5,33 @@ class mtfEditor {
     constructor(dom, option = {}) {
         this.dom = dom;
         this.editorDom = option.editorDom || "#editor";
+        this.autoSave = null;
+        this.key = option.key || 'mtf-editor';
         this.init();
     }
 
     init() {
+
+        if (localStorage.getItem(this.key)) {
+            let key = this.key,
+                dom = this.editorDom;
+            mdui.dialog({
+                title: '询问-尚未保存的编辑',
+                content: '有尚未保存的编辑，是否恢复？',
+                history: false,
+                buttons: [{
+                        text: '否'
+                    },
+                    {
+                        text: '是',
+                        onClick: function (inst) {
+                            $$(dom).val(localStorage.getItem(key));
+                        }
+                    }
+                ]
+            });
+        };
+
         $$(this.dom + '-link').on('click', () => {
             mdui.dialog({
                 title: '插入链接',
@@ -122,6 +145,14 @@ class mtfEditor {
         $$(this.dom + '-info').on('click', () => {
             window.open('http://www.markdown.cn');
         });
+
+        $$('form').on('submit', function () {
+            this.cleanAutoSave();
+        });
+
+        $$(this.editorDom).on('input propertychange', () => {
+            this.saveContent();
+        })
     }
 
     addContent(value, position = 'after') {
@@ -137,5 +168,14 @@ class mtfEditor {
                 $$(this.editorDom).val(content);
                 break;
         }
+    }
+
+    saveContent() {
+        let content = $$(this.editorDom).val();
+        localStorage.setItem(this.key, content);
+    }
+
+    cleanAutoSave() {
+        localStorage.removeItem(this.key);
     }
 }

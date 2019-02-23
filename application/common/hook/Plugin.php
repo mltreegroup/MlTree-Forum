@@ -5,7 +5,7 @@ use app\common\model\Plugin as pluginModel;
 
 class Plugin
 {
-    public static $pluginList = array();
+    public static $pluginList = [];
     public static $noset = [];
 
     /**

@@ -22,6 +22,17 @@ class User extends Base
             if (!$userInfo) {
                 return $this->error('用户不存在');
             }
+            /**
+             * 置入钩子
+             * 钩子名称：userIndex
+             * 钩子参数：[type,userInfo,userTopic]
+             */
+            \app\common\hook\Plugin::call('userIndex', $this, $data = [
+                'type' => 'Visitor',
+                'userInfo' => $userInfo,
+                'userTopic' => $userTopicList,
+            ]);
+
             return $this->mtfView('user/index', '用户信息',
                 [
                     'type' => 'Visitor',
@@ -47,7 +58,14 @@ class User extends Base
         }
         if (request()->isPost()) {
             $data = input('post.', '', 'strip_tags,htmlspecialchars');
+            /**
+             * 置入钩子
+             * 钩子名称：userReg
+             * 钩子参数：$data
+             */
+            \app\common\hook\Plugin::call('userRegBefor', $this, $data);
             $res = UserModel::register($data);
+            \app\common\hook\Plugin::call('userRegAfter', $this, $data);
             if ($res[0]) {
                 return outRes(0, '注册成功！正在前往登录界面', url('forum/user/login'));
             } else {
@@ -65,6 +83,12 @@ class User extends Base
         }
         if (request()->isPost()) {
             $data = input('post.', '', 'strip_tags,htmlspecialchars');
+            /**
+             * 置入钩子
+             * 钩子名称：userLogin
+             * 钩子参数：$data
+             */
+            \app\common\hook\Plugin::call('userLogin', $this, $data);
             $res = UserModel::login($data);
             if ($res[0]) {
                 return outRes(0, '登录成功！欢迎回来……', url('forum/user/index'));

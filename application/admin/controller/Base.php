@@ -11,13 +11,13 @@ class Base extends Controller
     {
         $uid = session('uid');
         if (!User::isLogin()) {
-            return $this->error('无权限！', url('forum/index/index'));
+            return $this->error('无权限', url('forum/index/index'));
         }
         $auth = new auth();
         if (empty($uid)) {
-            return $this->error('无权限！', url('forum/index/index'));
+            return $this->error('无权限', url('forum/index/index'));
         } elseif (!$auth->check('admin', $uid)) {
-            return $this->error('无权限！', url('forum/index/index'));
+            return $this->error('无权限', url('forum/index/index'));
         }
     }
 

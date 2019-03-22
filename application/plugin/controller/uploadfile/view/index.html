@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>设置UploadFile</title>
+    <link rel="stylesheet" href="__CSS__mdui.min.css">
+    <script src="__JS__mdui.min.js"></script>
+</head>
+
+<body>
+    <div class="mdui-container mdui-typo">
+        <blockquote>当选择储存方式为本地储存时无需填写任何参数</blockquote>
+        <form action="" method="post" class="mdui-m-t-5">
+            <label class="mdui-textfield-label">储存方式</label>
+            <select class="mdui-select" mdui-select name="type">
+                <option value="local">本地储存</option>
+                <option value="Upyun">又拍云储存</option>
+            </select>
+            <div class="mdui-textfield">
+                <label class="mdui-textfield-label">服务地址</label>
+                <input class="mdui-textfield-input" type="text" name="url" />
+            </div>
+            <div class="mdui-textfield">
+                <label class="mdui-textfield-label">储存空间名称</label>
+                <input class="mdui-textfield-input" type="text" name="service_name" />
+            </div>
+            <div class="mdui-textfield">
+                <label class="mdui-textfield-label">操作员名称</label>
+                <input class="mdui-textfield-input" type="text" name="operato_name" />
+            </div>
+            <div class="mdui-textfield">
+                <label class="mdui-textfield-label">操作员密码</label>
+                <input class="mdui-textfield-input" type="text" name="operato_pwd" />
+            </div>
+            <label class="mdui-textfield-label">储存本地副本</label>
+            <label class="mdui-switch">
+                <input type="checkbox" name="save_local" value="true" />
+                <i class="mdui-switch-icon"></i>
+            </label>
+            <br>
+            <button type="button" class="mdui-btn" id="submit">保存</button>
+        </form>
+    </div>
+</body>
+<script>
+    let $$ = mdui.JQ;
+
+    $$('#submit').on('click', function () {
+        let data = $$('form').serialize();
+        $$.ajax({
+            method: 'POST',
+            url: '',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                mdui.snackbar(res.msg)
+            },
+        });
+    });
+</script>
+
+</html>

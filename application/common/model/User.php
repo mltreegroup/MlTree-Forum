@@ -98,7 +98,6 @@ class User extends Model
      * @param [array] $loginData [用户登录信息]
      * @return [array]
      */
-
     public static function login($loginData)
     {
         $userData = Db::name('user')->where('email', $loginData['email'])->find();
@@ -131,6 +130,19 @@ class User extends Model
         cookie('userKey', $userKey);
 
         return [true, '登录成功'];
+    }
+
+    /**
+     * 小程序登录函数
+     * @param string $code 登录返回的code
+     */
+    public static function loginWx($code)
+    {
+        $_conf = config('mtf.Wxapplet');
+        $url = "https://api.weixin.qq.com/sns/jscode2session?appid={$_conf['appid']}&secret={$_conf['appSecret']}&js_code={$code}&grant_type=authorization_code";
+        $res = \curlGet($url, true);
+        $res = json_decode($res);
+        
     }
 
     /**
@@ -245,7 +257,7 @@ class User extends Model
             'status' => $this->userObj->status,
             'statusText' => $this->userObj->statusText,
         ];
-        if (fastAuth('admin',session('uid'))) {
+        if (fastAuth('admin', session('uid'))) {
             $data['create_ip'] = $this->userObj->create_ip;
             $data['login_ip'] = $this->userObj->login_ip;
         }
@@ -270,7 +282,7 @@ class User extends Model
     public static function getTopicList($uid)
     {
         $userTopicList = Db::name('topic')->where('uid', $uid)->paginate(10);
-        
+
         foreach ($userTopicList as $key => $value) {
             $value['content'] = strip_tags(htmlspecialchars_decode($value['content']));
             $value['time_format'] = time_format($value['create_time']);

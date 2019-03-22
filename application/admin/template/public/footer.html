@@ -1,3 +1,25 @@
 <footer class="mdui-bottom-nav">
     <div>©MlTree Forum</div>
 </footer>
+<script>
+    var $$ = mdui.JQ;
+    $$(function () {
+        let layout = localStorage.getItem('theme-layout');
+        if (layout == 'dark') {
+            $$('body').addClass('mdui-theme-layout-dark');
+        } else {
+            if ($$('body').hasClass('mdui-theme-layout-dark')) return $$('body').removeClass(
+                'mdui-theme-layout-dark');
+        }
+    });
+
+    $$('#theme-layout').on('click', () => {
+        if ($$('body').hasClass('mdui-theme-layout-dark')) {
+            $$('body').removeClass('mdui-theme-layout-dark');
+            localStorage.setItem('theme-layout', 'light');
+        } else {
+            $$('body').addClass('mdui-theme-layout-dark');
+            localStorage.setItem('theme-layout', 'dark');
+        }
+    });
+</script>

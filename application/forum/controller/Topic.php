@@ -54,7 +54,7 @@ class Topic extends Base
         if ($uid == 0 && $tid == 0) {
             return redirect(url('forum\index\index'));
         } elseif (!User::isLogin()) {
-            return $this->error('请先登录。', 'forum/user/login');
+            return $this->error('请先登录', 'forum/user/login');
         }
 
         //查询帖子信息

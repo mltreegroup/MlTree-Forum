@@ -19,8 +19,8 @@ class Tag extends TagLib
      */
     public function tagPluginJs()
     {
-        $parse = '{volist name="plugin" id="vo"}';
-        $parse .= '<script src="__MOD__plugin/run.js"></script>';
+        $parse = '<script src="__MOD__plugin/run.js"></script>';
+        $parse .= '{volist name="plugin" id="vo"}';
         $parse .= '<script src="{$vo.runJs}"></script>';
         $parse .= '{/volist}';
         return $parse;

@@ -2,7 +2,7 @@
 
 return [
     'version' => '1.0.2.20190220_Alpha',
-    
+
     /**
      * QQ互联登录配置
      */
@@ -12,6 +12,15 @@ return [
         'callback' => '',
         'scope' => 'get_user_info',
         'errorReport' => true,
+    ],
+
+    /**
+     * 微信小程序设置
+     */
+    'Wxapplet' => [
+        'status' => false,
+        'appid' => 'wx1b84983decae3476',
+        'appSecret' => 'c15cf3ab1e5164d64eb87e6d679f4799',
     ],
 
     /**

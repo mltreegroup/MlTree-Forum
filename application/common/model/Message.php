@@ -113,7 +113,7 @@ class Message extends Model
     public function readMessage($midarray)
     {
         if (empty($midarray)) {
-            return [false, 'Mid数组不能为空'];
+            return [false, 'MID数组不能为空'];
         }
         if ($midarray == 'all') {
             Message::where('toUid', session('uid'))->update(['status' => 1]);
@@ -163,7 +163,7 @@ class Message extends Model
     public function getMessage($mid)
     {
         if (empty($mid)) {
-            return [false, 'mid不能为空'];
+            return [false, 'MID不能为空'];
         }
         $res = Message::get($mid);
         if (empty($res)) {

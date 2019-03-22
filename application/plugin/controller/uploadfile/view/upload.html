@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>上传文件</title>
+    <link rel="stylesheet" href="__CSS__mdui.min.css">
+    <script src="__JS__mdui.min.js"></script>
+</head>
+
+<body class="mdui-theme-primary-blue mdui-theme-accent-pink">
+    <div class="mdui-container mdui-typo">
+        <div class="mdui-m-t-1">
+            <button id="selectBtn" class="mdui-btn mdui-color-theme-accent mdui-m-y-1">上传文件</button>
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>File Name</th>
+                            <th>Size</th>
+                            <th>Code</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="__MOD__upload/upload.mtf.js"></script>
+    <script>
+        var upload = new mtfUpload({
+            url: '',
+            selectBtn: '#selectBtn',
+            sign: 'file',
+            beforeSend: function (xhr, files) {
+                $$('tbody').append(
+                    $$('<tr id="' + upload.fileSign + '" ></tr>')
+                    .append($$('<td></td>').text($$('tbody').find('tr').length + 1))
+                    .append($$('<td></td>').text(files.name))
+                    .append($$('<td></td>').text(files.size + "KB"))
+                    .append($$('<td width="70%"></td>').append($$('<code class="Code" id="' + upload.fileSign +
+                        '-Code"></code>').text(
+                        "uploading")))
+                );
+            },
+            success: function (res) {
+                let code = `![${upload.files.name}](${res.msg})`;
+                if (res.code == 0) {
+                    $$('#' + upload.fileSign).find('.Code').text(code);
+                    mdui.snackbar('上传成功');
+                } else {
+                    $$('#' + upload.fileSign).find('.Code').text('upload false');
+                    mdui.snackbar('上传失败<br>' + res.msg);
+                }
+
+            },
+            error: function (xhr, status) {
+                mdui.snackbar('请求失败<br>' + status);
+            },
+        });
+    </script>
+</body>
+
+</html>

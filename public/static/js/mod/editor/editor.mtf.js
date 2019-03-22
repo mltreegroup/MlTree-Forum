@@ -1,5 +1,6 @@
 /**
  * 自制Markdown编辑器
+ * Version: 1.0.1
  */
 class mtfEditor {
     constructor(dom, option = {}) {
@@ -153,6 +154,16 @@ class mtfEditor {
         $$(this.editorDom).on('input propertychange', () => {
             this.saveContent();
         })
+    }
+
+    addBtn(id, val, func) {
+        $$(this.dom).append(
+            $$('<button type="button" class="mdui-btn" id="mtf-editor-' + id + '"></button>')
+            .html(val).on('click', function (e) {
+                func(e);
+            })
+        );
+        return true;
     }
 
     addContent(value, position = 'after') {

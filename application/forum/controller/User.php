@@ -13,7 +13,7 @@ class User extends Base
     {
         $user = new UserModel();
         if ($uid == 0 && empty(session('uid'))) {
-            return $this->error('用户不存在！', 'index/index/index');
+            return $this->error('用户不存在', 'index/index/index');
         }
         if (!UserModel::isLogin(cookie('userKey')) || $uid != session('uid') && $uid != 0) {
             $user = new UserModel;
@@ -67,7 +67,7 @@ class User extends Base
             $res = UserModel::register($data);
             \app\common\hook\Plugin::call('userRegAfter', $this, $data);
             if ($res[0]) {
-                return outRes(0, '注册成功！正在前往登录界面', url('forum/user/login'));
+                return outRes(0, '注册成功, 正在前往登录界面', url('forum/user/login'));
             } else {
                 return outRes(-1, $res[1]);
             }
@@ -103,9 +103,9 @@ class User extends Base
     {
         if (UserModel::isLogin()) {
             UserModel::logout();
-            return $this->success('退出成功！');
+            return $this->success('退出成功');
         } else {
-            return $this->error('当前无需退出呢！');
+            return $this->error('当前无需退出');
         }
     }
 
@@ -172,9 +172,9 @@ class User extends Base
         $email = base64_decode($email);
         $user = UserModel::getByEmail($email);
         if (empty($user)) {
-            return $this->error('账号不存在或错误。');
+            return $this->error('账号不存在或错误');
         } elseif (empty($user->code) && $user->status != 0) {
-            return $this->error('账号无需激活或位未知错误');
+            return $this->error('账号无需激活或未知错误');
         } elseif (session('ActiveTime') > time()) {
             return $this->error('请稍后再尝试获取激活邮件');
         }
@@ -248,7 +248,7 @@ class User extends Base
                     'option' => $this->siteOption('注册'),
                 ]);
             } else {
-                return $this->error('尚未注册，请注册后绑定QQ再使用QQ登录！', 'forum/user/reg');
+                return $this->error('尚未注册，请注册后绑定QQ再使用QQ登录', 'forum/user/reg');
             }
         }
     }

@@ -61,7 +61,7 @@ class Base extends Controller
      */
     protected static function getValue($appSign = '', $name)
     {
-        $res = Db::name('plugin_options')->where('sign', $appSign)->where('name', $name)->select();
+        $res = Db::name('plugin_options')->where('sign', $appSign)->where('name', $name)->value('value');
         return $res;
     }
 
@@ -70,7 +70,7 @@ class Base extends Controller
      */
     protected static function getValues($appSign = '')
     {
-        $res = Db::name('plugin_options')->where('sign', $appSign)->select();
+        $res = Db::name('plugin_options')->where('sign', $appSign)->column('value', 'name');
         return $res;
     }
 
@@ -79,7 +79,21 @@ class Base extends Controller
      */
     protected static function setValues($appSign = '', $value = [])
     {
-        $res = Db::name('plugin_options')->where('sign', $appSign)->update($value);
+        if (!Db::name('plugin_options')->where('sign', $appSign)->find()) {
+            $data = [];
+            foreach ($value as $key => $val) {
+                $data[] = [
+                    'name' => $key,
+                    'value' => $val,
+                    'sign' => $appSign,
+                ];
+            }
+            $res = Db::name('plugin_options')->insertAll($data);
+        } else {
+            foreach ($value as $key => $val) {
+                $res = Db::name('plugin_options')->where('sign', $appSign)->where('name', $key)->setField('value', $val);
+            }
+        }
         return $res;
     }
 }

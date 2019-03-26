@@ -330,3 +330,12 @@ function get_dir($path, $abs = false, $dir = true)
     }
     return $files;
 }
+
+/**
+ * 获取板块列表信息
+ */
+function getForum()
+{
+    $res = db('forum')->select();
+    return $res;
+}

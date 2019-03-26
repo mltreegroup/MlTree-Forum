@@ -126,4 +126,10 @@ class Plugin
     {
         cache('MlTree_Hook_plugin', null);
     }
+
+    public static function getAddes($data)
+    {
+        $res = $data;
+        return $res;
+    }
 }

@@ -44,7 +44,8 @@
             <nav class="drawer-user-info__subtitle">
                 <span class="nickname">未登录</span>
                 <span class="email">登录即可解锁更多姿势
-                    <button class="dropdown mdui-btn mdui-btn-icon mdui-ripple" mdui-menu="{target:'#user-operations',align:'right'}"><i
+                    <button class="dropdown mdui-btn mdui-btn-icon mdui-ripple"
+                        mdui-menu="{target:'#user-operations',align:'right'}"><i
                             class="mdui-icon material-icons">arrow_drop_down</i></button>
                     <ul class="mdui-menu" id="user-operations">
                         <li class="mdui-menu-item">
@@ -66,7 +67,8 @@
                 <span class="nickname">{$memberData.username}</span>
                 <span class="email">
                     {$memberData.email}
-                    <button class="dropdown mdui-btn mdui-btn-icon mdui-ripple" mdui-menu="{target:'#user-operations',align:'right'}"><i
+                    <button class="dropdown mdui-btn mdui-btn-icon mdui-ripple"
+                        mdui-menu="{target:'#user-operations',align:'right'}"><i
                             class="mdui-icon material-icons">arrow_drop_down</i></button>
                     <ul class="mdui-menu" id="user-operations">
                         <li class="mdui-menu-item">
@@ -86,6 +88,19 @@
             <div class="mdui-divider"></div>
         </header>
         <ul class="mdui-list">
+            <li class="mdui-subheader">板块列表</li>
+            {volist name="links" id="link"}
+            <li class="mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-avatar mdui-icon material-icons">
+                    {if $link.picurl}
+                    <img src="{$link.picurl}" alt="友情链接" />
+                    {else}
+                    open_in_new
+                    {/if}
+                </i>
+                <a href="{$link.url}" target="_blank" class="mdui-list-item-content">{$link.title}</a>
+            </li>
+            {/volist}
             <li class="mdui-subheader">友情链接</li>
             {volist name="links" id="link"}
             <li class="mdui-list-item mdui-ripple">
@@ -102,7 +117,8 @@
             <li class="mdui-subheader">支持</li>
             <li class="mdui-list-item mdui-ripple">
                 <i class="mdui-list-item-icon mdui-icon material-icons">open_in_new</i>
-                <a href="https://github.com/mltreegroup/mltree-forum" target="_blank" class="mdui-list-item-content">MlTree
+                <a href="https://github.com/mltreegroup/mltree-forum" target="_blank"
+                    class="mdui-list-item-content">MlTree
                     Forum</a>
             </li>
         </ul>
@@ -116,6 +132,11 @@
     <script src="__JS__main.mtf.js"></script>
     {block name="js"}{/block}
     {tag:pluginjs /}
+
+
+    <div class="mdui-card">
+        
+    </div>
 </body>
 
 </html>

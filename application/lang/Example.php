@@ -1,6 +1,7 @@
 <?php
 
-// 核心英文语言包
+// 核心语言包示例
+
 return [
     // forumController lang
     '无权限或未登录' => '',

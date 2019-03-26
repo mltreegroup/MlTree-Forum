@@ -13,7 +13,7 @@ class User extends Base
     {
         $user = new UserModel();
         if ($uid == 0 && empty(session('uid'))) {
-            return $this->error('用户不存在', 'index/index/index');
+            return $this->error('用户不存在', 'forum/index/index');
         }
         if (!UserModel::isLogin(cookie('userKey')) || $uid != session('uid') && $uid != 0) {
             $user = new UserModel;
@@ -27,11 +27,12 @@ class User extends Base
              * 钩子名称：userIndex
              * 钩子参数：[type,userInfo,userTopic]
              */
-            \app\common\hook\Plugin::call('userIndex', $this, $data = [
+            $data = [
                 'type' => 'Visitor',
                 'userInfo' => $userInfo,
                 'userTopic' => $userTopicList,
-            ]);
+            ];
+            \app\common\hook\Plugin::call('userIndex', $this, $data);
 
             return $this->mtfView('user/index', '用户信息',
                 [

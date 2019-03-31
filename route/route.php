@@ -11,6 +11,7 @@
 
 Route::rule('/', 'forum/index/index'); // 首页访问路由
 Route::alias('Api','forum/api');
+Route::rule('Forum/:fid','forum/index/forum');
 Route::rule('Topic/:tid', 'forum/topic/index');
 Route::rule('Editor/:tid','forum/topic/editor');
 Route::rule('Login', 'forum/user/login');

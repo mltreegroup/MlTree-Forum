@@ -12,6 +12,16 @@ class Index extends Base
         return $this->mtfView('forum/index');
     }
 
+    public function Forum($fid = 0)
+    {
+        if ($fid == 0) {
+            return \redirect(url('forum/index/index'));
+        }
+        $this->assign('fid', $fid);
+        \app\common\hook\Plugin::call('forumIndex', $this);
+        return $this->mtfView('forum/forum');
+    }
+
     public function Search($kw = '', $tp = 'topic')
     {
         $kwa = [$kw];

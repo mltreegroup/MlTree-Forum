@@ -27,7 +27,7 @@ class Api extends Base
     {
         $topic = new Topic;
         if (request()->isPost()) {
-            $data = $topic->TopicList(input('post.page'), input('post.type'));
+            $data = $topic->TopicList(input('post.page'), input('post.type'), input('post.fid'));
             return outRes(0, ['data' => $data[0], 'pages' => $data[1]], null, 'data');
         }
         $data = $topic->TopicList(1, 'common');

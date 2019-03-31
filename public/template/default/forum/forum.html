@@ -1,0 +1,49 @@
+{extend name="default/public/main"}
+{block name="menu"}
+{include file='default/public/topbar' /}{// 默认的topbar直接使用这一段即可}
+{/block}
+{block name="main"}
+<aside class="mdui-card">
+    <div class="mdui-card-primary">
+        <div class="mdui-card-primary-title">公告</div>
+        <div class="mdui-card-primary-subtitle">Announcement</div>
+    </div>
+    <div class="mdui-card-content">{$site.notice|raw}</div>
+</aside>
+<div class="mdui-subheader">置顶</div>
+<div class="mdui-card">
+    <ul class="mdui-list" id="stickied-posts">
+        <div class="mdui-progress">
+            <div class="mdui-progress-indeterminate"></div>
+        </div>
+    </ul>
+</div>
+<div class="mdui-subheader">所有帖子</div>
+<div class="mdui-card">
+    <ul class="mdui-list" id="all-posts">
+        <div class="mdui-progress">
+            <div class="mdui-progress-indeterminate"></div>
+        </div>
+    </ul>
+</div>
+{/block}
+
+{block name="js"}
+<button class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme-accent" id="post-creator"><i class="mdui-icon material-icons">create</i></button>
+<script src="__JS__post.mtf.js"></script>
+<script>
+    var post = new mtfPost({
+        topicListUrl: '{:url("api/getTopicList")}',
+    })
+
+    post.getTopicList('#all-posts', '{$fid}');
+    post.getTopicList('#stickied-posts', '{$fid}', 'tops');
+    $('#post-creator').dblclick(() => {
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1000);
+        return false;
+    });
+    $('#post-creator').click(() => window.location.href = '{:url("forum/topic/create")}');
+</script>
+{/block}

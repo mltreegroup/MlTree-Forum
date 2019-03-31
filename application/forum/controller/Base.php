@@ -23,12 +23,14 @@ class Base extends BaseController
             $user = new User;
             $this->assign('memberData', $user->getInfor(\session('uid')));
         }
-        $msgObj = new Message;
-        $msg = $msgObj->getMessageList(session('uid'), 0);
-        $this->assign('msg', ['unread' => count($msg['data'])]);
+        $forumList = Db::name('forum')->field('fid,name,topics,introduce')->select();
+        // $msgObj = new Message;
+        // $msg = $msgObj->getMessageList(session('uid'), 0);
+        // $this->assign('msg', ['unread' => count($msg['data'])]);
 
         $this->assign('site', Option::getValues('base'));
         $this->assign('links', $data);
+        $this->assign('forumList',$forumList);
         $auth = new Auth();
         if (request()->action() != 'login' && request()->action() != '_error') {
             if (Option::getValue('siteStatus') != 1 && !$auth->check('admin', session('uid'))) {

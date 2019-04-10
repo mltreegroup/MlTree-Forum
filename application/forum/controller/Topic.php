@@ -27,7 +27,7 @@ class Topic extends Base
         return $this->mtfView('topic/index', $res[1]['subject']);
     }
 
-    public function create()
+    public function create($fid = null)
     {
         if (!User::isLogin()) {
             return redirect(url('forum/user/login'));

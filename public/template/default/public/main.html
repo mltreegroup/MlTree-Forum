@@ -88,11 +88,20 @@
             <div class="mdui-divider"></div>
         </header>
         <ul class="mdui-list">
+            <li class="mdui-list-item mdui-ripple">
+                <i class="mdui-icon material-icons mdui-list-item-icon">chat</i>
+                <a href="#" class="mdui-list-item-content">Chats</a>
+            </li>
+            {if fastAuth('admin',session('uid'))}
+            <li class="mdui-list-item mdui-ripple">
+                <i class="mdui-icon material-icons mdui-list-item-icon">dashboard</i>
+                <a href="{:url('admin/index/index')}" class="mdui-list-item-content">Admin Console</a>
+            </li>
+            {/if}
             <li class="mdui-subheader">板块列表</li>
             {volist name="forumList" id="vo"}
             <li class="mdui-list-item mdui-ripple">
-                <a href="{:url('forum/index/forum',['fid'=>$vo.fid])}"
-                    class="mdui-list-item-content">{$vo.name}</a>
+                <a href="{:url('forum/index/forum',['fid'=>$vo.fid])}" class="mdui-list-item-content">{$vo.name}</a>
             </li>
             {/volist}
             <li class="mdui-subheader">友情链接</li>

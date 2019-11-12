@@ -68,7 +68,7 @@ class User extends Base
             $res = UserModel::register($data);
             \app\common\hook\Plugin::call('userRegAfter', $this, $data);
             if ($res[0]) {
-                return outRes(0, '注册成功, 正在前往登录界面', url('forum/user/login'));
+                return outRes(0, $res[1], url('forum/user/login'));
             } else {
                 return outRes(-1, $res[1]);
             }

@@ -71,6 +71,7 @@ class User extends Model
         // 如果不是则判断是否需要邮箱验证
         if (!empty(session('openid'))) {
             $userInforMation['openid'] = session('openid');
+            \session('openid',null);
             $user = user::create($userInforMation);
             return [true, '注册成功'];
         }

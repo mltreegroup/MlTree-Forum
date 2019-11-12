@@ -1,14 +1,14 @@
 <?php
 namespace app\common\model;
 
-use think\Model;
 use think\Db;
+use think\Model;
 
 class Option extends Model
 {
     public static function getValues($groups = ['base'])
     {
-        $t =  Db::name('options')->where('type', 'in', $groups)->column('value', 'name');
+        $t = Db::name('options')->where('type', 'in', $groups)->column('value', 'name');
         return $t;
     }
     public static function getValue($optionName)
@@ -17,20 +17,20 @@ class Option extends Model
     }
     public static function siteStatus()
     {
-		$data = Db::name('options')->where('name','siteStatus');
+        $data = Db::name('options')->where('name', 'siteStatus');
         if ($data != 1) {
             return false;
         }
         return true;
     }
-    static function setValues($data)
-	{
-		foreach ($data as $key => $value) {
-			Db::name('options')->where('name',$key)->setField('value',$value);
-		}
-	}
-	static function setValue($name,$data)
-	{
-		Db::name('options')->where('name',$name)->setField('value',$data);
-	}
+    public static function setValues($data)
+    {
+        foreach ($data as $key => $value) {
+            Db::name('options')->where('name', $key)->setField('value', $value);
+        }
+    }
+    public static function setValue($name, $data)
+    {
+        Db::name('options')->where('name', $name)->setField('value', $data);
+    }
 }

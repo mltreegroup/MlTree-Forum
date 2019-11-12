@@ -44,5 +44,6 @@ return [
         '__IMG__' => '/static/images/',
         '__JQ__' => '/static/js/jquery-3.3.1.min.js',
         '__TPL__' => '/template/',
+        '__MTF__' => '/static/js/mod/mltreeforum/'
     ],
 ];

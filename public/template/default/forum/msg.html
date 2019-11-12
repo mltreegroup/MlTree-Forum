@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Message - {$site.mainTitle}</title>
+
+    <link rel="stylesheet" href="__CSS__mdui.min.css">
+    <link rel="stylesheet" href="__CSS__common.mtf.css">
+    <script src="__JS__mdui.min.js"></script>
+    
+</head>
+
+<body class="mdui-theme-primary-green mdui-theme-accent-blue">
+<div class="mdui-card" id="msg-list">
+    <div class="mdui-tab mdui-tab-centered" mdui-tab>
+        <a href="#message" class="mdui-ripple">消息提醒</a>
+    </div>
+    <div id="message" class="mdui-p-a-0">
+        <ul class="mdui-list">
+            <a class="mdui-list-item mdui-ripple" v-for="lst in msgList" :href="lst.url">
+                <div class="mdui-list-item-avatar"><img :src="lst.user.avatar" /></div>
+                <div class="mdui-list-item-content">
+                    <div class="mdui-list-item-title">{{lst.content}}</div>
+                    <div class="mdui-list-item-text mdui-list-item-one-line"><span
+                            class="mdui-text-color-theme-text">{{lst.user.username}}</span> - 回复主题【{{lst.info}}】</div>
+                </div>
+            </a>
+        </ul>
+    </div>
+</div>
+<script src="__JS__vue.js"></script>
+<script>
+    let app = new Vue({
+        el: '#msg-list',
+        data: {
+            msgList: [{
+                user: {
+                    username: '十载北林',
+                    avatar: 'https://cdn.v2ex.com/avatar/685b/a585/257374_large.png?m=1550841568',
+                },
+                content: '测试回复',
+                info: '测试帖子',
+                url: 'https://forum.kingsr.cc',
+            }, {
+                user: {
+                    username: '十载北林',
+                    avatar: 'https://cdn.v2ex.com/avatar/685b/a585/257374_large.png?m=1550841568',
+                },
+                content: '测试回复',
+                info: '测试帖子',
+                url: 'https://forum.kingsr.cc',
+            }, {
+                user: {
+                    username: '十载北林',
+                    avatar: 'https://cdn.v2ex.com/avatar/685b/a585/257374_large.png?m=1550841568',
+                },
+                content: '测试回复',
+                info: '测试帖子',
+                url: 'https://forum.kingsr.cc',
+            }, {
+                user: {
+                    username: '十载北林',
+                    avatar: 'https://cdn.v2ex.com/avatar/685b/a585/257374_large.png?m=1550841568',
+                },
+                content: '测试回复',
+                info: '测试帖子',
+                url: 'https://forum.kingsr.cc',
+            }]
+        }
+    });
+</script>
+</body>
+
+</html>

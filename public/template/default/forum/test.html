@@ -1,0 +1,15 @@
+{extend name="default/public/main"}
+{block name="main"}
+<div class="mdui-col-xs-0 mdui-col-md-3">
+    <button id="messageBtn" class="mdui-btn">信息</button>
+</div>
+
+{/block}
+
+{block name="js"}
+<script src="__MOD__message/msg.mtf.js"></script>
+<script>
+    let msg = new mtfMessage();
+    
+</script>
+{/block}

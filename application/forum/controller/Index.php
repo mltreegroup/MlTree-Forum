@@ -34,4 +34,9 @@ class Index extends Base
     {
         return $this->mtfView('forum/test');
     }
+
+    public function msg()
+    {
+        return $this->mtfView('forum/msg');
+    }
 }

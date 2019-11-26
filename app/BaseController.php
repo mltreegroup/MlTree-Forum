@@ -34,7 +34,9 @@ abstract class BaseController
      * 控制器中间件
      * @var array
      */
-    protected $middleware = [];
+    protected $middleware = [
+        \app\middleware\Check::class,
+    ];
 
     /**
      * 构造方法
@@ -43,7 +45,7 @@ abstract class BaseController
      */
     public function __construct(App $app)
     {
-        $this->app     = $app;
+        $this->app = $app;
         $this->request = $this->app->request;
 
         // 控制器初始化
@@ -75,7 +77,7 @@ abstract class BaseController
                 list($validate, $scene) = explode('.', $validate);
             }
             $class = false !== strpos($validate, '\\') ? $validate : $this->app->parseClass('validate', $validate);
-            $v     = new $class();
+            $v = new $class();
             if (!empty($scene)) {
                 $v->scene($scene);
             }
@@ -89,6 +91,18 @@ abstract class BaseController
         }
 
         return $v->failException(true)->check($data);
+    }
+
+    protected function out($msg, $data = [], $code = 1)
+    {
+        $res = json(['code' => $code, 'msg' => \lang($msg), 'data' => $data, 'time' => time()]);
+        return $res;
+    }
+
+    public function auth($name = '', $uid = 0, $relation = 'or', $checkStatus = true)
+    {
+        $auth = new \app\Auth;
+        return $auth->check($name, $uid, $relation, $checkStatus);
     }
 
 }

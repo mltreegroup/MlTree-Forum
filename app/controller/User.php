@@ -30,8 +30,24 @@ class User extends BaseController
         if ($user->isEmpty()) {
             return $this->out(('user does not exist'), [], -11);
         }
+        $user->password = 'exist';
         $user->topics;
+        $user->group;
         return $this->out('success', $user);
+    }
+
+    /**
+     * 修改用户信息
+     */
+    public function update()
+    {
+        if ($this->request->isPost()) {
+            $user = Users::find($this->request->jwt->uid);
+            $data = $this->request->post(['nick', 'motto']);
+            $user->save($data);
+            $user->password = 'secrecy';
+            return $this->out('success', $user);
+        }
     }
 
     /**

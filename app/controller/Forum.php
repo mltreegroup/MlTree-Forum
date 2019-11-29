@@ -5,6 +5,8 @@ namespace app\controller;
 
 use app\BaseController;
 use app\model\Forums;
+use app\model\Options;
+use app\model\Topics;
 
 class Forum extends BaseController
 {
@@ -16,7 +18,9 @@ class Forum extends BaseController
     public function index()
     {
         //
+        $page = $this->request->param('page') ?? 1;
         $list = Forums::withCount('topics')->order('create_time', 'desc')->select();
+
         return $this->out('success', $list);
     }
 
@@ -51,11 +55,14 @@ class Forum extends BaseController
     public function read()
     {
         //
-        $forum = Forums::find($this->request->param('tid'));
+        $forum = Forums::find($this->request->param('fid'));
         if (empty($forum)) {
-            return $this->out('Forum does not exist');
+            return $this->out('Forum does not exist', [], -32);
         }
-        return $this->out('success', $forum);
+        $page = $this->request->param('page') ?? 1;
+        $list = Topics::with('user')->where('fid', $this->request->param('fid'))->page((int) $page, (int) Options::getValue('listMax'))->order('create_time', 'desc')->select();
+        $list->visible(['user' => ['nick', 'uid', 'avatar']]);
+        return $this->out('success', ['forum' => $forum, 'list' => $list]);
     }
 
     /**

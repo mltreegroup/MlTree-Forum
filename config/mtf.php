@@ -2,8 +2,8 @@
 return [
     'checklist' => [
         'Index' => [
-            'check' => ['test'],
-            'pass' => [],
+            'check' => ['test', 'upload'],
+            'pass' => ['checkJWT', 'site', 'index'],
         ],
         'Comment' => [
             'check' => [],
@@ -34,7 +34,7 @@ return [
         ],
         'User' => [
             'check' => [],
-            'pass' => ['login', 'register', 'changpwd', 'forget'],
+            'pass' => ['login', 'register', 'changpwd', 'forget', 'read'],
         ],
         'Admin' => [
             'check' => [],

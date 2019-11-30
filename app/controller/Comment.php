@@ -5,8 +5,8 @@ namespace app\controller;
 
 use app\BaseController;
 use app\model\Comments;
-use app\model\Options;
 use app\model\Topics;
+use app\model\Options;
 
 class Comment extends BaseController
 {
@@ -26,8 +26,8 @@ class Comment extends BaseController
             return $this->out('Topic does not exist', [], -51);
         }
         $comment = Comments::with('user')
-            ->where('tid', 'in', $tid)
-            ->page($page, Options::getValue('commentListMax'))
+            ->where('tid', $tid)
+            ->page((int) $page, (int) Options::getValue('commentListMax'))
             ->order('create_time', 'desc')
             ->select();
 

@@ -28,7 +28,7 @@ class InstallSql extends Migrator
      */
     public function change()
     {
-        $users = $this->table('users', ['id' => 'uid']);
+        $users = $this->table('users', ['id' => 'uid', 'collation' => 'utf8mb4_general_ci']);
         $users->addColumn('gid', 'integer', ['comment' => '所属用户组ID'])
             ->addColumn('nick', 'string', ['limit' => 50, 'comment' => '用户昵称'])
             ->addColumn('email', 'string', ['limit' => 100])
@@ -48,12 +48,12 @@ class InstallSql extends Migrator
             ->addIndex(['uid', 'gid'], ['unique' => true])
             ->create();
 
-        $fields = $this->table('fields', ['id' => 'feid'])
+        $fields = $this->table('fields', ['id' => 'feid', 'collation' => 'utf8mb4_general_ci'])
             ->addColumn('name', 'string', ['limit' => 200])
             ->addColumn('value', 'text')
             ->create();
 
-        $forums = $this->table('forums', ['id' => 'fid'])
+        $forums = $this->table('forums', ['id' => 'fid', 'collation' => 'utf8mb4_general_ci'])
             ->addColumn('name', 'string')
             ->addColumn('description', 'string', ['null' => true])
             ->addColumn('create_time', 'integer')
@@ -62,7 +62,7 @@ class InstallSql extends Migrator
             ->addColumn('status', 'integer', ['limit' => 1])
             ->create();
 
-        $groups = $this->table('groups', ['id' => 'gid'])
+        $groups = $this->table('groups', ['id' => 'gid', 'collation' => 'utf8mb4_general_ci'])
             ->addColumn('name', 'string')
             ->addColumn('description', 'string', ['null' => true])
             ->addColumn('rule', 'string', ['null' => true])
@@ -71,20 +71,20 @@ class InstallSql extends Migrator
             ->addColumn('status', 'integer', ['limit' => 1])
             ->create();
 
-        $options = $this->table('options', ['id' => false])
+        $options = $this->table('options', ['id' => false, 'collation' => 'utf8mb4_general_ci'])
             ->addColumn('name', 'string')
             ->addColumn('value', 'text')
             ->addColumn('type', 'string')
             ->create();
 
-        $rule = $this->table('rule', ['id' => 'ruid'])
+        $rule = $this->table('rule', ['id' => 'ruid', 'collation' => 'utf8mb4_general_ci'])
             ->addColumn('name', 'string')
             ->addColumn('rule', 'string')
             ->addColumn('type', 'string')
             ->addColumn('status', 'integer', ['limit' => 1])
             ->create();
 
-        $topics = $this->table('topics', ['id' => 'tid'])
+        $topics = $this->table('topics', ['id' => 'tid', 'collation' => 'utf8mb4_general_ci'])
             ->addColumn('fid', 'integer')
             ->addColumn('uid', 'integer')
             ->addColumn('title', 'string')
@@ -99,7 +99,7 @@ class InstallSql extends Migrator
             ->addColumn('status', 'integer', ['limit' => 1])
             ->create();
 
-        $comments = $this->table('comments', ['id' => 'coid'])
+        $comments = $this->table('comments', ['id' => 'coid', 'collation' => 'utf8mb4_general_ci'])
             ->addColumn('tid', 'integer')
             ->addColumn('uid', 'integer')
             ->addColumn('reply_coid', 'integer', ['comment' => '回复的评论ID', 'null' => true])
@@ -110,9 +110,9 @@ class InstallSql extends Migrator
             ->addColumn('status', 'integer', ['limit' => 1])
             ->create();
 
-        $files = $this->table('files', ['id' => 'file_id'])
+        $files = $this->table('files', ['id' => 'file_id', 'collation' => 'utf8mb4_general_ci'])
             ->addColumn('uid', 'integer')
-            ->addColumn('file_url', 'string', [ 'null' => true])
+            ->addColumn('file_url', 'string', ['null' => true])
             ->addColumn('type', 'text')
             ->addColumn('service_type', 'integer')
             ->addColumn('create_time', 'integer')

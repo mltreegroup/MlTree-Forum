@@ -1,7 +1,7 @@
 MlTree Forum Tp6 Version
 ===============
 
-> 运行环境要求PHP7.1+。
+> 运行环境要求PHP7.1+、打开popen。
 
 ## 主要新特性
 

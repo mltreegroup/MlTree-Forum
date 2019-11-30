@@ -72,7 +72,7 @@ class Topic extends BaseController
     {
         //
         $tid = $this->request->param('tid');
-        $topic = Topics::with(['user', 'forum'])->find($tid);
+        $topic = Topics::with(['user', 'forum', 'comments'])->find($tid);
         if (empty($topic)) {
             return $this->out('Topic does not exist', [], -23);
         }
@@ -143,6 +143,40 @@ class Topic extends BaseController
             }
             $topic->delete();
             return $this->out('Deleted successfully');
+        }
+    }
+
+    public function up()
+    {
+        if ($this->request->isPut()) {
+            $tid = $this->request->put('tid');
+            $handle = $this->request->put('handle');
+            $topic = Topics::find($tid);
+
+            if ($topic) {
+                $topic->top = (int) $handle;
+                $topic->save();
+                return $this->out('Topic Up success');
+            } else {
+                return $this->out('Topic does not exist', [], -24);
+            }
+        }
+    }
+
+    public function down()
+    {
+        if ($this->request->isPut()) {
+            $tid = $this->request->put('tid');
+            $handle = $this->request->put('handle');
+            $topic = Topics::find($tid);
+
+            if ($topic) {
+                $topic->top = (int) $handle;
+                $topic->save();
+                return $this->out('Topic Up success');
+            } else {
+                return $this->out('Topic does not exist', [], -24);
+            }
         }
     }
 }

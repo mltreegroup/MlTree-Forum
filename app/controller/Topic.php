@@ -17,21 +17,32 @@ class Topic extends BaseController
     public function index()
     {
         //
-        $page = $this->request->param('page');
+        $page = (int) $this->request->param('page');
         $type = $this->request->param('type');
-        $fid = $this->request->param('forum');
+        $fid = (int) $this->request->param('forum');
 
         $page ?? $page = 1;
 
         if (!empty($fid)) {
             $list = Topics::with(['user', 'forum'])->where('fid', $fid)->page($page, (int) Options::getValue('listMax'))->order('create_time', 'desc')->select();
+            $count = Topics::where('fid', $fid)->count();
         } else {
             $list = Topics::with(['user', 'forum'])->page($page, (int) Options::getValue('listMax'))->order('create_time', 'desc')->select();
+            $count = Topics::count();
         }
 
         $list->visible(['user' => ['uid', 'nick', 'email', 'avatar']]);
 
-        return $this->out('success', $list);
+        //计算page
+        $maxPage = ceil($count / (int) Options::getValue('listMax'));
+
+        $res = [
+            'list' => $list,
+            'page' => $page,
+            'maxPage' => $maxPage,
+        ];
+
+        return $this->out('success', $res);
     }
 
     /**

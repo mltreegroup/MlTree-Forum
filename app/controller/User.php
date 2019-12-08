@@ -43,7 +43,7 @@ class User extends BaseController
     {
         if ($this->request->isPost()) {
             $user = Users::find($this->request->jwt->uid);
-            $data = $this->request->post(['nick', 'motto']);
+            $data = $this->request->post(['nick', 'motto', 'avatar']);
             $user->save($data);
             $user->password = 'secrecy';
             return $this->out('success', $user);

@@ -2,8 +2,8 @@
 return [
     'checklist' => [
         'Index' => [
-            'check' => ['test', 'upload'],
-            'pass' => ['checkJWT', 'site', 'index'],
+            'check' => ['upload'],
+            'pass' => ['checkJWT', 'site', 'index', 'test'],
         ],
         'Comment' => [
             'check' => [],
@@ -30,6 +30,8 @@ return [
                 'create' => true,
                 'update' => true,
                 'delete' => 'admin',
+                'up' => true,
+                'down' => true,
             ],
         ],
         'User' => [

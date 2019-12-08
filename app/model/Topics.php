@@ -30,4 +30,12 @@ class Topics extends Model
     {
         return $this->hasMany(Comments::class, 'tid', 'tid');
     }
+
+    public function searchTopicAttr($query, $value, $data)
+    {
+        $query->where('title|content', 'like', '%' . $value . '%');
+        if (isset($data['sort'])) {
+            $query->order($data['sort']);
+        }
+    }
 }

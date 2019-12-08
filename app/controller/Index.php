@@ -40,4 +40,35 @@ class Index extends BaseController
         }
         return $this->out('pass');
     }
+
+    public function serach()
+    {
+        $keyword = $this->request->param('keyword');
+        $type = $this->request->param('type') ?? 'topic';
+
+        if (empty($keyword)) {
+            return $this->out('Keyword is required', [], -15);
+        }
+
+        if ($type === 'topic') {
+            $topic = app\model\Topics::withSearch(['topic'], [
+                'topic' => $keyword,
+                'sort' => $this->request->param('sort'),
+            ])
+                ->select();
+        }
+    }
+
+    public function test()
+    {
+        for ($i = 0; $i < 100; $i++) {
+            \app\model\Topics::create([
+                'title' => 'Title - ' . $i,
+                'content' => 'Content - ' . $i,
+                'uid' => 1,
+                'fid' => 1,
+                'status' => 1,
+            ]);
+        }
+    }
 }

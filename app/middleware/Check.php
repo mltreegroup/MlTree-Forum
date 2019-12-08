@@ -25,22 +25,8 @@ class Check
             return \response("OK");
         }
 
-        if (empty($jwt)) {
-            if (!empty($checkList[$controller]['pass'])) { // 如果验证规则中pass不为空
-                if (!\in_array($action, $checkList[$controller]['pass'])) { // 则验证action是否在通过列表中，否则报错
-                    return response(['code' => 1000, 'msg' => \lang('Permission error'), 'data' => 'In Check Middleware'], 401, [], 'json');
-                }
-            } else {
-                if (\in_array($action, $checkList[$controller]['check'])) {
-                    return response(['code' => 1000, 'msg' => \lang('Permission error'), 'data' => 'In Check Middleware'], 401, [], 'json');
-                }
-            }
-
-            return $next($request);
-        }
-
         $check_jwt = \app\model\JsonToken::checkJWT($jwt);
-        if ($check_jwt) {
+        if ($check_jwt[0]) {
             if (\cache('user_' . $check_jwt[1]->uid . '_jwt') !== $jwt) {
                 if (!empty($checkList[$controller]['pass'])) { // 如果验证规则中pass不为空
                     if (!\in_array($action, $checkList[$controller]['pass'])) { // 则验证action是否在通过列表中，否则报错
@@ -71,10 +57,20 @@ class Check
                     }
                 }
             }
-
             $request->jwt = $check_jwt[1];
             return $next($request);
         } else {
+            if (!empty($checkList[$controller]['pass'])) { // 如果验证规则中pass不为空
+                if (!\in_array($action, $checkList[$controller]['pass']) && empty($jwt)) { // 则验证action是否在通过列表中，否则报错
+                    return response(['code' => 1000, 'msg' => \lang('Permission error'), 'data' => 'In Check Middleware'], 401, [], 'json');
+                }
+                return $next($request);
+            } else {
+                if (\in_array($action, $checkList[$controller]['check']) && empty($jwt)) {
+                    return response(['code' => 1000, 'msg' => \lang('Permission error'), 'data' => 'In Check Middleware'], 401, [], 'json');
+                }
+                return $next($request);
+            }
             return response(['code' => 1001, 'msg' => \lang($check_jwt[1]), 'data' => 'In JsonToken Checker'], 401, [], 'json');
         }
 

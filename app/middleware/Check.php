@@ -25,53 +25,56 @@ class Check
             return \response("OK");
         }
 
-        $check_jwt = \app\model\JsonToken::checkJWT($jwt);
-        if ($check_jwt[0]) {
-            if (\cache('user_' . $check_jwt[1]->uid . '_jwt') !== $jwt) {
-                if (!empty($checkList[$controller]['pass'])) { // 如果验证规则中pass不为空
-                    if (!\in_array($action, $checkList[$controller]['pass'])) { // 则验证action是否在通过列表中，否则报错
-                        return response(['code' => 1001, 'msg' => \lang('JsonToken expired'), 'data' => 'In JsonToken Checker'], 401, [], 'json');
-                    }
-                } else {
-                    if (\in_array($action, $checkList[$controller]['check'])) {
-                        return response(['code' => 1001, 'msg' => \lang('JsonToken expired'), 'data' => 'In JsonToken Checker'], 401, [], 'json');
-                    }
-                }
-
-            }
-
-            // 验证用户是否拥有权限
-            if (isset($checkList[$controller]['auth'])) {
-                if (isset($checkList[$controller]['auth'][$action])) {
-                    $_auth = $checkList[$controller]['auth'][$action];
-                    $auth = new \app\Auth;
-                    if ($_auth) { // 如果规则为true
-                        if (!$auth->check([\ucwords($action) . $controller, 'admin'])) {
-                            return \response(['code' => 1002, 'msg' => \lang('Insufficient authority'), 'data' => 'In JsonToken Checker'], 401, [], 'json');
-                        }
-                    } else {
-                        $_auth[] = 'admin';
-                        if (!$auth->check($_auth)) {
-                            return \response(['code' => 1002, 'msg' => \lang('Insufficient authority'), 'data' => 'In JsonToken Checker'], 401, [], 'json');
-                        }
-                    }
-                }
-            }
-            $request->jwt = $check_jwt[1];
-            return $next($request);
-        } else {
+        if (empty($jwt)) {
             if (!empty($checkList[$controller]['pass'])) { // 如果验证规则中pass不为空
-                if (!\in_array($action, $checkList[$controller]['pass']) && empty($jwt)) { // 则验证action是否在通过列表中，否则报错
+                if (!\in_array($action, $checkList[$controller]['pass'])) { // 则验证action是否在通过列表中，否则报错
                     return response(['code' => 1000, 'msg' => \lang('Permission error'), 'data' => 'In Check Middleware'], 401, [], 'json');
                 }
                 return $next($request);
             } else {
-                if (\in_array($action, $checkList[$controller]['check']) && empty($jwt)) {
+                if (\in_array($action, $checkList[$controller]['check'])) {
                     return response(['code' => 1000, 'msg' => \lang('Permission error'), 'data' => 'In Check Middleware'], 401, [], 'json');
                 }
                 return $next($request);
             }
-            return response(['code' => 1001, 'msg' => \lang($check_jwt[1]), 'data' => 'In JsonToken Checker'], 401, [], 'json');
+        } else {
+            $check_jwt = \app\model\JsonToken::checkJWT($jwt);
+            if ($check_jwt[0]) {
+                if (\cache('user_' . $check_jwt[1]->uid . '_jwt') !== $jwt) {
+                    if (!empty($checkList[$controller]['pass'])) { // 如果验证规则中pass不为空
+                        if (!\in_array($action, $checkList[$controller]['pass'])) { // 则验证action是否在通过列表中，否则报错
+                            return response(['code' => 1001, 'msg' => \lang('JsonToken expired'), 'data' => 'In JsonToken Checker'], 401, [], 'json');
+                        }
+                    } else {
+                        if (\in_array($action, $checkList[$controller]['check'])) {
+                            return response(['code' => 1001, 'msg' => \lang('JsonToken expired'), 'data' => 'In JsonToken Checker'], 401, [], 'json');
+                        }
+                    }
+
+                }
+                // 验证用户是否拥有权限
+                if (isset($checkList[$controller]['auth'])) {
+                    if (isset($checkList[$controller]['auth'][$action])) {
+                        $_auth = $checkList[$controller]['auth'][$action];
+                        $auth = new \app\Auth;
+                        if ($_auth) { // 如果规则为true
+                            if (!$auth->check([\ucwords($action) . $controller, 'admin'])) {
+                                return \response(['code' => 1002, 'msg' => \lang('Insufficient authority'), 'data' => 'In JsonToken Checker'], 401, [], 'json');
+                            }
+                        } else {
+                            $_auth[] = 'admin';
+                            if (!$auth->check($_auth)) {
+                                return \response(['code' => 1002, 'msg' => \lang('Insufficient authority'), 'data' => 'In JsonToken Checker'], 401, [], 'json');
+                            }
+                        }
+                    }
+                }
+                $request->jwt = $check_jwt[1];
+                return $next($request);
+            } else {
+
+                return response(['code' => 1001, 'msg' => \lang($check_jwt[1]), 'data' => 'In JsonToken Checker'], 401, [], 'json');
+            }
         }
 
     }

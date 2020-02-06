@@ -16,6 +16,12 @@ class Forums extends Model
     protected $deleteTime = 'delete_time';
     protected $pk = 'fid';
 
+    public function getStatusTextAttr($val, $data)
+    {
+        $text = [0 => '关闭', 1 => '正常'];
+        return $text[$data['status']];
+    }
+
     public function topics()
     {
         return $this->hasMany(Topics::class, 'fid');

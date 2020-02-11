@@ -7,9 +7,7 @@ class Index extends BaseController
 {
     public function index()
     {
-        //dump(password_hash('admin',PASSWORD_DEFAULT));
-        //dump(\think\facade\Cache::get('user_1'));
-        dump($this->request->domain());
+
     }
 
     public function site()

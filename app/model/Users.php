@@ -64,7 +64,7 @@ class Users extends Model
             } else {
                 $admin = false;
             }
-            $jwt = \app\model\JsonToken::createJWT('system', 'Login generation', time(), ['nick' => $user['nick'], 'uid' => $user['uid'], 'admin' => $admin]);
+            $jwt = \app\model\JsonToken::createJWT('system', 'Login generation', time(), ['nick' => $user['nick'], 'uid' => $user['uid'], 'avatar' => $user['avatar'], 'admin' => $admin]);
 
             $user->last_ip = \request()->ip();
             $user->last_time = time();

@@ -5,8 +5,8 @@ namespace app\controller;
 
 use app\BaseController;
 use app\model\Comments;
-use app\model\Topics;
 use app\model\Options;
+use app\model\Topics;
 
 class Comment extends BaseController
 {
@@ -28,7 +28,7 @@ class Comment extends BaseController
         $comment = Comments::with('user')
             ->where('tid', $tid)
             ->page((int) $page, (int) Options::getValue('commentListMax'))
-            ->order('create_time', 'desc')
+            ->order('create_time')
             ->select();
 
         $comment->visible(['user' => ['uid', 'avatar', 'nick', 'email']]);
@@ -50,6 +50,7 @@ class Comment extends BaseController
         if ($this->request->isPost()) {
             $tid = $this->request->post('tid');
             $insert = $this->request->post(['tid', 'content']);
+            $insert['reply_coid'] = $this->request->post('replyId');
 
             $topic = Topics::find($tid);
             if (empty($topic)) {
